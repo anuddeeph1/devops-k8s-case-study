@@ -1,11 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: devops-web-server
+  name: load-testing
   namespace: argocd
   labels:
-    app.kubernetes.io/name: devops-web-server
-    app.kubernetes.io/component: frontend
+    app.kubernetes.io/name: load-testing
     app.kubernetes.io/part-of: devops-case-study
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -14,7 +13,7 @@ spec:
   source:
     repoURL: https://github.com/anuddeeph/ng-voice.git
     targetRevision: gitops
-    path: helm-charts/web-server
+    path: helm-charts/load-testing
     helm:
       valueFiles:
         - values.yaml
@@ -29,15 +28,11 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - PrunePropagationPolicy=foreground
+      - PruneLast=true
     retry:
       limit: 5
       backoff:
         duration: 5s
         factor: 2
-        maxDuration: 3m
+        maxDuration: 3m0s
   revisionHistoryLimit: 3
-  ignoreDifferences:
-    - group: apps
-      kind: Deployment
-      jsonPointers:
-        - /spec/replicas

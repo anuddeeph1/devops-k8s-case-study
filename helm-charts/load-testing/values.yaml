@@ -1,0 +1,28 @@
+# Load Testing Configuration
+global:
+  namespace: devops-case-study
+
+loadTesting:
+  image:
+    repository: alpine/curl
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  
+  schedule: "*/2 * * * *"  # Every 2 minutes
+  
+  target:
+    service: web-server-service
+    port: 80
+    path: /
+  
+  resources:
+    requests:
+      memory: "16Mi"
+      cpu: "10m"
+    limits:
+      memory: "32Mi"
+      cpu: "25m"
+  
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}

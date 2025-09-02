@@ -14,21 +14,10 @@ spec:
   source:
     repoURL: https://github.com/anuddeeph/ng-voice.git
     targetRevision: gitops
-    path: helm-charts/devops-case-study
+    path: helm-charts/monitoring
     helm:
       valueFiles:
         - values.yaml
-      parameters:
-        - name: database.enabled
-          value: "false"
-        - name: webServer.enabled
-          value: "false"
-        - name: monitoring.enabled
-          value: "true"
-        - name: loadTesting.enabled
-          value: "false"
-        - name: networkPolicies.enabled
-          value: "false"
   destination:
     server: https://kubernetes.default.svc
     namespace: devops-case-study

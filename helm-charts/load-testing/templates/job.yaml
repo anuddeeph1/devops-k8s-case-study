@@ -1,0 +1,43 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: load-test-job
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "load-testing.labels" . | nindent 4 }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: load-test-job
+        {{- include "load-testing.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: load-test
+        image: "{{ .Values.loadTesting.image.repository }}:{{ .Values.loadTesting.image.tag }}"
+        imagePullPolicy: {{ .Values.loadTesting.image.pullPolicy }}
+        command:
+        - sh
+        - -c
+        - |
+          apk add --no-cache bash
+          chmod +x /scripts/load-test.sh
+          exec /scripts/load-test.sh
+        env:
+        - name: TARGET_URL
+          value: "http://{{ .Values.loadTesting.target.service }}:{{ .Values.loadTesting.target.port }}{{ .Values.loadTesting.target.path }}"
+        - name: DURATION
+          value: "180"  # 3 minutes for the job
+        - name: CONCURRENT_USERS
+          value: "15"
+        volumeMounts:
+        - name: load-test-script
+          mountPath: /scripts
+        resources:
+          {{- toYaml .Values.loadTesting.resources | nindent 10 }}
+      volumes:
+      - name: load-test-script
+        configMap:
+          name: load-test-script
+          defaultMode: 0755

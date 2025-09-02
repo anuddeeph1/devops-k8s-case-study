@@ -1,0 +1,22 @@
+# Pod Monitoring Configuration
+global:
+  namespace: devops-case-study
+
+monitoring:
+  podMonitor:
+    image:
+      repository: anuddeeph/pod-monitor
+      tag: "latest"
+      pullPolicy: Always
+    
+    resources:
+      requests:
+        memory: "32Mi"
+        cpu: "25m"
+      limits:
+        memory: "64Mi"
+        cpu: "50m"
+    
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}

@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-monitor
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "monitoring.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "monitoring.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "monitoring.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: pod-monitor
+      containers:
+      - name: pod-monitor
+        image: "{{ .Values.monitoring.podMonitor.image.repository }}:{{ .Values.monitoring.podMonitor.image.tag }}"
+        imagePullPolicy: {{ .Values.monitoring.podMonitor.image.pullPolicy }}
+        env:
+        - name: NAMESPACE
+          value: {{ .Values.global.namespace | quote }}
+        resources:
+          {{- toYaml .Values.monitoring.podMonitor.resources | nindent 10 }}
+        livenessProbe:
+          exec:
+            command:
+            - pgrep
+            - -f
+            - pod-monitor
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          exec:
+            command:
+            - pgrep
+            - -f
+            - pod-monitor
+          initialDelaySeconds: 5
+          periodSeconds: 10
+      restartPolicy: Always
+      {{- with .Values.monitoring.podMonitor.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.monitoring.podMonitor.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.monitoring.podMonitor.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

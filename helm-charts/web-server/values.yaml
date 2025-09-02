@@ -1,0 +1,40 @@
+# Nginx Web Server Configuration
+global:
+  namespace: devops-case-study
+
+webServer:
+  image:
+    repository: nginx
+    tag: "1.25-alpine"
+    pullPolicy: IfNotPresent
+  
+  replicas: 3
+  
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 80
+  
+  ingress:
+    enabled: true
+    host: localhost
+    path: /
+  
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "50m"
+    limits:
+      memory: "128Mi"
+      cpu: "100m"
+
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}

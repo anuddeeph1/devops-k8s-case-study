@@ -1,0 +1,14 @@
+apiVersion: v2
+name: load-testing
+description: Load testing tools for DevOps case study
+type: application
+version: 0.1.0
+appVersion: "latest"
+keywords:
+  - load-testing
+  - performance
+  - devops
+home: https://github.com/anuddeeph/ng-voice
+maintainers:
+  - name: anuddeeph
+    email: anuddeeph@example.com

@@ -1,0 +1,133 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-server
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "web-server.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.webServer.replicas }}
+  selector:
+    matchLabels:
+      {{- include "web-server.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "web-server.selectorLabels" . | nindent 8 }}
+        tier: frontend
+    spec:
+      initContainers:
+      - name: init-html
+        image: alpine:3.18
+        command:
+        - sh
+        - -c
+        - |
+          set -e
+          echo "Starting init container to prepare web content..."
+          
+          # Install necessary tools
+          apk add --no-cache curl
+          
+          # Get the Pod IP
+          POD_IP=$(hostname -i)
+          echo "Pod IP: $POD_IP"
+          
+          # Get the Pod Name from environment
+          POD_NAME=${POD_NAME:-"unknown"}
+          echo "Pod Name: $POD_NAME"
+          
+          # Extract last 5 characters from pod name for serving-host
+          SERVING_HOST="Host-${POD_NAME: -5}"
+          echo "Serving Host: $SERVING_HOST"
+          
+          # Get Node Name
+          NODE_NAME=${NODE_NAME:-"unknown"}
+          echo "Node Name: $NODE_NAME"
+          
+          # Copy template to working directory and replace placeholders
+          cp /templates/index.html.template /shared/index.html
+          
+          # Replace placeholders in the HTML file
+          sed -i "s/POD_IP_PLACEHOLDER/$POD_IP/g" /shared/index.html
+          sed -i "s/SERVING_HOST_PLACEHOLDER/$SERVING_HOST/g" /shared/index.html
+          sed -i "s/POD_NAME_PLACEHOLDER/$POD_NAME/g" /shared/index.html
+          sed -i "s/NODE_NAME_PLACEHOLDER/$NODE_NAME/g" /shared/index.html
+          
+          echo "HTML template prepared successfully!"
+          echo "Init completed at $(date)" > /shared/init-status.txt
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        volumeMounts:
+        - name: html-template
+          mountPath: /templates
+        - name: shared-data
+          mountPath: /shared
+      containers:
+      - name: nginx
+        image: "{{ .Values.webServer.image.repository }}:{{ .Values.webServer.image.tag }}"
+        imagePullPolicy: {{ .Values.webServer.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.webServer.service.targetPort }}
+          name: http
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+        - name: shared-data
+          mountPath: /usr/share/nginx/html
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.webServer.service.targetPort }}
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.webServer.service.targetPort }}
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          {{- toYaml .Values.webServer.resources | nindent 10 }}
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: nginx-config
+      - name: html-template
+        configMap:
+          name: html-template
+      - name: shared-data
+        emptyDir: {}
+      {{- with .Values.webServer.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.webServer.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.webServer.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,20 @@
+{{- if .Values.mysql.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "database.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.mysql.persistence.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.mysql.persistence.size }}
+  storageClassName: {{ .Values.mysql.persistence.storageClass | quote }}
+  selector:
+    matchLabels:
+      type: local
+      app: mysql
+{{- end }}

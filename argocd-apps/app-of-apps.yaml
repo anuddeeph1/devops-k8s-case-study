@@ -16,7 +16,7 @@ spec:
     path: argocd-apps
     directory:
       recurse: true
-      include: "*.yaml"
+      include: "*-app.yaml"
       exclude: "app-of-apps.yaml"  # Prevent recursive loop
   destination:
     server: https://kubernetes.default.svc

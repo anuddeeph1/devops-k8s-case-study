@@ -1,0 +1,14 @@
+apiVersion: v2
+name: database
+description: MySQL database for DevOps case study
+type: application
+version: 0.1.0
+appVersion: "8.0"
+keywords:
+  - mysql
+  - database
+  - devops
+home: https://github.com/anuddeeph/ng-voice
+maintainers:
+  - name: anuddeeph
+    email: anuddeeph@example.com

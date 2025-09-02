@@ -1,0 +1,15 @@
+apiVersion: v2
+name: monitoring
+description: Pod monitoring application for DevOps case study
+type: application
+version: 0.1.0
+appVersion: "latest"
+keywords:
+  - monitoring
+  - golang
+  - kubernetes
+  - devops
+home: https://github.com/anuddeeph/ng-voice
+maintainers:
+  - name: anuddeeph
+    email: anuddeeph@example.com

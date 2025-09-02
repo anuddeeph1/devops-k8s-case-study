@@ -112,13 +112,17 @@ build_monitoring_app() {
 
 # Deploy applications via ArgoCD
 deploy_with_argocd() {
-    log_info "Deploying applications via ArgoCD GitOps..."
+    log_info "Deploying applications via ArgoCD GitOps using App-of-Apps pattern..."
     
-    # Deploy the main application
-    kubectl apply -f argocd-apps/devops-case-study-app.yaml
+    # Deploy individual applications
+    log_info "Deploying individual applications..."
+    kubectl apply -f argocd-apps/database-app.yaml
+    kubectl apply -f argocd-apps/web-server-app.yaml
+    kubectl apply -f argocd-apps/monitoring-app.yaml
+    kubectl apply -f argocd-apps/load-testing-app.yaml
     
-    # Wait for application to sync
-    log_info "Waiting for ArgoCD application to sync..."
+    # Wait for applications to sync
+    log_info "Waiting for ArgoCD applications to sync..."
     
     # Install ArgoCD CLI if not present (for local testing)
     if ! command -v argocd &> /dev/null; then
@@ -126,27 +130,32 @@ deploy_with_argocd() {
         log_info "curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64"
     fi
     
-    # Wait for application to be healthy
-    log_info "Monitoring ArgoCD application status..."
-    for i in {1..30}; do
-        STATUS=$(kubectl get application devops-case-study -n argocd -o jsonpath='{.status.health.status}' 2>/dev/null || echo "Unknown")
-        SYNC_STATUS=$(kubectl get application devops-case-study -n argocd -o jsonpath='{.status.sync.status}' 2>/dev/null || echo "Unknown")
-        
-        log_info "Application Health: $STATUS, Sync: $SYNC_STATUS"
-        
-        if [ "$STATUS" = "Healthy" ] && [ "$SYNC_STATUS" = "Synced" ]; then
-            log_success "ArgoCD application deployed successfully!"
-            break
-        fi
-        
-        if [ "$i" -eq 30 ]; then
-            log_warning "ArgoCD application deployment timed out. Check ArgoCD UI for details."
-        fi
-        
-        sleep 10
+    # Wait for all applications to be healthy
+    APPS=("database" "web-server" "monitoring" "load-testing")
+    log_info "Monitoring ArgoCD applications status..."
+    
+    for app in "${APPS[@]}"; do
+        log_info "Checking $app application..."
+        for i in {1..20}; do
+            STATUS=$(kubectl get application $app -n argocd -o jsonpath='{.status.health.status}' 2>/dev/null || echo "Unknown")
+            SYNC_STATUS=$(kubectl get application $app -n argocd -o jsonpath='{.status.sync.status}' 2>/dev/null || echo "Unknown")
+            
+            log_info "$app - Health: $STATUS, Sync: $SYNC_STATUS"
+            
+            if [ "$STATUS" = "Healthy" ] && [ "$SYNC_STATUS" = "Synced" ]; then
+                log_success "$app application deployed successfully!"
+                break
+            fi
+            
+            if [ "$i" -eq 20 ]; then
+                log_warning "$app application deployment timed out. Check ArgoCD UI for details."
+            fi
+            
+            sleep 5
+        done
     done
     
-    log_success "GitOps deployment completed"
+    log_success "GitOps deployment completed - All applications deployed!"
 }
 
 # Create namespace
@@ -305,6 +314,7 @@ main() {
             sleep 10  # Give cluster time to stabilize
             setup_argocd
             build_monitoring_app
+            create_namespace  # Create namespace before ArgoCD deployment
             deploy_with_argocd
             setup_port_forwarding
             sleep 30  # Give ArgoCD time to deploy

@@ -1,0 +1,14 @@
+apiVersion: v2
+name: web-server
+description: Nginx web server for DevOps case study
+type: application
+version: 0.1.0
+appVersion: "1.25"
+keywords:
+  - nginx
+  - webserver
+  - devops
+home: https://github.com/anuddeeph/ng-voice
+maintainers:
+  - name: anuddeeph
+    email: anuddeeph@example.com

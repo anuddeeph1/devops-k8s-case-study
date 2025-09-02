@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "database.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "database.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "database.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: mysql
+        image: "{{ .Values.mysql.image.repository }}:{{ .Values.mysql.image.tag }}"
+        imagePullPolicy: {{ .Values.mysql.image.pullPolicy }}
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: mysql-root-password
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: mysql-user
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: mysql-password
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: mysql-database
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-storage
+          mountPath: /var/lib/mysql
+        - name: mysql-config
+          mountPath: /etc/mysql/conf.d
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "mysqladmin ping -u root -p${MYSQL_ROOT_PASSWORD}"
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "mysql -u root -p${MYSQL_ROOT_PASSWORD} -e 'SELECT 1'"
+          initialDelaySeconds: 5
+          periodSeconds: 2
+          timeoutSeconds: 1
+        resources:
+          {{- toYaml .Values.mysql.resources | nindent 10 }}
+      volumes:
+      - name: mysql-storage
+        {{- if .Values.mysql.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: mysql-pvc
+        {{- else }}
+        emptyDir: {}
+        {{- end }}
+      - name: mysql-config
+        configMap:
+          name: mysql-config
+      {{- with .Values.mysql.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.mysql.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.mysql.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

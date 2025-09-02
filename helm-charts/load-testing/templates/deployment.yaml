@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: load-tester
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "load-testing.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "load-testing.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "load-testing.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: load-tester
+        image: "{{ .Values.loadTesting.image.repository }}:{{ .Values.loadTesting.image.tag }}"
+        imagePullPolicy: {{ .Values.loadTesting.image.pullPolicy }}
+        command:
+        - sh
+        - -c
+        - |
+          # Install bash for our scripts
+          apk add --no-cache bash
+          
+          # Make scripts executable
+          chmod +x /scripts/load-test.sh
+          chmod +x /scripts/monitor-hpa.sh
+          
+          echo "Load tester ready. Available commands:"
+          echo "1. /scripts/load-test.sh - Run load test"
+          echo "2. /scripts/monitor-hpa.sh - Monitor HPA status"
+          echo ""
+          echo "Environment variables:"
+          echo "TARGET_URL=${TARGET_URL}"
+          echo "DURATION=${DURATION}"
+          echo "CONCURRENT_USERS=${CONCURRENT_USERS}"
+          echo ""
+          echo "Sleeping... Use 'kubectl exec' to run commands"
+          
+          # Keep container running
+          while true; do
+            sleep 3600
+          done
+        env:
+        - name: TARGET_URL
+          value: "http://{{ .Values.loadTesting.target.service }}:{{ .Values.loadTesting.target.port }}{{ .Values.loadTesting.target.path }}"
+        - name: DURATION
+          value: "300"
+        - name: CONCURRENT_USERS
+          value: "20"
+        volumeMounts:
+        - name: load-test-script
+          mountPath: /scripts
+        resources:
+          {{- toYaml .Values.loadTesting.resources | nindent 10 }}
+      volumes:
+      - name: load-test-script
+        configMap:
+          name: load-test-script
+          defaultMode: 0755
+      {{- with .Values.loadTesting.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.loadTesting.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.loadTesting.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

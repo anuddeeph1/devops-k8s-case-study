@@ -1,0 +1,24 @@
+{{- if .Values.webServer.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-server-ingress
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "web-server.labels" . | nindent 4 }}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: {{ .Values.webServer.ingress.host }}
+    http:
+      paths:
+      - path: {{ .Values.webServer.ingress.path }}
+        pathType: Prefix
+        backend:
+          service:
+            name: web-server-service
+            port:
+              number: {{ .Values.webServer.service.port }}
+{{- end }}
