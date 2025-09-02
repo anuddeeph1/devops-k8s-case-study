@@ -31,6 +31,14 @@ mysql:
       memory: "1Gi"
       cpu: "500m"
 
+  # Backup Configuration
+  backup:
+    enabled: true
+    storage:
+      size: 5Gi
+      accessMode: ReadWriteOnce
+      storageClass: ""
+
   nodeSelector: {}
   tolerations: []
   affinity: {}
