@@ -18,10 +18,10 @@ loadTesting:
   resources:
     requests:
       memory: "64Mi"
-      cpu: "10m"
+      cpu: "50m"      # 5x increase!
     limits:
       memory: "128Mi"
-      cpu: "25m"
+      cpu: "200m"     # 8x increase!
   
   nodeSelector: {}
   tolerations: []
