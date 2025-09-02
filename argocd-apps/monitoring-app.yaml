@@ -12,8 +12,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/anuddeeph/ng-voice.git  # Update with your actual repo URL
-    targetRevision: HEAD
+    repoURL: https://github.com/anuddeeph/ng-voice.git
+    targetRevision: gitops
     path: helm-charts/devops-case-study
     helm:
       valueFiles:

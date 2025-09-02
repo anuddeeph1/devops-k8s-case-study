@@ -11,8 +11,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/anuddeeph/ng-voice.git  # Update with your actual repo URL
-    targetRevision: HEAD
+    repoURL: https://github.com/anuddeeph/ng-voice.git
+    targetRevision: gitops
     path: argocd-apps
     directory:
       recurse: true
