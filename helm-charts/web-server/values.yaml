@@ -32,8 +32,8 @@ webServer:
     enabled: true
     minReplicas: 3
     maxReplicas: 10
-    targetCPUUtilizationPercentage: 70
-    targetMemoryUtilizationPercentage: 80
+    targetCPUUtilizationPercentage: 20
+    targetMemoryUtilizationPercentage: 20
 
   nodeSelector: {}
   tolerations: []
