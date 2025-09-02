@@ -1,0 +1,81 @@
+{{- if .Values.mysql.backup.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "database.fullname" . }}-backup-cronjob
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "database.labels" . | nindent 4 }}
+    app.kubernetes.io/component: backup
+spec:
+  # Schedule from values
+  schedule: "{{ .Values.mysql.backup.schedule }}"
+  timeZone: "UTC"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: {{ .Values.mysql.backup.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.mysql.backup.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "database.labels" . | nindent 12 }}
+            app.kubernetes.io/component: backup-job
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: mysql-backup
+            image: "{{ .Values.mysql.image.repository }}:{{ .Values.mysql.image.tag }}"
+            imagePullPolicy: {{ .Values.mysql.image.pullPolicy }}
+            command:
+            - /bin/bash
+            - -c
+            - |
+              chmod +x /scripts/backup.sh
+              /scripts/backup.sh
+            env:
+            - name: MYSQL_HOST
+              value: "{{ include "database.fullname" . }}-service"
+            - name: MYSQL_PORT
+              value: "{{ .Values.mysql.service.port }}"
+            - name: MYSQL_USER
+              value: "root"
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "database.fullname" . }}-secret
+                  key: mysql-root-password
+            - name: MYSQL_DATABASE
+              value: "{{ .Values.mysql.database }}"
+            - name: BACKUP_DIR
+              value: "/backups"
+            - name: RETENTION_DAYS
+              value: "{{ .Values.mysql.backup.retentionDays }}"
+            volumeMounts:
+            - name: backup-storage
+              mountPath: /backups
+            - name: backup-scripts
+              mountPath: /scripts
+            resources:
+              {{- toYaml .Values.mysql.backup.resources | nindent 14 }}
+          volumes:
+          - name: backup-storage
+            persistentVolumeClaim:
+              claimName: {{ include "database.fullname" . }}-backup-pvc
+          - name: backup-scripts
+            configMap:
+              name: {{ include "database.fullname" . }}-backup-script
+              defaultMode: 0755
+          {{- with .Values.mysql.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.mysql.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.mysql.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+{{- end }}

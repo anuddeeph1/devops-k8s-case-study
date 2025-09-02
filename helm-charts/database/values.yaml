@@ -38,6 +38,21 @@ mysql:
       size: 5Gi
       accessMode: ReadWriteOnce
       storageClass: ""
+    
+    # CronJob Configuration
+    schedule: "0 */6 * * *"  # Every 6 hours (00:00, 06:00, 12:00, 18:00 UTC)
+    retentionDays: 7         # Keep backups for 7 days
+    successfulJobsHistoryLimit: 3
+    failedJobsHistoryLimit: 1
+    
+    # Backup Job Resources
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "100m"
+      limits:
+        memory: "512Mi"
+        cpu: "200m"
 
   nodeSelector: {}
   tolerations: []
