@@ -1,0 +1,208 @@
+{{- if .Values.webServer.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "devops-case-study.fullname" . }}-web-server
+  namespace: {{ include "devops-case-study.namespace" . }}
+  labels:
+    {{- include "devops-case-study.webServer.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.webServer.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "devops-case-study.webServer.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "devops-case-study.webServer.selectorLabels" . | nindent 8 }}
+    spec:
+      initContainers:
+      - name: init-html
+        image: alpine:3.18
+        command:
+        - sh
+        - -c
+        - |
+          set -e
+          echo "Starting init container to prepare web content..."
+          
+          apk add --no-cache curl
+          
+          POD_IP=$(hostname -i)
+          echo "Pod IP: $POD_IP"
+          
+          POD_NAME=${POD_NAME:-"unknown"}
+          echo "Pod Name: $POD_NAME"
+          
+          SERVING_HOST="Host-${POD_NAME: -5}"
+          echo "Serving Host: $SERVING_HOST"
+          
+          NODE_NAME=${NODE_NAME:-"unknown"}
+          echo "Node Name: $NODE_NAME"
+          
+          cp /templates/index.html.template /shared/index.html
+          
+          sed -i "s/POD_IP_PLACEHOLDER/$POD_IP/g" /shared/index.html
+          sed -i "s/SERVING_HOST_PLACEHOLDER/$SERVING_HOST/g" /shared/index.html
+          sed -i "s/POD_NAME_PLACEHOLDER/$POD_NAME/g" /shared/index.html
+          sed -i "s/NODE_NAME_PLACEHOLDER/$NODE_NAME/g" /shared/index.html
+          
+          echo "HTML template prepared successfully!"
+          echo "Init completed at $(date)" > /shared/init-status.txt
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        volumeMounts:
+        - name: html-template
+          mountPath: /templates
+        - name: shared-data
+          mountPath: /shared
+      containers:
+      - name: nginx
+        image: "{{ .Values.webServer.image.repository }}:{{ .Values.webServer.image.tag }}"
+        imagePullPolicy: {{ .Values.webServer.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.webServer.service.targetPort }}
+          name: http
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+        - name: shared-data
+          mountPath: /usr/share/nginx/html
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.webServer.service.targetPort }}
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.webServer.service.targetPort }}
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          {{- toYaml .Values.webServer.resources | nindent 10 }}
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: {{ include "devops-case-study.fullname" . }}-nginx-config
+      - name: html-template
+        configMap:
+          name: {{ include "devops-case-study.fullname" . }}-html-template
+      - name: shared-data
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "devops-case-study.fullname" . }}-web-server-service
+  namespace: {{ include "devops-case-study.namespace" . }}
+  labels:
+    {{- include "devops-case-study.webServer.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.webServer.service.type }}
+  selector:
+    {{- include "devops-case-study.webServer.selectorLabels" . | nindent 4 }}
+  ports:
+  - port: {{ .Values.webServer.service.port }}
+    targetPort: {{ .Values.webServer.service.targetPort }}
+    protocol: TCP
+    name: http
+---
+{{- if .Values.webServer.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "devops-case-study.fullname" . }}-web-server-ingress
+  namespace: {{ include "devops-case-study.namespace" . }}
+  labels:
+    {{- include "devops-case-study.webServer.labels" . | nindent 4 }}
+  annotations:
+    {{- toYaml .Values.webServer.ingress.annotations | nindent 4 }}
+spec:
+  ingressClassName: {{ .Values.webServer.ingress.className }}
+  rules:
+  - host: {{ .Values.webServer.ingress.host }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "devops-case-study.fullname" . }}-web-server-service
+            port:
+              number: {{ .Values.webServer.service.port }}
+{{- end }}
+---
+{{- if .Values.webServer.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "devops-case-study.fullname" . }}-web-server-hpa
+  namespace: {{ include "devops-case-study.namespace" . }}
+  labels:
+    {{- include "devops-case-study.webServer.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "devops-case-study.fullname" . }}-web-server
+  minReplicas: {{ .Values.webServer.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.webServer.autoscaling.maxReplicas }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.webServer.autoscaling.targetCPUUtilizationPercentage }}
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.webServer.autoscaling.targetMemoryUtilizationPercentage }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
+      - type: Pods
+        value: 1
+        periodSeconds: 60
+      selectPolicy: Min
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+      - type: Pods
+        value: 2
+        periodSeconds: 60
+      selectPolicy: Max
+{{- end }}
+{{- end }}

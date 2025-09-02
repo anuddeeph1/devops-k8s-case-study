@@ -47,10 +47,10 @@ database:
   mysql:
     enabled: true
     auth:
-      rootPassword: "root123"
+      rootPassword: "cm9vdDEyMw=="  # root123 base64 encoded
       database: "webapp"
-      username: "testuser"
-      password: "testpass"
+      username: "dGVzdHVzZXI="     # testuser base64 encoded
+      password: "dGVzdHBhc3M="     # testpass base64 encoded
     
     primary:
       persistence:

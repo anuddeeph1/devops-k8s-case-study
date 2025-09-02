@@ -79,22 +79,36 @@ docker login
 # Make deployment script executable
 chmod +x deploy.sh
 
-# Deploy everything
+# Traditional deployment using kubectl
 ./deploy.sh deploy
+
+# OR GitOps deployment using ArgoCD
+./deploy.sh gitops
 ```
 
+#### Traditional Deployment
 This will:
 1. Create KIND cluster with metrics-server for HPA
 2. Build and push the monitoring application to Docker Hub
-3. Deploy all components to Kubernetes
+3. Deploy all components to Kubernetes using kubectl
 4. Set up port forwarding
 5. Run basic tests
+
+#### GitOps Deployment
+This will:
+1. Create KIND cluster with metrics-server for HPA
+2. Install ArgoCD for GitOps management
+3. Build and push the monitoring application to Docker Hub
+4. Deploy applications via ArgoCD from Git repository
+5. Set up port forwarding for both apps and ArgoCD UI
+6. Run basic tests
 
 ### Access the Application
 
 After deployment completes:
 - **Web Application**: http://localhost:8080
 - **Database**: localhost:3306 (root/root123)
+- **ArgoCD UI** (GitOps mode): https://localhost:8081 (admin/password-shown-in-logs)
 
 ## 🧪 Testing and Demonstration
 
@@ -159,6 +173,21 @@ kubectl run test-pod --rm -it --image=mysql:8.0 -n devops-case-study -- \
 │   └── load-test-deployment.yaml
 ├── helm-charts/                  # Helm chart packaging
 │   └── devops-case-study/
+│       ├── templates/           # Kubernetes manifests templates
+│       │   ├── database-deployment.yaml
+│       │   ├── web-server-deployment.yaml
+│       │   ├── monitoring-deployment.yaml
+│       │   ├── load-testing-deployment.yaml
+│       │   ├── network-policies.yaml
+│       │   └── web-server-configmap.yaml
+│       ├── Chart.yaml           # Helm chart metadata
+│       └── values.yaml          # Configuration values
+├── argocd-apps/                 # ArgoCD Application manifests
+│   ├── devops-case-study-app.yaml
+│   ├── database-app.yaml
+│   ├── web-server-app.yaml
+│   ├── monitoring-app.yaml
+│   └── app-of-apps.yaml
 └── docs/                        # Documentation
     └── disaster-recovery-plan.md
 ```
@@ -189,6 +218,19 @@ kubectl run test-pod --rm -it --image=mysql:8.0 -n devops-case-study -- \
 - **Memory Scaling**: Targets 80% memory utilization
 - **Scaling Behavior**: Configurable scale-up/scale-down policies
 - **Load Testing**: Automated load generation for demonstration
+
+### GitOps with ArgoCD
+- **Declarative Deployments**: All applications defined as code
+- **Automated Sync**: Real-time synchronization with Git repository
+- **App-of-Apps Pattern**: Hierarchical application management
+- **Self-Healing**: Automatic drift correction and recovery
+- **Web UI**: Visual application management and monitoring
+
+### Helm Templates
+- **Parameterized**: Configurable via values.yaml
+- **Modular**: Separate templates for each component
+- **Conditional**: Enable/disable components as needed
+- **Reusable**: Environment-specific value overrides
 
 ## 🛡️ Security Features
 

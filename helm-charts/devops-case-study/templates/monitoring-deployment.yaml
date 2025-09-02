@@ -1,0 +1,83 @@
+{{- if .Values.monitoring.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "devops-case-study.fullname" . }}-pod-monitor
+  namespace: {{ include "devops-case-study.namespace" . }}
+  labels:
+    {{- include "devops-case-study.monitoring.labels" . | nindent 4 }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "devops-case-study.fullname" . }}-pod-monitor
+  labels:
+    {{- include "devops-case-study.monitoring.labels" . | nindent 4 }}
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "devops-case-study.fullname" . }}-pod-monitor
+  labels:
+    {{- include "devops-case-study.monitoring.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "devops-case-study.fullname" . }}-pod-monitor
+subjects:
+- kind: ServiceAccount
+  name: {{ include "devops-case-study.fullname" . }}-pod-monitor
+  namespace: {{ include "devops-case-study.namespace" . }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "devops-case-study.fullname" . }}-pod-monitor
+  namespace: {{ include "devops-case-study.namespace" . }}
+  labels:
+    {{- include "devops-case-study.monitoring.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "devops-case-study.monitoring.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "devops-case-study.monitoring.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "devops-case-study.fullname" . }}-pod-monitor
+      containers:
+      - name: pod-monitor
+        image: "{{ .Values.monitoring.podMonitor.image.repository }}:{{ .Values.monitoring.podMonitor.image.tag }}"
+        imagePullPolicy: {{ .Values.monitoring.podMonitor.image.pullPolicy }}
+        env:
+        - name: NAMESPACE
+          value: {{ include "devops-case-study.namespace" . | quote }}
+        resources:
+          {{- toYaml .Values.monitoring.podMonitor.resources | nindent 10 }}
+        livenessProbe:
+          exec:
+            command:
+            - pgrep
+            - -f
+            - pod-monitor
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          exec:
+            command:
+            - pgrep
+            - -f
+            - pod-monitor
+          initialDelaySeconds: 5
+          periodSeconds: 10
+      restartPolicy: Always
+{{- end }}

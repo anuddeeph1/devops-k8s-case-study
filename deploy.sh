@@ -63,6 +63,35 @@ setup_cluster() {
     log_success "KIND cluster is ready"
 }
 
+# Install ArgoCD for GitOps
+setup_argocd() {
+    log_info "Installing ArgoCD for GitOps deployment..."
+    
+    # Create ArgoCD namespace
+    kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
+    
+    # Install ArgoCD
+    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+    
+    # Wait for ArgoCD to be ready
+    log_info "Waiting for ArgoCD to be ready..."
+    kubectl wait --for=condition=available --timeout=300s deployment/argocd-server -n argocd
+    
+    # Get ArgoCD admin password
+    log_info "Getting ArgoCD admin password..."
+    sleep 10  # Wait for secret to be created
+    ARGO_PASSWORD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" 2>/dev/null | base64 -d || echo "Password not ready yet")
+    
+    # Setup port forwarding for ArgoCD (in background)
+    kubectl port-forward svc/argocd-server -n argocd 8081:443 > /dev/null 2>&1 &
+    ARGO_PF_PID=$!
+    echo "$ARGO_PF_PID" > .argo-pf.pid
+    
+    log_success "ArgoCD installed and configured"
+    log_info "ArgoCD admin password: $ARGO_PASSWORD"
+    log_info "ArgoCD UI: https://localhost:8081 (admin/$ARGO_PASSWORD)"
+}
+
 # Build monitoring application
 build_monitoring_app() {
     log_info "Building pod monitoring application..."
@@ -79,6 +108,45 @@ build_monitoring_app() {
     cd "$PROJECT_ROOT"
     
     log_success "Pod monitoring application built and pushed"
+}
+
+# Deploy applications via ArgoCD
+deploy_with_argocd() {
+    log_info "Deploying applications via ArgoCD GitOps..."
+    
+    # Deploy the main application
+    kubectl apply -f argocd-apps/devops-case-study-app.yaml
+    
+    # Wait for application to sync
+    log_info "Waiting for ArgoCD application to sync..."
+    
+    # Install ArgoCD CLI if not present (for local testing)
+    if ! command -v argocd &> /dev/null; then
+        log_warning "ArgoCD CLI not found. Install it for better GitOps management:"
+        log_info "curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64"
+    fi
+    
+    # Wait for application to be healthy
+    log_info "Monitoring ArgoCD application status..."
+    for i in {1..30}; do
+        STATUS=$(kubectl get application devops-case-study -n argocd -o jsonpath='{.status.health.status}' 2>/dev/null || echo "Unknown")
+        SYNC_STATUS=$(kubectl get application devops-case-study -n argocd -o jsonpath='{.status.sync.status}' 2>/dev/null || echo "Unknown")
+        
+        log_info "Application Health: $STATUS, Sync: $SYNC_STATUS"
+        
+        if [ "$STATUS" = "Healthy" ] && [ "$SYNC_STATUS" = "Synced" ]; then
+            log_success "ArgoCD application deployed successfully!"
+            break
+        fi
+        
+        if [ "$i" -eq 30 ]; then
+            log_warning "ArgoCD application deployment timed out. Check ArgoCD UI for details."
+        fi
+        
+        sleep 10
+    done
+    
+    log_success "GitOps deployment completed"
 }
 
 # Create namespace
@@ -231,6 +299,18 @@ main() {
             test_deployment
             show_status
             ;;
+        "gitops")
+            check_prerequisites
+            setup_cluster
+            sleep 10  # Give cluster time to stabilize
+            setup_argocd
+            build_monitoring_app
+            deploy_with_argocd
+            setup_port_forwarding
+            sleep 30  # Give ArgoCD time to deploy
+            test_deployment
+            show_status
+            ;;
         "cleanup")
             log_info "Cleaning up deployment..."
             
@@ -243,6 +323,11 @@ main() {
             if [ -f .db-pf.pid ]; then
                 kill $(cat .db-pf.pid) 2>/dev/null || true
                 rm -f .db-pf.pid
+            fi
+            
+            if [ -f .argo-pf.pid ]; then
+                kill $(cat .argo-pf.pid) 2>/dev/null || true
+                rm -f .argo-pf.pid
             fi
             
             # Delete KIND cluster
@@ -259,12 +344,17 @@ main() {
             show_status
             ;;
         *)
-            echo "Usage: $0 [deploy|cleanup|test|status]"
+            echo "Usage: $0 [deploy|gitops|cleanup|test|status]"
             echo ""
-            echo "  deploy  - Full deployment (default)"
+            echo "  deploy  - Full deployment using kubectl (default)"
+            echo "  gitops  - GitOps deployment using ArgoCD"
             echo "  cleanup - Clean up everything"
             echo "  test    - Run load test"
             echo "  status  - Show current status"
+            echo ""
+            echo "GitOps deployment requires:"
+            echo "  - Git repository with Helm charts"
+            echo "  - ArgoCD access to the repository"
             exit 1
             ;;
     esac
