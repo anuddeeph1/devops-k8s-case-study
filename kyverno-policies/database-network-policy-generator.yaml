@@ -1,0 +1,198 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: generate-database-networkpolicy
+  labels:
+    app.kubernetes.io/name: kyverno-database-policy
+    app.kubernetes.io/component: network-security
+  annotations:
+    policies.kyverno.io/title: "Generate Database NetworkPolicy"
+    policies.kyverno.io/category: "Network Security"
+    policies.kyverno.io/subject: "NetworkPolicy"
+    policies.kyverno.io/description: >-
+      This policy automatically generates a NetworkPolicy that restricts database access
+      to only web-server pods. It allows web-server pods to connect to MySQL on port 3306
+      while denying all other traffic to the database. This implements the DevOps case study
+      requirement for database network security using Policy-as-Code principles.
+spec:
+  admission: true
+  background: true
+  schemaValidation: false
+  rules:
+  - name: generate-mysql-networkpolicy
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+          names:
+          - "mysql-*"
+          namespaces:
+          - devops-case-study
+          selector:
+            matchLabels:
+              app: mysql
+    generate:
+      apiVersion: networking.k8s.io/v1
+      kind: NetworkPolicy
+      name: mysql-database-access-policy
+      namespace: "{{ request.namespace }}"
+      synchronize: true
+      data:
+        metadata:
+          labels:
+            app.kubernetes.io/name: mysql-networkpolicy  
+            app.kubernetes.io/component: database-security
+            generated-by: kyverno
+            devops-case-study: database-restriction
+        spec:
+          # Apply to MySQL database pods
+          podSelector:
+            matchLabels:
+              app: mysql
+          
+          # Default policy: Deny all ingress traffic
+          policyTypes:
+          - Ingress
+          
+          # Allow specific ingress rules
+          ingress:
+          # Rule 1: Allow web-server pods to connect to MySQL on port 3306
+          - from:
+            - podSelector:
+                matchLabels:
+                  app: web-server
+            ports:
+            - protocol: TCP
+              port: 3306
+          
+          # Rule 2: Allow monitoring/health checks from pod-monitor
+          - from:
+            - podSelector:
+                matchLabels:
+                  app: pod-monitor
+            ports:
+            - protocol: TCP
+              port: 3306
+          
+          # Rule 3: Allow backup jobs to connect to MySQL
+          - from:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/component: backup-job
+            ports:
+            - protocol: TCP
+              port: 3306
+          
+          # Rule 4: Allow restore jobs to connect to MySQL  
+          - from:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/component: restore-job
+            ports:
+            - protocol: TCP
+              port: 3306
+          
+          # Rule 5: Allow verify jobs to connect to MySQL
+          - from:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/component: verify-job
+            ports:
+            - protocol: TCP
+              port: 3306
+
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy  
+metadata:
+  name: generate-web-server-networkpolicy
+  labels:
+    app.kubernetes.io/name: kyverno-webserver-policy
+    app.kubernetes.io/component: network-security
+  annotations:
+    policies.kyverno.io/title: "Generate Web Server NetworkPolicy"
+    policies.kyverno.io/category: "Network Security" 
+    policies.kyverno.io/subject: "NetworkPolicy"
+    policies.kyverno.io/description: >-
+      This policy automatically generates a NetworkPolicy for web-server pods
+      to allow ingress traffic on HTTP ports while securing outbound database connections.
+spec:
+  admission: true
+  background: true
+  schemaValidation: false
+  rules:
+  - name: generate-webserver-networkpolicy
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+          names:
+          - "web-server-*"
+          namespaces:
+          - devops-case-study
+          selector:
+            matchLabels:
+              app: web-server
+    generate:
+      apiVersion: networking.k8s.io/v1
+      kind: NetworkPolicy
+      name: web-server-access-policy
+      namespace: "{{ request.namespace }}"
+      synchronize: true
+      data:
+        metadata:
+          labels:
+            app.kubernetes.io/name: web-server-networkpolicy
+            app.kubernetes.io/component: web-server-security
+            generated-by: kyverno
+            devops-case-study: web-server-access
+        spec:
+          # Apply to web-server pods
+          podSelector:
+            matchLabels:
+              app: web-server
+          
+          # Allow both ingress and egress
+          policyTypes:
+          - Ingress
+          - Egress
+          
+          # Ingress rules - allow HTTP traffic
+          ingress:
+          # Allow all HTTP traffic (for browser access)
+          - ports:
+            - protocol: TCP
+              port: 80
+          # Allow load testing traffic
+          - from:
+            - podSelector:
+                matchLabels:
+                  app: load-tester
+            ports:
+            - protocol: TCP
+              port: 80
+          
+          # Egress rules - restrict outbound connections
+          egress:
+          # Allow DNS resolution
+          - to: []
+            ports:
+            - protocol: UDP
+              port: 53
+          # Allow connection to MySQL database only
+          - to:
+            - podSelector:
+                matchLabels:
+                  app: mysql
+            ports:
+            - protocol: TCP
+              port: 3306
+          # Allow outbound HTTP for health checks, etc.
+          - to: []
+            ports:
+            - protocol: TCP
+              port: 80
+            - protocol: TCP
+              port: 443
