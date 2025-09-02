@@ -12,7 +12,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/anuddeeph/ng-voice.git
+    repoURL: https://github.com/anuddeeph1/musical-giggle.git
     targetRevision: gitops
     path: helm-charts/database
     helm:
