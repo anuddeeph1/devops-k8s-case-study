@@ -84,7 +84,7 @@ chmod +x deploy.sh
 ```
 
 This will:
-1. Create KIND cluster
+1. Create KIND cluster with metrics-server for HPA
 2. Build and push the monitoring application to Docker Hub
 3. Deploy all components to Kubernetes
 4. Set up port forwarding

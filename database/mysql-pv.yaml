@@ -25,6 +25,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
+  storageClassName: ""  # Disable dynamic provisioning to bind to manual PV
   selector:
     matchLabels:
       type: local

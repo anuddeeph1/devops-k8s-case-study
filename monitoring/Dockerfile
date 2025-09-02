@@ -30,7 +30,10 @@ RUN apk --no-cache add ca-certificates tzdata
 # Create non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-WORKDIR /root/
+# Create app directory with proper permissions
+RUN mkdir -p /app && chown appuser:appgroup /app
+
+WORKDIR /app
 
 # Copy binary from builder stage
 COPY --from=builder /app/pod-monitor .

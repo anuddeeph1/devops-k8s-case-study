@@ -49,6 +49,19 @@ kubectl wait --namespace ingress-nginx \
   --selector=app.kubernetes.io/component=controller \
   --timeout=90s
 
+# Install Metrics Server for HPA
+echo "Installing Kubernetes Metrics Server..."
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+# Patch metrics-server for KIND cluster (disable TLS verification)
+echo "Configuring metrics-server for KIND cluster..."
+kubectl patch deployment metrics-server -n kube-system --type='json' \
+  -p='[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}]'
+
+# Wait for metrics-server to be ready
+echo "Waiting for metrics-server to be ready..."
+kubectl wait --for=condition=available --timeout=120s deployment/metrics-server -n kube-system
+
 echo "Cluster setup complete!"
 echo "Cluster info:"
 kubectl cluster-info
