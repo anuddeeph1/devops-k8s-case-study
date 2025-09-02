@@ -1,0 +1,17 @@
+FROM alpine:3.18
+
+# Install necessary tools
+RUN apk add --no-cache bash curl
+
+# Copy the init script and make it executable
+COPY init-script.sh /usr/local/bin/init-script.sh
+RUN chmod +x /usr/local/bin/init-script.sh
+
+# Create directories
+RUN mkdir -p /templates /shared
+
+# Set the working directory
+WORKDIR /
+
+# Default command
+CMD ["/usr/local/bin/init-script.sh"]

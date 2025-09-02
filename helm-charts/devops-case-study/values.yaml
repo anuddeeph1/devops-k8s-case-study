@@ -1,0 +1,137 @@
+# Default values for devops-case-study
+global:
+  namespace: devops-case-study
+
+# Web server configuration
+webServer:
+  enabled: true
+  image:
+    repository: nginx
+    tag: "1.25-alpine"
+    pullPolicy: IfNotPresent
+  
+  replicaCount: 3
+  
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 80
+  
+  ingress:
+    enabled: true
+    className: nginx
+    host: webapp.local
+    annotations: 
+      nginx.ingress.kubernetes.io/rewrite-target: /
+  
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "200m"
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+
+# Database configuration
+database:
+  enabled: true
+  type: mysql
+  
+  mysql:
+    enabled: true
+    auth:
+      rootPassword: "root123"
+      database: "webapp"
+      username: "testuser"
+      password: "testpass"
+    
+    primary:
+      persistence:
+        enabled: true
+        size: 10Gi
+        storageClass: "standard"
+      
+      resources:
+        requests:
+          memory: "512Mi"
+          cpu: "500m"
+        limits:
+          memory: "1Gi"
+          cpu: "1000m"
+    
+    architecture: standalone
+
+# Pod monitoring configuration
+monitoring:
+  enabled: true
+  podMonitor:
+    image:
+      repository: anuddeeph/pod-monitor
+      tag: "latest"
+      pullPolicy: Always
+    
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "50m"
+      limits:
+        memory: "128Mi"
+        cpu: "100m"
+
+# Load testing configuration
+loadTesting:
+  enabled: true
+  
+  job:
+    enabled: false  # Enable manually when needed
+    duration: 180   # seconds
+    concurrentUsers: 15
+    targetUrl: "http://web-server-service"
+  
+  deployment:
+    enabled: true
+    duration: 300   # seconds
+    concurrentUsers: 20
+    targetUrl: "http://web-server-service"
+    
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "50m"
+      limits:
+        memory: "128Mi"
+        cpu: "200m"
+
+# Network policies configuration
+networkPolicies:
+  enabled: true
+  defaultDeny: true
+
+# Namespace configuration
+namespace:
+  create: true
+  name: devops-case-study
+
+# RBAC configuration
+rbac:
+  create: true
+
+# Service accounts
+serviceAccount:
+  create: true
+  annotations: {}
+
+# Persistence configuration
+persistence:
+  mysql:
+    enabled: true
+    size: 10Gi
+    accessMode: ReadWriteOnce
+    storageClass: "standard"
