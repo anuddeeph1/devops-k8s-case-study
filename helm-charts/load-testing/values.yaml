@@ -26,3 +26,10 @@ loadTesting:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+
+  # Load Test Parameters (HIGH TRAFFIC for HPA testing)
+  loadTest:
+    duration: "300"          # 5 minutes 
+    jobDuration: "180"       # 3 minutes for jobs
+    concurrentUsers: "50"    # HIGH TRAFFIC! (was 20)
+    requestDelay: "0.1"      # 100ms between requests

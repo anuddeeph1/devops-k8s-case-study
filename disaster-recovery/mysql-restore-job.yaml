@@ -1,0 +1,61 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mysql-restore-job
+  namespace: devops-case-study
+  labels:
+    app: mysql-restore
+spec:
+  template:
+    metadata:
+      labels:
+        app: mysql-restore-job
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: mysql-restore
+        image: mysql:8.0
+        command:
+        - /bin/bash
+        - -c
+        - |
+          chmod +x /scripts/restore.sh
+          /scripts/restore.sh
+        env:
+        - name: MYSQL_HOST
+          value: "mysql-service"
+        - name: MYSQL_PORT
+          value: "3306"
+        - name: MYSQL_USER
+          value: "root"
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: mysql-root-password
+        - name: BACKUP_DIR
+          value: "/backups"
+        # Uncomment and set to restore specific backup file
+        # - name: BACKUP_FILE
+        #   value: "mysql_backup_20250902_120000.sql.gz"
+        volumeMounts:
+        - name: backup-storage
+          mountPath: /backups
+        - name: backup-scripts
+          mountPath: /scripts
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "200m"
+      volumes:
+      - name: backup-storage
+        persistentVolumeClaim:
+          claimName: mysql-backup-pvc
+      - name: backup-scripts
+        configMap:
+          name: mysql-backup-script
+          defaultMode: 0755
+  backoffLimit: 3

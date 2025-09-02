@@ -1,0 +1,37 @@
+{{- if .Values.mysql.backup.enabled }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-backup-pv
+  labels:
+    type: local
+    app: mysql-backup
+    {{- include "database.labels" . | nindent 4 }}
+spec:
+  capacity:
+    storage: {{ .Values.mysql.backup.storage.size }}
+  accessModes:
+    - {{ .Values.mysql.backup.storage.accessMode }}
+  hostPath:
+    path: "/tmp/data/mysql-backups"
+  persistentVolumeReclaimPolicy: Retain
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-backup-pvc
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "database.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.mysql.backup.storage.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.mysql.backup.storage.size }}
+  storageClassName: {{ .Values.mysql.backup.storage.storageClass | quote }}
+  selector:
+    matchLabels:
+      type: local
+      app: mysql-backup
+{{- end }}

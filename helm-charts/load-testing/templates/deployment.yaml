@@ -49,9 +49,9 @@ spec:
         - name: TARGET_URL
           value: "http://{{ .Values.loadTesting.target.service }}:{{ .Values.loadTesting.target.port }}{{ .Values.loadTesting.target.path }}"
         - name: DURATION
-          value: "300"
+          value: "{{ .Values.loadTesting.loadTest.duration }}"
         - name: CONCURRENT_USERS
-          value: "20"
+          value: "{{ .Values.loadTesting.loadTest.concurrentUsers }}"
         volumeMounts:
         - name: load-test-script
           mountPath: /scripts

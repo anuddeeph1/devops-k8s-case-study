@@ -1,0 +1,182 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-backup-script
+  namespace: devops-case-study
+  labels:
+    app: mysql-backup
+data:
+  backup.sh: |
+    #!/bin/bash
+    set -e
+    
+    # Configuration
+    MYSQL_HOST=${MYSQL_HOST:-"mysql-service"}
+    MYSQL_PORT=${MYSQL_PORT:-"3306"}
+    MYSQL_USER=${MYSQL_USER:-"root"}
+    MYSQL_DATABASE=${MYSQL_DATABASE:-"testdb"}
+    BACKUP_DIR=${BACKUP_DIR:-"/backups"}
+    RETENTION_DAYS=${RETENTION_DAYS:-"7"}
+    
+    # Create backup directory if it doesn't exist
+    mkdir -p $BACKUP_DIR
+    
+    # Generate timestamp
+    TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+    BACKUP_FILE="mysql_backup_${TIMESTAMP}.sql"
+    COMPRESSED_FILE="${BACKUP_FILE}.gz"
+    
+    echo "🚀 Starting MySQL backup at $(date)"
+    echo "📍 Host: $MYSQL_HOST:$MYSQL_PORT"
+    echo "💾 Database: $MYSQL_DATABASE"
+    echo "📁 Backup directory: $BACKUP_DIR"
+    
+    # Create backup
+    echo "📦 Creating backup: $BACKUP_FILE"
+    mysqldump -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_ROOT_PASSWORD \
+      --single-transaction \
+      --routines \
+      --triggers \
+      --all-databases \
+      --flush-logs \
+      --master-data=2 > $BACKUP_DIR/$BACKUP_FILE
+    
+    if [ $? -eq 0 ]; then
+      echo "✅ Database dump completed successfully"
+      
+      # Compress backup
+      echo "🗜️  Compressing backup..."
+      gzip $BACKUP_DIR/$BACKUP_FILE
+      
+      if [ $? -eq 0 ]; then
+        echo "✅ Backup compressed: $COMPRESSED_FILE"
+        
+        # Calculate backup size
+        BACKUP_SIZE=$(du -sh $BACKUP_DIR/$COMPRESSED_FILE | cut -f1)
+        echo "📊 Backup size: $BACKUP_SIZE"
+        
+        # Log backup metadata
+        echo "$(date): Backup $COMPRESSED_FILE created successfully (Size: $BACKUP_SIZE)" >> $BACKUP_DIR/backup.log
+        
+        # Cleanup old backups
+        echo "🧹 Cleaning up backups older than $RETENTION_DAYS days..."
+        find $BACKUP_DIR -name "mysql_backup_*.sql.gz" -type f -mtime +$RETENTION_DAYS -delete
+        
+        # List current backups
+        echo "📋 Current backups:"
+        ls -lah $BACKUP_DIR/mysql_backup_*.sql.gz 2>/dev/null || echo "No compressed backups found"
+        
+        echo "🎉 Backup completed successfully at $(date)"
+        
+      else
+        echo "❌ Failed to compress backup"
+        exit 1
+      fi
+    else
+      echo "❌ Database backup failed"
+      exit 1
+    fi
+  
+  restore.sh: |
+    #!/bin/bash
+    set -e
+    
+    # Configuration
+    MYSQL_HOST=${MYSQL_HOST:-"mysql-service"}
+    MYSQL_PORT=${MYSQL_PORT:-"3306"}
+    MYSQL_USER=${MYSQL_USER:-"root"}
+    BACKUP_DIR=${BACKUP_DIR:-"/backups"}
+    
+    echo "🔄 MySQL Disaster Recovery - Restore Process"
+    echo "⚠️  WARNING: This will overwrite the current database!"
+    
+    # List available backups
+    echo "📋 Available backups:"
+    ls -lah $BACKUP_DIR/mysql_backup_*.sql.gz 2>/dev/null || {
+      echo "❌ No backups found in $BACKUP_DIR"
+      exit 1
+    }
+    
+    # Use the most recent backup if no specific file provided
+    if [ -z "$BACKUP_FILE" ]; then
+      BACKUP_FILE=$(ls -t $BACKUP_DIR/mysql_backup_*.sql.gz 2>/dev/null | head -n1)
+      echo "🔍 Using most recent backup: $(basename $BACKUP_FILE)"
+    else
+      BACKUP_FILE="$BACKUP_DIR/$BACKUP_FILE"
+    fi
+    
+    if [ ! -f "$BACKUP_FILE" ]; then
+      echo "❌ Backup file not found: $BACKUP_FILE"
+      exit 1
+    fi
+    
+    echo "📂 Restoring from: $(basename $BACKUP_FILE)"
+    echo "📅 Backup date: $(stat -c %y $BACKUP_FILE)"
+    
+    # Decompress if needed
+    if [[ $BACKUP_FILE == *.gz ]]; then
+      echo "🗜️  Decompressing backup..."
+      TEMP_SQL="/tmp/restore_$(date +%s).sql"
+      gunzip -c $BACKUP_FILE > $TEMP_SQL
+      SQL_FILE=$TEMP_SQL
+    else
+      SQL_FILE=$BACKUP_FILE
+    fi
+    
+    # Perform restore
+    echo "🔄 Starting database restore..."
+    mysql -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_ROOT_PASSWORD < $SQL_FILE
+    
+    if [ $? -eq 0 ]; then
+      echo "✅ Database restored successfully!"
+      echo "📊 Restore completed at $(date)"
+      
+      # Cleanup temporary file
+      if [ -n "$TEMP_SQL" ] && [ -f "$TEMP_SQL" ]; then
+        rm -f $TEMP_SQL
+      fi
+      
+      # Log restore operation
+      echo "$(date): Database restored from $(basename $BACKUP_FILE)" >> $BACKUP_DIR/restore.log
+      
+    else
+      echo "❌ Database restore failed"
+      exit 1
+    fi
+  
+  verify.sh: |
+    #!/bin/bash
+    set -e
+    
+    # Configuration
+    MYSQL_HOST=${MYSQL_HOST:-"mysql-service"}
+    MYSQL_PORT=${MYSQL_PORT:-"3306"}
+    MYSQL_USER=${MYSQL_USER:-"root"}
+    
+    echo "🔍 Database Health Verification"
+    echo "================================"
+    
+    # Test connection
+    echo "🔗 Testing database connection..."
+    mysql -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_ROOT_PASSWORD -e "SELECT 1" > /dev/null
+    
+    if [ $? -eq 0 ]; then
+      echo "✅ Database connection successful"
+    else
+      echo "❌ Database connection failed"
+      exit 1
+    fi
+    
+    # Check databases
+    echo -e "\n📊 Available databases:"
+    mysql -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_ROOT_PASSWORD -e "SHOW DATABASES;"
+    
+    # Check tables in testdb
+    echo -e "\n📋 Tables in testdb (if exists):"
+    mysql -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_ROOT_PASSWORD -D testdb -e "SHOW TABLES;" 2>/dev/null || echo "No testdb database found"
+    
+    # Check MySQL status
+    echo -e "\n🔧 MySQL status:"
+    mysql -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_ROOT_PASSWORD -e "SHOW STATUS LIKE 'Uptime';"
+    
+    echo -e "\n✅ Database health verification completed"
