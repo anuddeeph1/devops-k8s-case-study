@@ -29,7 +29,7 @@ spec:
           /scripts/restore.sh
         env:
         - name: MYSQL_HOST
-          value: "{{ include "database.fullname" . }}-service"
+          value: "mysql-service"
         - name: MYSQL_PORT
           value: "{{ .Values.mysql.service.port }}"
         - name: MYSQL_USER
@@ -37,7 +37,7 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ include "database.fullname" . }}-secret
+              name: mysql-secret
               key: mysql-root-password
         - name: BACKUP_DIR
           value: "/backups"

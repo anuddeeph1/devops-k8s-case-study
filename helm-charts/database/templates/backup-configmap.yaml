@@ -13,7 +13,7 @@ data:
     set -e
     
     # Configuration
-    MYSQL_HOST=${MYSQL_HOST:-"{{ include "database.fullname" . }}-service"}
+    MYSQL_HOST=${MYSQL_HOST:-"mysql-service"}
     MYSQL_PORT=${MYSQL_PORT:-"{{ .Values.mysql.service.port }}"}
     MYSQL_USER=${MYSQL_USER:-"root"}
     MYSQL_DATABASE=${MYSQL_DATABASE:-"{{ .Values.mysql.database }}"}
@@ -84,7 +84,7 @@ data:
     set -e
     
     # Configuration
-    MYSQL_HOST=${MYSQL_HOST:-"{{ include "database.fullname" . }}-service"}
+    MYSQL_HOST=${MYSQL_HOST:-"mysql-service"}
     MYSQL_PORT=${MYSQL_PORT:-"{{ .Values.mysql.service.port }}"}
     MYSQL_USER=${MYSQL_USER:-"root"}
     BACKUP_DIR=${BACKUP_DIR:-"/backups"}
@@ -151,7 +151,7 @@ data:
     set -e
     
     # Configuration
-    MYSQL_HOST=${MYSQL_HOST:-"{{ include "database.fullname" . }}-service"}
+    MYSQL_HOST=${MYSQL_HOST:-"mysql-service"}
     MYSQL_PORT=${MYSQL_PORT:-"{{ .Values.mysql.service.port }}"}
     MYSQL_USER=${MYSQL_USER:-"root"}
     
