@@ -6,6 +6,8 @@ metadata:
   labels:
     app.kubernetes.io/name: kyverno
     app.kubernetes.io/component: security
+  annotations:
+    argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
 spec:
   project: default
   source:
@@ -16,6 +18,14 @@ spec:
       releaseName: kyverno
       values: |
         # Kyverno Configuration for Policy-as-Code Security
+        
+        # CRITICAL: ArgoCD Configuration (per Kyverno docs)
+        config:
+          preserve: false  # Essential for ArgoCD deployments!
+        
+        # Webhook labels for ArgoCD tracking
+        webhookLabels:
+          app.kubernetes.io/managed-by: argocd
         
         # Resource configuration
         resources:
@@ -96,6 +106,7 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=true
+    - ServerSideApply=true
     - PrunePropagationPolicy=foreground
     retry:
       limit: 5

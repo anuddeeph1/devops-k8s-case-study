@@ -6,6 +6,8 @@ metadata:
   labels:
     app.kubernetes.io/name: kyverno-policies
     app.kubernetes.io/component: security-policies
+  annotations:
+    argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
 spec:
   project: default
   source:
@@ -61,6 +63,7 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=false  # Namespace should already exist from kyverno core
+    - ServerSideApply=true
     - PrunePropagationPolicy=foreground
     retry:
       limit: 5
