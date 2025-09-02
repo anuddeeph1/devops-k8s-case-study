@@ -17,11 +17,11 @@ loadTesting:
   
   resources:
     requests:
-      memory: "64Mi"
-      cpu: "50m"      # 5x increase!
-    limits:
       memory: "128Mi"
-      cpu: "200m"     # 8x increase!
+      cpu: "100m"      # 5x increase!
+    limits:
+      memory: "256Mi"
+      cpu: "400m"     # 8x increase!
   
   nodeSelector: {}
   tolerations: []
@@ -31,5 +31,5 @@ loadTesting:
   loadTest:
     duration: "300"          # 5 minutes 
     jobDuration: "180"       # 3 minutes for jobs
-    concurrentUsers: "50"    # HIGH TRAFFIC! (was 20)
+    concurrentUsers: "100"    # HIGH TRAFFIC! (was 20)
     requestDelay: "0.1"      # 100ms between requests
