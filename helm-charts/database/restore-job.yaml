@@ -1,0 +1,77 @@
+---
+# Source: database/templates/temp-restore-job.yaml
+# This template creates a restore job when applied
+# Usage: kubectl apply -f this-template-output.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: devops-database-restore-job
+  namespace: devops-case-study
+  labels:
+    helm.sh/chart: database-0.1.0
+    app.kubernetes.io/name: database
+    app.kubernetes.io/instance: devops-database
+    app.kubernetes.io/version: "8.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: database
+    app.kubernetes.io/component: restore
+spec:
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: database-0.1.0
+        app.kubernetes.io/name: database
+        app.kubernetes.io/instance: devops-database
+        app.kubernetes.io/version: "8.0"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: database
+        app.kubernetes.io/component: restore-job
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: mysql-restore
+        image: "mysql:8.0"
+        imagePullPolicy: IfNotPresent
+        command:
+        - /bin/bash
+        - -c
+        - |
+          chmod +x /scripts/restore.sh
+          /scripts/restore.sh
+        env:
+        - name: MYSQL_HOST
+          value: "mysql-service"
+        - name: MYSQL_PORT
+          value: "3306"
+        - name: MYSQL_USER
+          value: "root"
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: mysql-root-password
+        - name: BACKUP_DIR
+          value: "/backups"
+        # Uncomment and set this to restore from a specific backup file
+        # - name: BACKUP_FILE
+        #   value: "mysql_backup_YYYYMMDD_HHMMSS.sql.gz"
+        volumeMounts:
+        - name: backup-storage
+          mountPath: /backups
+        - name: backup-scripts
+          mountPath: /scripts
+        resources:
+          limits:
+            cpu: 200m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+      volumes:
+      - name: backup-storage
+        persistentVolumeClaim:
+          claimName: mysql-backup-pvc
+      - name: backup-scripts
+        configMap:
+          name: devops-database-backup-script
+          defaultMode: 0755
