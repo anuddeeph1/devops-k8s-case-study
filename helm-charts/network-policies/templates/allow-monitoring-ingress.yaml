@@ -23,12 +23,6 @@ spec:
           - "*"
           namespaces:
           - {{ .Values.networkPolicies.targetNamespace }}
-      clusterRoles:
-      - "system:controller:*"
-      subjects:
-      - kind: ServiceAccount
-        name: "*"
-        namespace: {{ .Values.networkPolicies.targetNamespace }}
     preconditions:
       all:
       - key: {{ `"{{ request.object.metadata.labels.\"app.kubernetes.io/name\" || '' }}"` }}
