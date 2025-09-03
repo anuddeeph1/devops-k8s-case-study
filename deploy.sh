@@ -114,15 +114,29 @@ build_monitoring_app() {
 deploy_with_argocd() {
     log_info "Deploying applications via ArgoCD GitOps using App-of-Apps pattern..."
     
-    # Deploy individual applications
-    log_info "Deploying individual applications..."
-    kubectl apply -f argocd-apps/database-app.yaml
-    kubectl apply -f argocd-apps/web-server-app.yaml
-    kubectl apply -f argocd-apps/monitoring-app.yaml
-    kubectl apply -f argocd-apps/load-testing-app.yaml
+    # Deploy the App-of-Apps which will manage all applications
+    log_info "Deploying App-of-Apps pattern..."
+    kubectl apply -f argocd-apps/app-of-apps.yaml
     
-    # Wait for applications to sync
-    log_info "Waiting for ArgoCD applications to sync..."
+    # Wait for app-of-apps to sync
+    log_info "Waiting for App-of-Apps to sync..."
+    for i in {1..10}; do
+        STATUS=$(kubectl get application devops-case-study-apps -n argocd -o jsonpath='{.status.health.status}' 2>/dev/null || echo "Unknown")
+        SYNC_STATUS=$(kubectl get application devops-case-study-apps -n argocd -o jsonpath='{.status.sync.status}' 2>/dev/null || echo "Unknown")
+        
+        log_info "App-of-Apps - Health: $STATUS, Sync: $SYNC_STATUS"
+        
+        if [ "$STATUS" = "Healthy" ] && [ "$SYNC_STATUS" = "Synced" ]; then
+            log_success "App-of-Apps deployed successfully!"
+            break
+        fi
+        
+        if [ "$i" -eq 10 ]; then
+            log_warning "App-of-Apps deployment timed out. Continuing with individual app monitoring..."
+        fi
+        
+        sleep 5
+    done
     
     # Install ArgoCD CLI if not present (for local testing)
     if ! command -v argocd &> /dev/null; then
@@ -130,13 +144,13 @@ deploy_with_argocd() {
         log_info "curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64"
     fi
     
-    # Wait for all applications to be healthy
-    APPS=("database" "web-server" "monitoring" "load-testing")
-    log_info "Monitoring ArgoCD applications status..."
+    # Wait for all applications to be healthy (with sync waves)
+    APPS=("reports-server" "kyverno" "kyverno-policies" "kyverno-custom-policies" "devops-database" "devops-web-server" "devops-monitoring" "load-testing")
+    log_info "Monitoring ArgoCD applications status (respecting sync waves)..."
     
     for app in "${APPS[@]}"; do
         log_info "Checking $app application..."
-        for i in {1..20}; do
+        for i in {1..30}; do  # Increased timeout for Kyverno components
             STATUS=$(kubectl get application $app -n argocd -o jsonpath='{.status.health.status}' 2>/dev/null || echo "Unknown")
             SYNC_STATUS=$(kubectl get application $app -n argocd -o jsonpath='{.status.sync.status}' 2>/dev/null || echo "Unknown")
             
@@ -147,15 +161,96 @@ deploy_with_argocd() {
                 break
             fi
             
-            if [ "$i" -eq 20 ]; then
+            if [ "$i" -eq 30 ]; then
                 log_warning "$app application deployment timed out. Check ArgoCD UI for details."
             fi
             
-            sleep 5
+            sleep 10  # Longer wait for complex deployments like Kyverno
         done
     done
     
-    log_success "GitOps deployment completed - All applications deployed!"
+    # Verify Reports Server is working
+    log_info "Verifying Reports Server deployment..."
+    sleep 20  # Give Reports Server time to initialize
+    
+    # Check Reports Server pods
+    REPORTS_PODS=$(kubectl get pods -n kyverno -l app.kubernetes.io/name=policy-reporter --no-headers 2>/dev/null | grep -v Completed | wc -l || echo "0")
+    if [ "$REPORTS_PODS" -gt 0 ]; then
+        log_success "Reports Server pods are running ($REPORTS_PODS pods)"
+        
+        # Check if API service is available
+        API_SERVICE=$(kubectl get apiservice v1.reports.kyverno.io --no-headers 2>/dev/null | grep Available || echo "")
+        if [ -n "$API_SERVICE" ]; then
+            log_success "Reports Server API service is available"
+        else
+            log_warning "Reports Server API service not available yet. May need more time to initialize."
+        fi
+        
+        # Check if PolicyReports are being generated
+        sleep 10  # Give time for reports to be generated
+        POLICY_REPORTS=$(kubectl get policyreports -A --no-headers 2>/dev/null | wc -l || echo "0")
+        if [ "$POLICY_REPORTS" -gt 0 ]; then
+            log_success "Policy reports are being generated ($POLICY_REPORTS reports)"
+        else
+            log_warning "No policy reports found yet. Reports may generate after policies are applied."
+        fi
+        
+        # Check if ClusterPolicyReports exist
+        CLUSTER_REPORTS=$(kubectl get clusterpolicyreports --no-headers 2>/dev/null | wc -l || echo "0")
+        if [ "$CLUSTER_REPORTS" -gt 0 ]; then
+            log_success "Cluster policy reports are available ($CLUSTER_REPORTS reports)"
+        else
+            log_warning "No cluster policy reports found yet."
+        fi
+        
+        # Check Reports Server service
+        REPORTS_SVC=$(kubectl get service -n kyverno -l app.kubernetes.io/name=policy-reporter --no-headers 2>/dev/null | wc -l || echo "0")
+        if [ "$REPORTS_SVC" -gt 0 ]; then
+            log_success "Reports Server service is available"
+        else
+            log_warning "Reports Server service not found."
+        fi
+    else
+        log_warning "No Reports Server pods found. Check deployment status."
+    fi
+    
+    # Verify Kyverno is working
+    log_info "Verifying Kyverno deployment..."
+    sleep 30  # Give Kyverno time to initialize
+    
+    # Check Kyverno pods
+    KYVERNO_PODS=$(kubectl get pods -n kyverno --no-headers 2>/dev/null | grep -E "(kyverno|admission|background|cleanup|reports)" | grep -v Completed | wc -l || echo "0")
+    if [ "$KYVERNO_PODS" -gt 0 ]; then
+        log_success "Kyverno pods are running ($KYVERNO_PODS pods)"
+        
+        # Check if policies are loaded
+        POLICIES=$(kubectl get clusterpolicies --no-headers 2>/dev/null | wc -l || echo "0")
+        if [ "$POLICIES" -gt 0 ]; then
+            log_success "Kyverno policies are loaded ($POLICIES policies)"
+        else
+            log_warning "No Kyverno policies found. This may be expected if using audit mode."
+        fi
+        
+        # Check if NetworkPolicies are generated
+        NETPOLS=$(kubectl get networkpolicies -n devops-case-study --no-headers 2>/dev/null | wc -l || echo "0")
+        if [ "$NETPOLS" -gt 0 ]; then
+            log_success "NetworkPolicies generated by Kyverno ($NETPOLS policies)"
+        else
+            log_warning "No NetworkPolicies generated yet. Check Kyverno logs if expected."
+        fi
+        
+        # Show detailed Kyverno status
+        log_info "Kyverno component status:"
+        kubectl get pods -n kyverno -o custom-columns="NAME:.metadata.name,STATUS:.status.phase,READY:.status.containerStatuses[*].ready" --no-headers 2>/dev/null | while read name status ready; do
+            if [[ "$name" == *"kyverno"* ]]; then
+                log_info "  $name: $status (Ready: $ready)"
+            fi
+        done
+    else
+        log_warning "No Kyverno pods found. Check deployment status."
+    fi
+    
+    log_success "GitOps deployment completed - All applications deployed with Policy-as-Code!"
 }
 
 # Create namespace
