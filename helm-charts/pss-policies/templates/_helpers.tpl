@@ -79,7 +79,7 @@ Policy validation failure action - can be overridden per policy
 */}}
 {{- define "pss-policies.validationFailureAction" -}}
 {{- $policyName := .policyName -}}
-{{- if hasKey .Values.policies $policyName -}}
+{{- if and .Values.policies (hasKey .Values.policies $policyName) -}}
   {{- if hasKey (index .Values.policies $policyName) "validationFailureAction" -}}
     {{- index .Values.policies $policyName "validationFailureAction" }}
   {{- else -}}
@@ -95,7 +95,7 @@ Policy background setting - can be overridden per policy
 */}}
 {{- define "pss-policies.background" -}}
 {{- $policyName := .policyName -}}
-{{- if hasKey .Values.policies $policyName -}}
+{{- if and .Values.policies (hasKey .Values.policies $policyName) -}}
   {{- if hasKey (index .Values.policies $policyName) "background" -}}
     {{- index .Values.policies $policyName "background" }}
   {{- else -}}

@@ -1,0 +1,49 @@
+{{- if .Values.pss.baseline.enabled }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: disallow-privileged-containers
+  labels:
+    {{- include "pss-policies.labels" . | nindent 4 }}
+  annotations:
+    {{- include "pss-policies.annotations" . | nindent 4 }}
+    policies.kyverno.io/title: Disallow Privileged Containers
+    policies.kyverno.io/category: Pod Security Standards (Baseline)
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Privileged containers share namespaces with the host system, eschew cgroup
+      restrictions, and do not offer any security. They should be disallowed.
+spec:
+  validationFailureAction: {{ include "pss-policies.validationFailureAction" (dict "Values" .Values "policyName" "disallow-privileged-containers") }}
+  background: {{ include "pss-policies.background" (dict "Values" .Values "policyName" "disallow-privileged-containers") }}
+  admission: {{ .Values.pss.admission }}
+  emitWarning: {{ .Values.pss.emitWarning }}
+  rules:
+    - name: check-privileged
+      match:
+        any:
+        - resources:
+            kinds:
+            - Pod
+        {{ include "pss-policies.namespaceSelector" . | nindent 8 }}
+      validate:
+        message: >-
+          Privileged containers are disallowed. The fields spec.securityContext.privileged
+          and spec.containers[*].securityContext.privileged, and spec.initContainers[*].securityContext.privileged
+          must be unset or set to `false`.
+        pattern:
+          spec:
+            =(securityContext):
+              =(privileged): "false"
+            =(ephemeralContainers):
+            - =(securityContext):
+                =(privileged): "false"
+            =(initContainers):
+            - =(securityContext):
+                =(privileged): "false"
+            containers:
+            - =(securityContext):
+                =(privileged): "false"
+{{- end }}
