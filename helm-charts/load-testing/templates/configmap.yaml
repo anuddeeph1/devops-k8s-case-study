@@ -59,17 +59,3 @@ data:
     
     echo "Load test completed at: $(date)"
   
-  monitor-hpa.sh: |
-    #!/bin/bash
-    
-    # Monitor HPA during load test
-    echo "Monitoring HPA status during load test..."
-    echo "Press Ctrl+C to stop monitoring"
-    
-    while true; do
-        echo "=== $(date) ==="
-        kubectl get hpa web-server-hpa -n {{ .Values.global.namespace }} -o wide 2>/dev/null || echo "HPA not found"
-        kubectl get pods -n {{ .Values.global.namespace }} -l app.kubernetes.io/name=web-server -o wide 2>/dev/null || echo "Web server pods not found"
-        echo ""
-        sleep 10
-    done
