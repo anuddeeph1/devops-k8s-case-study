@@ -4,8 +4,8 @@ global:
 
 loadTesting:
   image:
-    #repository: alpine/curl
-    repository: bitnami/kubectl
+    repository: alpine/curl
+    #repository: bitnami/kubectl
     tag: "latest"
     pullPolicy: IfNotPresent
   
