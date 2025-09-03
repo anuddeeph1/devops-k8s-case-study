@@ -178,7 +178,7 @@ deploy_with_argocd() {
     
     # Deploy the App-of-Apps which will manage all applications
     log_info "Deploying App-of-Apps pattern..."
-    kubectl apply -f ../argocd-apps/app-of-apps.yaml
+    kubectl apply -f ./argocd-apps/app-of-apps.yaml
     
     # Wait for app-of-apps to sync
     log_info "Waiting for App-of-Apps to sync..."
