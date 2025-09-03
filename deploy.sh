@@ -1,10 +1,11 @@
 #!/bin/bash
 
-# DevOps Case Study - Complete Deployment Script
+# DevOps Case Study - GitOps Deployment Script  
+# Production-grade Kubernetes deployment using ArgoCD and Helm Charts
 set -e
 
-echo "🚀 DevOps Case Study Deployment Script"
-echo "======================================"
+echo "🚀 DevOps Case Study - GitOps Deployment"
+echo "========================================"
 
 # Configuration
 NAMESPACE="devops-case-study"
@@ -49,13 +50,68 @@ check_prerequisites() {
     log_success "All prerequisites are installed"
 }
 
-# Setup cluster
+# Setup cluster  
 setup_cluster() {
     log_info "Setting up KIND cluster..."
     
-    # Make setup script executable and run it
-    chmod +x setup-cluster.sh
-    ./setup-cluster.sh
+    if [ -f "setup-cluster.sh" ]; then
+        # Use external setup script if available
+        chmod +x setup-cluster.sh
+        ./setup-cluster.sh
+    else
+        # Built-in KIND cluster setup
+        echo "Setting up DevOps Case Study environment..."
+        echo "Checking Docker Hub authentication..."
+        echo "⚠️  Please ensure you're logged in to Docker Hub: docker login"
+        
+        echo "Creating KIND cluster..."
+        cat <<EOF | kind create cluster --name devops-case-study --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  image: kindest/node:v1.33.1
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+- role: worker
+  image: kindest/node:v1.33.1
+- role: worker
+  image: kindest/node:v1.33.1
+EOF
+
+        echo "Using Docker Hub registry: ${REGISTRY}"
+        
+        # Install NGINX Ingress Controller
+        echo "Installing NGINX Ingress Controller..."
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+        
+        echo "Waiting for ingress controller to be ready..."
+        kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=90s || true
+        
+        # Install Metrics Server
+        echo "Installing Kubernetes Metrics Server..."
+        kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+        
+        echo "Configuring metrics-server for KIND cluster..."
+        kubectl patch deployment metrics-server -n kube-system --type='json' -p='[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}]'
+        
+        echo "Waiting for metrics-server to be ready..."
+        kubectl wait --for=condition=available --timeout=300s deployment/metrics-server -n kube-system
+        
+        echo "Cluster setup complete!"
+        kubectl cluster-info
+    fi
     
     # Wait for cluster to be ready
     kubectl wait --for=condition=Ready nodes --all --timeout=300s
@@ -96,18 +152,24 @@ setup_argocd() {
 build_monitoring_app() {
     log_info "Building pod monitoring application..."
     
-    cd monitoring
-    
-    # Build the Go application
-    docker build -t ${REGISTRY}/pod-monitor:latest .
-    
-    # Push to Docker Hub (make sure you're logged in)
-    echo "Pushing to Docker Hub..."
-    docker push ${REGISTRY}/pod-monitor:latest
-    
-    cd "$PROJECT_ROOT"
-    
-    log_success "Pod monitoring application built and pushed"
+    if [ -d "monitoring" ]; then
+        cd monitoring
+        
+        # Build the Go application
+        docker build -t ${REGISTRY}/pod-monitor:latest .
+        
+        # Push to Docker Hub (make sure you're logged in)
+        echo "Pushing to Docker Hub..."
+        docker push ${REGISTRY}/pod-monitor:latest
+        
+        cd "$PROJECT_ROOT"
+        
+        log_success "Pod monitoring application built and pushed"
+    else
+        log_info "Monitoring source directory not found - using pre-built image"
+        log_info "Using image: ${REGISTRY}/pod-monitor:latest"
+        log_success "Pod monitoring application ready (pre-built)"
+    fi
 }
 
 # Deploy applications via ArgoCD
@@ -299,34 +361,7 @@ create_namespace() {
     log_success "Namespace created/updated"
 }
 
-# Deploy components
-deploy_components() {
-    log_info "Deploying all components..."
-    
-    # Deploy database
-    log_info "Deploying MySQL database..."
-    kubectl apply -f database/ -n $NAMESPACE
-    
-    # Wait for database to be ready
-    kubectl wait --for=condition=available --timeout=300s deployment/mysql -n $NAMESPACE
-    
-    # Deploy web server
-    log_info "Deploying web server..."
-    kubectl apply -f web-server/ -n $NAMESPACE
-    
-    # Wait for web server to be ready
-    kubectl wait --for=condition=available --timeout=300s deployment/web-server -n $NAMESPACE
-    
-    # Deploy monitoring
-    log_info "Deploying pod monitor..."
-    kubectl apply -f monitoring/pod-monitor-deployment.yaml -n $NAMESPACE
-    
-    # Deploy load testing
-    log_info "Deploying load testing components..."
-    kubectl apply -f load-testing/ -n $NAMESPACE
-    
-    log_success "All components deployed successfully"
-}
+# NOTE: Manual deployment removed - using GitOps only
 
 # Setup port forwarding
 setup_port_forwarding() {
@@ -360,8 +395,8 @@ test_deployment() {
         log_warning "Web server health check failed - may need more time to start"
     fi
     
-    # Test database connectivity
-    if kubectl exec -n $NAMESPACE deployment/mysql -- mysql -u root -proot123 -e "SELECT 1" > /dev/null 2>&1; then
+    # Test database connectivity (StatefulSet)
+    if kubectl exec -n $NAMESPACE statefulset/mysql -- mysql -u root -proot123 -e "SELECT 1" > /dev/null 2>&1; then
         log_success "Database connectivity test passed"
     else
         log_warning "Database connectivity test failed"
@@ -428,18 +463,7 @@ show_status() {
 
 # Main deployment flow
 main() {
-    case "${1:-deploy}" in
-        "deploy")
-            check_prerequisites
-            setup_cluster
-            sleep 10  # Give cluster time to stabilize
-            build_monitoring_app
-            create_namespace
-            deploy_components
-            setup_port_forwarding
-            test_deployment
-            show_status
-            ;;
+    case "${1:-gitops}" in
         "gitops")
             check_prerequisites
             setup_cluster
@@ -452,6 +476,18 @@ main() {
             sleep 30  # Give ArgoCD time to deploy
             test_deployment
             show_status
+            ;;
+        "deploy")
+            log_error "Manual deployment mode has been removed!"
+            log_info "This project now uses GitOps-only deployment with ArgoCD and Helm charts."
+            log_info "Please use: $0 gitops"
+            echo ""
+            log_info "GitOps benefits:"
+            log_info "  ✅ Declarative deployments with Helm charts"  
+            log_info "  ✅ ArgoCD App-of-Apps pattern"
+            log_info "  ✅ Automatic sync and self-healing"
+            log_info "  ✅ Policy-as-Code with Kyverno"
+            exit 1
             ;;
         "cleanup")
             log_info "Cleaning up deployment..."
@@ -486,17 +522,22 @@ main() {
             show_status
             ;;
         *)
-            echo "Usage: $0 [deploy|gitops|cleanup|test|status]"
+            echo "Usage: $0 [gitops|cleanup|test|status]"
             echo ""
-            echo "  deploy  - Full deployment using kubectl (default)"
-            echo "  gitops  - GitOps deployment using ArgoCD"
-            echo "  cleanup - Clean up everything"
+            echo "  gitops  - GitOps deployment using ArgoCD (default)"
+            echo "  cleanup - Clean up everything" 
             echo "  test    - Run load test"
             echo "  status  - Show current status"
             echo ""
-            echo "GitOps deployment requires:"
-            echo "  - Git repository with Helm charts"
-            echo "  - ArgoCD access to the repository"
+            echo "🚀 GitOps Features:"
+            echo "  ✅ ArgoCD App-of-Apps pattern with sync waves"
+            echo "  ✅ Helm chart templating for all components"
+            echo "  ✅ Automatic sync and self-healing deployments"
+            echo "  ✅ Policy-as-Code with Kyverno (PSS + NetworkPolicies)"
+            echo "  ✅ StatefulSet database with disaster recovery"
+            echo "  ✅ HPA auto-scaling with load testing"
+            echo ""
+            echo "Note: Manual 'deploy' mode has been removed - GitOps only!"
             exit 1
             ;;
     esac
