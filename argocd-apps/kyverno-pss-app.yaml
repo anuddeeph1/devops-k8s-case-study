@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kyverno-pss
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+    argocd.argoproj.io/sync-wave: "3"  # Deploy AFTER Kyverno core
+spec:
+  project: default
+  sources:
+    # Baseline PSS Audit Policies
+    - repoURL: https://github.com/anuddeeph1/musical-giggle.git
+      targetRevision: gitops
+      path: helm-charts/pss-policies/baseline/Audit
+    # Restricted PSS Audit Policies  
+    - repoURL: https://github.com/anuddeeph1/musical-giggle.git
+      targetRevision: gitops
+      path: helm-charts/pss-policies/restricted/Audit
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kyverno
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+      - SkipDryRunOnMissingResource=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+  ignoreDifferences:
+    - group: kyverno.io
+      kind: ClusterPolicy
+      jsonPointers:
+        - /metadata/annotations
+        - /spec/background
+        - /spec/validationFailureAction
