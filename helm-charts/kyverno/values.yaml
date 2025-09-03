@@ -670,9 +670,9 @@ features:
     # -- Enables the feature
     enabled: true
     # -- Number of background scan workers
-    backgroundScanWorkers: 2
+    backgroundScanWorkers: 3
     # -- Background scan interval
-    backgroundScanInterval: 1h
+    backgroundScanInterval: 60s
     # -- Skips resource filters in background scan
     skipResourceFilters: true
   configMapCaching:
@@ -1845,7 +1845,7 @@ reportsController:
   revisionHistoryLimit: 10
 
   # -- Resync period for informers
-  resyncPeriod: 15m
+  resyncPeriod: 60s
 
   # -- Additional labels to add to each pod
   podLabels: {}
