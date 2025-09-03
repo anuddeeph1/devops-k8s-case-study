@@ -34,6 +34,7 @@ spec:
       name: allow-web-server-egress
       namespace: {{ `"{{ request.object.metadata.namespace }}"` }}
       synchronize: true
+      generateExisting: {{ .Values.kyverno.generateExisting }}
       data:
         metadata:
           labels:

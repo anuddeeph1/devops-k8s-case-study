@@ -27,6 +27,7 @@ spec:
       name: allow-dns
       namespace: {{ `"{{ request.object.metadata.name }}"` }}
       synchronize: true
+      generateExisting: {{ .Values.kyverno.generateExisting }}
       data:
         metadata:
           labels:

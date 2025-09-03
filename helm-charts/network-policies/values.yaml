@@ -71,7 +71,7 @@ kyverno:
   # Policy validation failure action
   validationFailureAction: "audit"
   # Generate policy settings
-  generateExisting: false
+  generateExisting: true  # 🚀 ENABLED: Generate NetworkPolicies for existing pods!
 
 # Namespace exclusions (where these policies should NOT apply)
 excludeNamespaces:

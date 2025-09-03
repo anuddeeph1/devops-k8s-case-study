@@ -34,6 +34,7 @@ spec:
       name: allow-load-testing-access
       namespace: {{ `"{{ request.object.metadata.namespace }}"` }}
       synchronize: true
+      generateExisting: {{ .Values.kyverno.generateExisting }}
       data:
         metadata:
           labels:
