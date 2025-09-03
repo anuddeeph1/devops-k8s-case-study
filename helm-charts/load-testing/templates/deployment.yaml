@@ -16,16 +16,38 @@ spec:
         {{- include "load-testing.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: load-tester-sa
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: load-tester
         image: "{{ .Values.loadTesting.image.repository }}:{{ .Values.loadTesting.image.tag }}"
         imagePullPolicy: {{ .Values.loadTesting.image.pullPolicy }}
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 65534
+          runAsGroup: 65534
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
         command:
-        - bash
+        - sh
         - -c
         - |
-          # Install additional tools needed for load testing
-          apt-get update && apt-get install -y curl
+          # Check if we have kubectl (bitnami/kubectl image) or need to use basic tools
+          if command -v kubectl > /dev/null 2>&1; then
+            echo "✅ kubectl found - full monitoring available"
+          else
+            echo "⚠️  kubectl not found - basic load testing only"
+          fi
           
           # Scripts are already executable via configMap defaultMode
           
