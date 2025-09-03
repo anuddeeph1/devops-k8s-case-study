@@ -1,0 +1,173 @@
+# Prometheus Stack Configuration
+global:
+  namespace: devops-case-study
+
+kubePrometheusStack:
+  enabled: true
+  
+  # Prometheus Configuration
+  prometheus:
+    prometheusSpec:
+      # Storage
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: standard
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 10Gi
+      
+      # Service Discovery
+      serviceMonitorSelectorNilUsesHelmValues: false
+      serviceMonitorSelector: {}
+      
+      # Resource limits
+      resources:
+        limits:
+          memory: 2Gi
+          cpu: 1000m
+        requests:
+          memory: 1Gi
+          cpu: 500m
+      
+      # Retention
+      retention: 15d
+      
+      # Additional scrape configs for custom services
+      additionalScrapeConfigs:
+        - job_name: 'pod-monitor'
+          static_configs:
+            - targets: ['pod-monitor:8080']
+          scrape_interval: 30s
+          metrics_path: '/metrics'
+        
+        - job_name: 'web-server'
+          kubernetes_sd_configs:
+            - role: endpoints
+              namespaces:
+                names:
+                  - devops-case-study
+          relabel_configs:
+            - source_labels: [__meta_kubernetes_service_name]
+              action: keep
+              regex: web-server
+            - source_labels: [__meta_kubernetes_endpoint_port_name]
+              action: keep
+              regex: http
+
+  # Grafana Configuration  
+  grafana:
+    enabled: true
+    
+    # Admin credentials
+    adminPassword: admin123
+    
+    # Service configuration
+    service:
+      type: NodePort
+      nodePort: 30080
+    
+    # Persistence
+    persistence:
+      enabled: true
+      size: 5Gi
+      storageClassName: standard
+    
+    # Resource limits
+    resources:
+      limits:
+        memory: 512Mi
+        cpu: 500m
+      requests:
+        memory: 256Mi
+        cpu: 250m
+    
+    # Dashboard providers
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+        - name: 'default'
+          orgId: 1
+          folder: ''
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
+    
+    # Import dashboards
+    dashboards:
+      default:
+        kubernetes-cluster:
+          gnetId: 6417
+          revision: 1
+          datasource: Prometheus
+        kubernetes-pods:
+          gnetId: 6336
+          revision: 1
+          datasource: Prometheus
+        kyverno-dashboard:
+          gnetId: 13995
+          revision: 2  
+          datasource: Prometheus
+
+  # AlertManager Configuration
+  alertmanager:
+    enabled: true
+    
+    alertmanagerSpec:
+      storage:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: standard
+            accessModes: ["ReadWriteOnce"]  
+            resources:
+              requests:
+                storage: 2Gi
+      
+      resources:
+        limits:
+          memory: 256Mi
+          cpu: 200m
+        requests:
+          memory: 128Mi
+          cpu: 100m
+
+    # Basic alerting configuration
+    config:
+      global:
+        smtp_smarthost: 'localhost:587'
+        smtp_from: 'alertmanager@devops-case-study.local'
+      
+      route:
+        group_by: ['alertname', 'cluster', 'service']
+        group_wait: 10s
+        group_interval: 10s
+        repeat_interval: 1h
+        receiver: 'web.hook'
+      
+      receivers:
+      - name: 'web.hook'
+        webhook_configs:
+        - url: 'http://localhost:5001/webhook'
+          send_resolved: true
+
+  # Node Exporter
+  nodeExporter:
+    enabled: true
+    
+  # kube-state-metrics  
+  kubeStateMetrics:
+    enabled: true
+
+  # Disable components we don't need in KIND
+  kubeEtcd:
+    enabled: false
+  kubeControllerManager:
+    enabled: false
+  kubeScheduler:
+    enabled: false
+  kubeProxy:
+    enabled: false

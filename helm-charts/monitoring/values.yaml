@@ -20,3 +20,11 @@ monitoring:
     nodeSelector: {}
     tolerations: []
     affinity: {}
+  
+  serviceMonitor:
+    enabled: true
+    interval: 30s
+    scrapeTimeout: 10s
+    additionalLabels: {}
+    metricRelabelings: []
+    relabelings: []

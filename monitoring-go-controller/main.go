@@ -5,12 +5,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"strings"
+	"sync"
 	"syscall"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
@@ -33,13 +37,58 @@ type PodEvent struct {
 	Reason    string            `json:"reason,omitempty"`
 }
 
+// Prometheus metrics
+var (
+	podEventsTotal = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "pod_monitor_events_total",
+			Help: "Total number of pod events observed",
+		},
+		[]string{"namespace", "event_type", "phase"},
+	)
+
+	activePods = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "pod_monitor_active_pods",
+			Help: "Number of active pods being monitored",
+		},
+		[]string{"namespace", "phase"},
+	)
+
+	watcherReconnects = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "pod_monitor_watcher_reconnects_total",
+			Help: "Total number of watcher reconnections",
+		},
+		[]string{"namespace"},
+	)
+
+	lastEventTimestamp = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "pod_monitor_last_event_timestamp",
+			Help: "Timestamp of the last pod event",
+		},
+		[]string{"namespace"},
+	)
+)
+
 type PodMonitor struct {
-	clientset  *kubernetes.Clientset
-	namespace  string
-	logger     *log.Logger
-	stopCh     chan struct{}
-	retryCount int
-	maxRetries int
+	clientset    *kubernetes.Clientset
+	namespace    string
+	logger       *log.Logger
+	stopCh       chan struct{}
+	retryCount   int
+	maxRetries   int
+	podTracker   map[string]corev1.PodPhase
+	trackerMutex sync.RWMutex
+}
+
+func init() {
+	// Register Prometheus metrics
+	prometheus.MustRegister(podEventsTotal)
+	prometheus.MustRegister(activePods)
+	prometheus.MustRegister(watcherReconnects)
+	prometheus.MustRegister(lastEventTimestamp)
 }
 
 func NewPodMonitor(namespace string) (*PodMonitor, error) {
@@ -68,12 +117,14 @@ func NewPodMonitor(namespace string) (*PodMonitor, error) {
 	logger := log.New(os.Stdout, "[POD-MONITOR] ", log.LstdFlags|log.Lmicroseconds)
 
 	return &PodMonitor{
-		clientset:  clientset,
-		namespace:  namespace,
-		logger:     logger,
-		stopCh:     make(chan struct{}),
-		retryCount: 0,
-		maxRetries: 10,
+		clientset:    clientset,
+		namespace:    namespace,
+		logger:       logger,
+		stopCh:       make(chan struct{}),
+		retryCount:   0,
+		maxRetries:   10,
+		podTracker:   make(map[string]corev1.PodPhase),
+		trackerMutex: sync.RWMutex{},
 	}, nil
 }
 
@@ -84,6 +135,20 @@ func (pm *PodMonitor) logEvent(event PodEvent) {
 		return
 	}
 	pm.logger.Printf("%s", string(eventJSON))
+
+	// Update Prometheus metrics
+	podEventsTotal.WithLabelValues(event.Namespace, event.EventType, event.Phase).Inc()
+	lastEventTimestamp.WithLabelValues(event.Namespace).SetToCurrentTime()
+
+	// Update pod phase tracking
+	pm.trackerMutex.Lock()
+	if event.EventType == "DELETED" {
+		delete(pm.podTracker, event.PodName)
+	} else {
+		pm.podTracker[event.PodName] = corev1.PodPhase(event.Phase)
+	}
+	pm.updateActivePods()
+	pm.trackerMutex.Unlock()
 
 	// Also log in human-readable format
 	switch event.EventType {
@@ -96,6 +161,19 @@ func (pm *PodMonitor) logEvent(event PodEvent) {
 	case "MODIFIED":
 		pm.logger.Printf("🔄 POD UPDATED: %s in namespace %s (Phase: %s, Reason: %s)",
 			event.PodName, event.Namespace, event.Phase, event.Reason)
+	}
+}
+
+func (pm *PodMonitor) updateActivePods() {
+	// Count pods by phase
+	phaseCounts := make(map[corev1.PodPhase]int)
+	for _, phase := range pm.podTracker {
+		phaseCounts[phase]++
+	}
+
+	// Update Prometheus gauges
+	for phase, count := range phaseCounts {
+		activePods.WithLabelValues(pm.namespace, string(phase)).Set(float64(count))
 	}
 }
 
@@ -180,6 +258,7 @@ func (pm *PodMonitor) watchPods(ctx context.Context) error {
 		case event, ok := <-watcher.ResultChan():
 			if !ok {
 				pm.retryCount++
+				watcherReconnects.WithLabelValues(pm.namespace).Inc()
 				if pm.retryCount >= pm.maxRetries {
 					return fmt.Errorf("watch failed after %d retries", pm.maxRetries)
 				}
@@ -256,6 +335,26 @@ func (pm *PodMonitor) watchPods(ctx context.Context) error {
 	}
 }
 
+func (pm *PodMonitor) startMetricsServer() {
+	metricsAddr := os.Getenv("METRICS_ADDR")
+	if metricsAddr == "" {
+		metricsAddr = ":8080"
+	}
+
+	http.Handle("/metrics", promhttp.Handler())
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
+	})
+
+	pm.logger.Printf("📊 Starting metrics server on %s", metricsAddr)
+	go func() {
+		if err := http.ListenAndServe(metricsAddr, nil); err != nil {
+			pm.logger.Printf("❌ Metrics server error: %v", err)
+		}
+	}()
+}
+
 func (pm *PodMonitor) Start() error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -278,6 +377,9 @@ func (pm *PodMonitor) Start() error {
 	}
 
 	pm.logger.Println("✅ Successfully connected to Kubernetes API")
+
+	// Start metrics server
+	pm.startMetricsServer()
 
 	return pm.watchPods(ctx)
 }

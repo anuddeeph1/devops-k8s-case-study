@@ -1,0 +1,84 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: devops-case-study-alerts
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app.kubernetes.io/name: prometheus-stack
+    prometheus: kube-prometheus
+    role: alert-rules
+spec:
+  groups:
+  - name: devops-case-study.rules
+    rules:
+    - alert: PodCrashLooping
+      expr: rate(kube_pod_container_status_restarts_total{namespace="devops-case-study"}[5m]) * 300 > 1
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Pod {{ $labels.pod }} is crash looping"
+        description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is restarting frequently ({{ $value }} restarts in last 5 minutes)"
+
+    - alert: PodMonitorDown
+      expr: up{job="pod-monitor"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Pod Monitor is down"
+        description: "The pod monitoring service is not responding to health checks"
+
+    - alert: HighPodEventRate
+      expr: rate(pod_monitor_events_total{namespace="devops-case-study"}[5m]) > 5
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High pod event rate detected"
+        description: "Pod event rate is {{ $value }} events/sec in namespace {{ $labels.namespace }}"
+
+    - alert: WebServerDown
+      expr: up{job="web-server"} == 0
+      for: 30s
+      labels:
+        severity: critical
+      annotations:
+        summary: "Web server is down"
+        description: "Web server service is not responding to health checks"
+
+    - alert: DatabaseDown
+      expr: up{job="database"} == 0
+      for: 30s
+      labels:
+        severity: critical
+      annotations:
+        summary: "Database is down"
+        description: "Database service is not responding to health checks"
+
+    - alert: HighCPUUsage
+      expr: 100 * (1 - avg(rate(container_cpu_usage_seconds_total{namespace="devops-case-study", container!="POD", container!=""}[5m])) by (pod)) > 80
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High CPU usage detected"
+        description: "Pod {{ $labels.pod }} has high CPU usage ({{ $value }}%)"
+
+    - alert: HighMemoryUsage
+      expr: (container_memory_usage_bytes{namespace="devops-case-study", container!="POD", container!=""} / container_spec_memory_limit_bytes) * 100 > 90
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High memory usage detected"
+        description: "Pod {{ $labels.pod }} has high memory usage ({{ $value }}%)"
+
+    - alert: PodMonitorReconnectingFrequently
+      expr: rate(pod_monitor_watcher_reconnects_total{namespace="devops-case-study"}[5m]) > 0.1
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Pod monitor reconnecting frequently"
+        description: "Pod monitor is reconnecting {{ $value }} times per second"

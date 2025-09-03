@@ -12,7 +12,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/anuddeeph1/musical-giggle.git
-    targetRevision: gitops
+    targetRevision: monitoring
     path: argocd-apps
     directory:
       recurse: true
