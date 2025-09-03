@@ -7,7 +7,7 @@ metadata:
     grafana_dashboard: "1"
     app.kubernetes.io/name: prometheus-stack
 data:
-  devops-case-study-overview.json: |
+  devops-case-study-overview.json: |-
     {
       "annotations": {
         "list": [
@@ -103,7 +103,7 @@ data:
             {
               "expr": "pod_monitor_active_pods{namespace=\"devops-case-study\"}",
               "interval": "",
-              "legendFormat": "{{phase}} pods",
+              "legendFormat": "{{`{{phase}}`}} pods",
               "refId": "A"
             }
           ],
@@ -185,7 +185,7 @@ data:
             {
               "expr": "rate(pod_monitor_events_total{namespace=\"devops-case-study\"}[5m])",
               "interval": "",
-              "legendFormat": "{{event_type}} events/sec",
+              "legendFormat": "{{`{{event_type}}`}} events/sec",
               "refId": "A"
             }
           ],
@@ -267,7 +267,7 @@ data:
             {
               "expr": "100 * (1 - avg(rate(container_cpu_usage_seconds_total{namespace=\"devops-case-study\", container!=\"POD\", container!=\"\"}[5m])) by (pod))",
               "interval": "",
-              "legendFormat": "CPU Usage - {{pod}}",
+              "legendFormat": "CPU Usage - {{`{{pod}}`}}",
               "refId": "A"
             }
           ],
@@ -349,7 +349,7 @@ data:
             {
               "expr": "container_memory_usage_bytes{namespace=\"devops-case-study\", container!=\"POD\", container!=\"\"}",
               "interval": "",
-              "legendFormat": "Memory Usage - {{pod}}",
+              "legendFormat": "Memory Usage - {{`{{pod}}`}}",
               "refId": "A"
             }
           ],

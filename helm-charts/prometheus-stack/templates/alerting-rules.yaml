@@ -17,8 +17,8 @@ spec:
       labels:
         severity: warning
       annotations:
-        summary: "Pod {{ $labels.pod }} is crash looping"
-        description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is restarting frequently ({{ $value }} restarts in last 5 minutes)"
+        summary: "Pod {{`{{ $labels.pod }}`}} is crash looping"
+        description: "Pod {{`{{ $labels.pod }}`}} in namespace {{`{{ $labels.namespace }}`}} is restarting frequently ({{`{{ $value }}`}} restarts in last 5 minutes)"
 
     - alert: PodMonitorDown
       expr: up{job="pod-monitor"} == 0
@@ -36,7 +36,7 @@ spec:
         severity: warning
       annotations:
         summary: "High pod event rate detected"
-        description: "Pod event rate is {{ $value }} events/sec in namespace {{ $labels.namespace }}"
+        description: "Pod event rate is {{`{{ $value }}`}} events/sec in namespace {{`{{ $labels.namespace }}`}}"
 
     - alert: WebServerDown
       expr: up{job="web-server"} == 0
@@ -63,7 +63,7 @@ spec:
         severity: warning
       annotations:
         summary: "High CPU usage detected"
-        description: "Pod {{ $labels.pod }} has high CPU usage ({{ $value }}%)"
+        description: "Pod {{`{{ $labels.pod }}`}} has high CPU usage ({{`{{ $value }}`}}%)"
 
     - alert: HighMemoryUsage
       expr: (container_memory_usage_bytes{namespace="devops-case-study", container!="POD", container!=""} / container_spec_memory_limit_bytes) * 100 > 90
@@ -72,7 +72,7 @@ spec:
         severity: warning
       annotations:
         summary: "High memory usage detected"
-        description: "Pod {{ $labels.pod }} has high memory usage ({{ $value }}%)"
+        description: "Pod {{`{{ $labels.pod }}`}} has high memory usage ({{`{{ $value }}`}}%)"
 
     - alert: PodMonitorReconnectingFrequently
       expr: rate(pod_monitor_watcher_reconnects_total{namespace="devops-case-study"}[5m]) > 0.1
@@ -81,4 +81,4 @@ spec:
         severity: warning
       annotations:
         summary: "Pod monitor reconnecting frequently"
-        description: "Pod monitor is reconnecting {{ $value }} times per second"
+        description: "Pod monitor is reconnecting {{`{{ $value }}`}} times per second"
