@@ -46,7 +46,7 @@ spec:
             - kyverno
       validate:
         message: >-
-          Use of custom Seccomp profiles is disallowed in the Restricted profile. The seccompProfile.type must be explicitly set to RuntimeDefault or Localhost for all containers and at the pod level.
+          Use of custom Seccomp profiles is disallowed. The fields spec.securityContext.seccompProfile.type, spec.containers[*].securityContext.seccompProfile.type, spec.initContainers[*].securityContext.seccompProfile.type, and spec.ephemeralContainers[*].securityContext.seccompProfile.type must be set to RuntimeDefault or Localhost.
         anyPattern:
           - spec:
               securityContext:
