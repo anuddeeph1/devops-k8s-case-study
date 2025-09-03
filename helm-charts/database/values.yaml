@@ -7,7 +7,7 @@ mysql:
     repository: mysql
     tag: "8.0"
     pullPolicy: IfNotPresent
-  
+  replicas: 3
   rootPassword: root123
   database: testdb
   user: testuser
