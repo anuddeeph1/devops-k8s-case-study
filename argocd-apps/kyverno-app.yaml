@@ -16,6 +16,12 @@ spec:
     helm:
       valueFiles:
         - values.yaml
+      values: |
+        # Speed up background processing for generateExisting policies
+        backgroundController:
+          extraEnvVars:
+            - name: BACKGROUND_SCAN_INTERVAL
+              value: "1m"  # Scan every 1 minute instead of default 5 minutes
   destination:
     server: https://kubernetes.default.svc
     namespace: kyverno
