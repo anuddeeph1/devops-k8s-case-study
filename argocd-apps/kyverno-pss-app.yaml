@@ -41,5 +41,13 @@ spec:
       kind: ClusterPolicy
       jsonPointers:
         - /metadata/annotations
+        - /metadata/generation
+        - /metadata/resourceVersion
+        - /metadata/uid
+        - /metadata/creationTimestamp
+        - /metadata/managedFields
         - /spec/background
         - /spec/validationFailureAction
+        - /spec/admission
+        - /spec/emitWarning
+        - /status
