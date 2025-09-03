@@ -1,50 +1,98 @@
-# Pod Security Standards (PSS) Policies for Kyverno
+# 🛡️ PSS Policies Helm Chart
 
-This Helm chart deploys Kubernetes Pod Security Standards policies using Kyverno.
+> **Kubernetes Pod Security Standards enforcement via Kyverno with configurable Audit/Enforce modes**
 
-## Overview
+## 📋 Overview
 
-This chart includes two sets of policies:
-- **Baseline**: Essential security controls with minimal disruption
-- **Restricted**: Stricter security requirements following security best practices
+The **pss-policies** chart deploys comprehensive Pod Security Standards (PSS) using Kyverno with:
+- **17 security policies** (11 Baseline + 6 Restricted)
+- **Configurable enforcement** (Audit or Enforce modes)
+- **Namespace exclusions** for system components
+- **Production-ready templates** with Helm integration
+- **GitOps deployment** support via ArgoCD
 
-## Configuration
+## 🏗️ Architecture
 
-### Key Values
-
-| Parameter | Description | Default | Options |
-|-----------|-------------|---------|---------|
-| `pss.validationFailureAction` | Policy enforcement mode | `"Audit"` | `"Audit"`, `"Enforce"` |
-| `pss.baseline.enabled` | Enable baseline policies | `true` | `true`, `false` |
-| `pss.restricted.enabled` | Enable restricted policies | `true` | `true`, `false` |
-| `pss.background` | Background scanning for existing resources | `true` | `true`, `false` |
-| `pss.admission` | Validate on create/update | `true` | `true`, `false` |
-| `pss.emitWarning` | Emit warnings in addition to logging | `false` | `true`, `false` |
-
-### Enforcement Modes
-
-#### Audit Mode (Recommended for Testing)
-```yaml
-pss:
-  validationFailureAction: "Audit"
 ```
-- **Logs violations** but **allows workloads** to be created
-- Ideal for **testing** and **understanding policy impact**
-- **No disruption** to existing workloads
+🛡️ Pod Security Standards Enforcement
 
-#### Enforce Mode (Production)
-```yaml
-pss:
-  validationFailureAction: "Enforce"
+┌─────────────────────────────────────────────────────────────────┐
+│                    Kubernetes Cluster                          │
+│                                                                 │
+│  ┌─────────────────┐    ┌─────────────────┐                   │
+│  │  Baseline PSS   │    │ Restricted PSS  │                   │
+│  │  (11 policies)  │    │  (6 policies)   │                   │
+│  │                 │    │                 │                   │
+│  │ • Privileged    │    │ • Non-root      │                   │
+│  │ • Capabilities  │    │ • Seccomp       │                   │
+│  │ • Host access   │    │ • Volumes       │                   │
+│  │ • Security ctx  │    │ • Privilege esc │                   │
+│  │ • Sysctls       │    │ • Capabilities  │                   │
+│  │ • ...and more   │    │ • Running user  │                   │
+│  └─────────────────┘    └─────────────────┘                   │
+│           │                       │                           │
+│           └───────────┬───────────┘                           │
+│                       │                                       │
+│              ┌─────────────────┐                              │
+│              │ Kyverno Engine  │                              │
+│              │ (Policy Engine) │                              │
+│              └─────────────────┘                              │
+│                       │                                       │
+│      ┌────────────────┼────────────────┐                     │
+│      │                │                │                     │
+│ ✅ devops-case-study  🚫 kube-system   🚫 kyverno           │
+│ (PSS Applied)        (Excluded)       (Excluded)             │
+│                                                               │
+└─────────────────────────────────────────────────────────────────┘
+
+📊 Policy Reports Generated:
+├── 📋 PolicyReport (per namespace)
+├── 📊 ClusterPolicyReport (cluster-wide)
+└── 📈 Metrics for monitoring
 ```
-- **Blocks non-compliant** workloads
-- Use after **testing with Audit mode**
-- Requires **workload compliance**
 
-### Namespace Exclusions
+## ✨ Key Features
 
-System namespaces are excluded by default:
+### 🔒 **Comprehensive Security Coverage**
+- **11 Baseline policies**: Essential security requirements
+- **6 Restricted policies**: Enhanced security for sensitive workloads
+- **Zero-tolerance approach**: All security violations detected
+- **Industry standards**: Based on official Kubernetes PSS
+
+### ⚙️ **Flexible Configuration**
+- **Audit mode**: Monitor violations without blocking
+- **Enforce mode**: Block non-compliant resources
+- **Per-policy configuration**: Granular control
+- **Namespace targeting**: Apply to specific namespaces only
+
+### 🚀 **Production Features**
+- **Helm templating**: Environment-specific configurations
+- **GitOps integration**: Full ArgoCD deployment support
+- **Performance optimized**: Background processing
+- **Comprehensive reporting**: Detailed violation reports
+
+## 🔧 Configuration
+
+### Default Values (`values.yaml`)
+
 ```yaml
+# Pod Security Standards configuration
+pss:
+  # Global policy settings
+  validationFailureAction: "Audit"  # Can be "Audit" or "Enforce"
+  
+  # Policy suites
+  baseline:
+    enabled: true     # Enable 11 baseline policies
+  restricted:
+    enabled: true     # Enable 6 restricted policies
+    
+  # Kyverno settings
+  background: true    # Enable background processing
+  emitWarning: false  # Emit warnings for violations
+  admission: true     # Enable admission control
+
+# Namespace exclusions (system namespaces)
 excludeNamespaces:
   - kube-system
   - kube-public
@@ -53,23 +101,307 @@ excludeNamespaces:
   - argocd
 ```
 
-### Per-Policy Overrides
+### Production Configuration Example
 
-Override settings for specific policies:
 ```yaml
-policies:
-  disallow-privileged-containers:
-    validationFailureAction: "Enforce"  # Enforce this specific policy
-    background: false
+# values-prod.yaml
+pss:
+  validationFailureAction: "Enforce"  # Block violations in production
   
-  require-run-as-nonroot:
-    validationFailureAction: "Audit"
+  baseline:
+    enabled: true
+    validationFailureAction: "Enforce"  # Override global for baseline
+  
+  restricted:
+    enabled: true  
+    validationFailureAction: "Audit"    # Still audit restricted for compatibility
+    
+  background: true
+  emitWarning: true    # Show warnings for visibility
+  admission: true
+
+# Production exclusions
+excludeNamespaces:
+  - kube-system
+  - kube-public
+  - kube-node-lease
+  - kyverno
+  - argocd
+  - istio-system
+  - cert-manager
+  - monitoring-system
 ```
 
-## Usage Examples
+### Development Configuration Example
 
-### 1. Audit Mode (Safe Testing)
 ```yaml
+# values-dev.yaml
+pss:
+  validationFailureAction: "Audit"  # Only audit in development
+  
+  baseline:
+    enabled: true
+    validationFailureAction: "Audit"
+  
+  restricted:
+    enabled: false  # Disable strict policies in dev
+    
+  background: false  # Reduce overhead in dev
+  emitWarning: true
+  admission: true
+```
+
+## 📦 Baseline Policies (11)
+
+### 🚫 **Core Security Policies**
+
+#### 1. **Disallow Privileged Containers** (`baseline/disallow-privileged-containers.yaml`)
+```yaml
+# Prevents privileged containers that have root access to host
+spec:
+  rules:
+  - validate:
+      message: "Privileged containers are not allowed"
+      pattern:
+        spec:
+          =(securityContext):
+            =(privileged): "false"
+```
+
+#### 2. **Disallow Capabilities** (`baseline/disallow-capabilities.yaml`)
+```yaml  
+# Restricts Linux capabilities that can be added
+spec:
+  rules:
+  - validate:
+      message: "Adding capabilities is not allowed"
+      pattern:
+        spec:
+          =(securityContext):
+            =(capabilities):
+              X(add): null
+```
+
+#### 3. **Disallow Host Namespaces** (`baseline/disallow-host-namespaces.yaml`)
+```yaml
+# Prevents sharing host network, PID, or IPC namespaces
+spec:
+  rules:
+  - validate:
+      message: "Sharing the host namespaces is not allowed"
+      pattern:
+        spec:
+          =(hostNetwork): "false"
+          =(hostPID): "false"
+          =(hostIPC): "false"
+```
+
+#### 4. **Disallow Host Ports** (`baseline/disallow-host-ports.yaml`)
+```yaml
+# Prevents binding to host ports
+spec:
+  rules:
+  - validate:
+      message: "Use of host ports is not allowed"
+      pattern:
+        spec:
+          containers:
+          - name: "*"
+            =(ports):
+            - X(hostPort): null
+```
+
+#### 5-11. **Additional Baseline Policies**
+- **disallow-host-path**: Prevents host path volume mounts
+- **disallow-host-process**: Restricts Windows host process containers  
+- **disallow-se-linux-options**: Controls SELinux options
+- **restrict-apparmor**: Restricts AppArmor profiles
+- **restrict-seccomp**: Enforces seccomp profiles
+- **restrict-sysctls**: Controls sysctl parameters
+- **restrict-volume-types**: Limits allowed volume types
+
+## 📦 Restricted Policies (6)
+
+### 🔒 **Enhanced Security Policies**
+
+#### 1. **Require Non-Root User** (`restricted/require-non-root-user.yaml`)
+```yaml
+# Ensures containers run as non-root user
+spec:
+  rules:
+  - validate:
+      message: "Containers must run as non-root user"
+      pattern:
+        spec:
+          securityContext:
+            runAsNonRoot: true
+```
+
+#### 2. **Disallow Privilege Escalation** (`restricted/disallow-privilege-escalation.yaml`)
+```yaml
+# Prevents privilege escalation
+spec:
+  rules:
+  - validate:
+      message: "Privilege escalation is not allowed"
+      pattern:
+        spec:
+          containers:
+          - securityContext:
+              allowPrivilegeEscalation: false
+```
+
+#### 3. **Require Seccomp Profile** (`restricted/require-seccomp-profile.yaml`)
+```yaml  
+# Mandates seccomp profile usage
+spec:
+  rules:
+  - validate:
+      message: "Seccomp profile is required"
+      pattern:
+        metadata:
+          annotations:
+            seccomp.security.alpha.kubernetes.io/pod: "runtime/default | localhost/*"
+```
+
+#### 4-6. **Additional Restricted Policies**
+- **drop-all-capabilities**: Drops all Linux capabilities
+- **restrict-volume-types**: Stricter volume type restrictions
+- **restrict-running-user-id**: Enforces specific user ID ranges
+
+## 🚀 Deployment
+
+### Via ArgoCD (Recommended)
+```yaml
+# argocd-apps/kyverno-pss-app.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kyverno-pss
+  namespace: argocd
+spec:
+  source:
+    repoURL: https://github.com/anuddeeph1/musical-giggle.git
+    targetRevision: gitops
+    path: helm-charts/pss-policies
+    helm:
+      values: |
+        pss:
+          validationFailureAction: "Audit"  # Start with audit
+          baseline:
+            enabled: true
+          restricted:
+            enabled: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kyverno
+```
+
+### Direct Helm Deployment
+```bash
+# Install with audit mode (recommended first)
+helm install kyverno-pss ./helm-charts/pss-policies \
+  --namespace kyverno \
+  --set pss.validationFailureAction=Audit
+
+# Install with enforce mode
+helm install kyverno-pss ./helm-charts/pss-policies \
+  --namespace kyverno \
+  --set pss.validationFailureAction=Enforce
+
+# Production deployment
+helm install kyverno-pss ./helm-charts/pss-policies \
+  --namespace kyverno \
+  --values values-prod.yaml
+```
+
+## 📊 Monitoring & Reporting
+
+### Policy Reports
+```bash
+# View cluster-wide policy reports
+kubectl get clusterpolicyreports
+
+# View namespace-specific policy reports
+kubectl get policyreports -A
+
+# Check policy violations in specific namespace
+kubectl describe policyreport -n devops-case-study
+```
+
+### Policy Status
+```bash
+# Check all PSS policies
+kubectl get clusterpolicies -l app.kubernetes.io/name=pss-policies
+
+# Verify policy readiness
+kubectl get clusterpolicies -l app.kubernetes.io/name=pss-policies \
+  -o custom-columns="NAME:.metadata.name,READY:.status.ready"
+
+# View specific policy details
+kubectl describe clusterpolicy disallow-privileged-containers
+```
+
+### Violation Analysis
+```bash
+# Count violations by policy
+kubectl get policyreports -A -o json | \
+  jq '.items[].results[] | select(.result=="fail") | .policy' | \
+  sort | uniq -c
+
+# Show recent violations
+kubectl get events --field-selector reason=PolicyViolation \
+  --sort-by='.metadata.creationTimestamp'
+```
+
+## 🔧 Troubleshooting
+
+### Policy Not Applying
+```bash
+# Check policy deployment
+kubectl get clusterpolicies -l app.kubernetes.io/name=pss-policies
+
+# View Kyverno admission controller logs
+kubectl logs -l app.kubernetes.io/name=kyverno-admission-controller \
+  -n kyverno --tail=50
+
+# Check for policy validation errors
+kubectl describe clusterpolicy disallow-privileged-containers
+```
+
+### False Positives  
+```bash
+# Check namespace exclusions
+kubectl get clusterpolicy disallow-privileged-containers \
+  -o yaml | grep -A 10 exclude
+
+# Verify pod labels and annotations
+kubectl get pod <pod-name> -n <namespace> -o yaml | \
+  head -20
+
+# Review policy report details
+kubectl describe policyreport <report-name> -n <namespace>
+```
+
+### Performance Issues
+```bash
+# Check admission webhook latency
+kubectl get validatingadmissionwebhook kyverno-resource-validating-webhook-cfg \
+  -o yaml | grep -A 5 admissionReviewVersions
+
+# Monitor policy processing time
+kubectl top pods -l app.kubernetes.io/name=kyverno-admission-controller -n kyverno
+
+# Check background processing
+kubectl logs -l app.kubernetes.io/name=kyverno-background-controller \
+  -n kyverno --tail=30
+```
+
+## 🎯 Use Cases & Examples
+
+### 🔍 **Audit Mode (Recommended Start)**
+```yaml
+# Start with audit to understand current violations
 pss:
   validationFailureAction: "Audit"
   baseline:
@@ -78,127 +410,107 @@ pss:
     enabled: false  # Start with baseline only
 ```
 
-### 2. Gradual Enforcement
+### ⚖️ **Gradual Enforcement**
 ```yaml
-# Start with baseline enforcement, restricted audit
-pss:
-  validationFailureAction: "Audit"
-  baseline:
-    enabled: true
-  restricted:
-    enabled: true
+# Phase 1: Audit everything
+validationFailureAction: "Audit"
 
-# Override baseline to enforce
-policies:
-  disallow-privileged-containers:
-    validationFailureAction: "Enforce"
-  disallow-capabilities:
-    validationFailureAction: "Enforce"
-```
-
-### 3. Full Enforcement (Production)
-```yaml
-pss:
+# Phase 2: Enforce baseline, audit restricted
+baseline:
   validationFailureAction: "Enforce"
-  baseline:
-    enabled: true
-  restricted:
-    enabled: true
-  background: true  # Scan existing resources
+restricted:
+  validationFailureAction: "Audit"
+
+# Phase 3: Enforce everything  
+validationFailureAction: "Enforce"
 ```
 
-## Policy Categories
-
-### Baseline Policies
-- `disallow-capabilities`: Restrict Linux capabilities
-- `disallow-host-namespaces`: Prevent host namespace access
-- `disallow-host-path`: Restrict host path mounts
-- `disallow-host-ports`: Prevent host port usage
-- `disallow-host-process`: Block host process containers
-- `disallow-privileged-containers`: Block privileged containers
-- `disallow-proc-mount`: Restrict /proc mount options
-- `disallow-selinux`: Control SELinux options
-- `restrict-apparmor-profiles`: Limit AppArmor profiles
-- `restrict-seccomp`: Control seccomp profiles
-- `restrict-sysctls`: Limit unsafe sysctls
-
-### Restricted Policies
-- `disallow-capabilities-strict`: Stricter capability restrictions
-- `disallow-privilege-escalation`: Prevent privilege escalation
-- `require-run-as-nonroot`: Require non-root user
-- `require-run-as-non-root-user`: Require specific non-root user
-- `restrict-seccomp-strict`: Stricter seccomp requirements
-- `restrict-volume-types`: Limit volume types
-
-## Installation
-
-### Via ArgoCD
+### 🎯 **Namespace-Specific Configuration**
 ```yaml
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: pss-policies
-spec:
-  source:
-    repoURL: https://github.com/anuddeeph1/musical-giggle.git
-    path: helm-charts/pss-policies
-    helm:
-      values: |
-        pss:
-          validationFailureAction: "Audit"
+# Different policies for different environments
+excludeNamespaces:
+  - kube-system      # System namespace
+  - development      # Relaxed policies
+  - legacy-apps      # Legacy applications
 ```
 
-### Via Helm CLI
+## 📋 Values Reference
+
+| Parameter | Description | Default | Required |
+|-----------|-------------|---------|----------|
+| `pss.validationFailureAction` | Global action (Audit/Enforce) | `"Audit"` | No |
+| `pss.baseline.enabled` | Enable baseline policies | `true` | No |
+| `pss.baseline.validationFailureAction` | Baseline-specific action | Inherits global | No |
+| `pss.restricted.enabled` | Enable restricted policies | `true` | No |
+| `pss.restricted.validationFailureAction` | Restricted-specific action | Inherits global | No |
+| `pss.background` | Enable background processing | `true` | No |
+| `pss.emitWarning` | Emit warnings for violations | `false` | No |
+| `pss.admission` | Enable admission control | `true` | No |
+| `excludeNamespaces` | Namespaces to exclude | System namespaces | No |
+
+## 📈 Migration Path
+
+### From Manual NetworkPolicies
 ```bash
-helm install pss-policies ./helm-charts/pss-policies \
+# 1. Deploy in audit mode first
+helm install kyverno-pss ./helm-charts/pss-policies \
   --set pss.validationFailureAction=Audit
-```
 
-## Monitoring
-
-Check policy reports:
-```bash
-# View policy violations
+# 2. Review violations
 kubectl get policyreports -A
 
-# View cluster-wide policy reports
-kubectl get clusterpolicyreports
+# 3. Fix applications gradually  
+kubectl describe policyreport <namespace-report>
 
-# Check specific policy status
-kubectl get clusterpolicy
+# 4. Switch to enforce mode
+helm upgrade kyverno-pss ./helm-charts/pss-policies \
+  --set pss.validationFailureAction=Enforce
 ```
 
-## Troubleshooting
-
-### Common Issues
-
-1. **Workloads blocked unexpectedly**
-   - Switch to `validationFailureAction: "Audit"` 
-   - Check policy reports for violations
-   - Fix workload security issues
-
-2. **Policies not applying**
-   - Verify Kyverno is running: `kubectl get pods -n kyverno`
-   - Check namespace exclusions
-   - Review policy conditions
-
-3. **Too many violations**
-   - Start with baseline only
-   - Use namespace exclusions
-   - Gradually enable restricted policies
-
-### Debug Commands
-
-```bash
-# Check Kyverno status
-kubectl get pods -n kyverno
-
-# View policy status
-kubectl get clusterpolicy
-
-# Check policy reports
-kubectl get policyreports -A
-
-# View specific policy details
-kubectl describe clusterpolicy <policy-name>
+### Integration with CI/CD
+```yaml
+# Add to CI pipeline
+steps:
+- name: Validate PSS Compliance
+  run: |
+    helm template ./helm-charts/pss-policies | kubectl apply --dry-run=server -f -
 ```
+
+## 🔗 Policy Templates
+
+### Template Structure
+```
+helm-charts/pss-policies/templates/
+├── baseline/                           # 11 Baseline policies
+│   ├── disallow-privileged-containers.yaml
+│   ├── disallow-capabilities.yaml
+│   ├── disallow-host-namespaces.yaml
+│   ├── disallow-host-ports.yaml
+│   ├── disallow-host-path.yaml
+│   ├── disallow-host-process.yaml
+│   ├── disallow-se-linux-options.yaml
+│   ├── restrict-apparmor.yaml
+│   ├── restrict-seccomp.yaml
+│   ├── restrict-sysctls.yaml
+│   └── restrict-volume-types.yaml
+└── restricted/                         # 6 Restricted policies  
+    ├── require-non-root-user.yaml
+    ├── disallow-privilege-escalation.yaml
+    ├── require-seccomp-profile.yaml
+    ├── drop-all-capabilities.yaml
+    ├── restrict-volume-types.yaml
+    └── restrict-running-user-id.yaml
+```
+
+## 🔗 Related Documentation
+
+- [📋 Main Project README](../../README.md)
+- [⚡ Kyverno Helm Chart](../kyverno/README.md)
+- [🔒 Network Policies Helm Chart](../network-policies/README.md)
+- [🌐 Web Server Helm Chart](../web-server/README.md)
+- [💾 Database Helm Chart](../database/README.md)
+- [📊 Monitoring Helm Chart](../monitoring/README.md)
+
+---
+
+**🛡️ Kubernetes Pod Security Standards with configurable enforcement!** 🚀
