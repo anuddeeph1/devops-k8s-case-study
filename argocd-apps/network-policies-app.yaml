@@ -22,6 +22,12 @@ spec:
           enabled: true
           targetNamespace: "devops-case-study"
         
+        # 🚀 CRITICAL: Enable generateExisting for existing namespaces!
+        kyverno:
+          validationFailureAction: "Audit"
+          background: true
+          generateExisting: true  # Generate for EXISTING namespaces!
+        
         # Enable all network policies for comprehensive coverage
         networkPolicies:
           policies:
