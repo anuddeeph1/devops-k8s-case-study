@@ -152,8 +152,8 @@ setup_argocd() {
 build_monitoring_app() {
     log_info "Building pod monitoring application..."
     
-    if [ -d "../monitoring-go-controller" ]; then
-        cd ../monitoring-go-controller
+    if [ -d "./monitoring-go-controller" ]; then
+        cd ./monitoring-go-controller
         
         # Build the Go application
         docker build -t ${REGISTRY}/pod-monitor:latest .
@@ -469,7 +469,7 @@ main() {
             setup_cluster
             sleep 10  # Give cluster time to stabilize
             setup_argocd
-            build_monitoring-go-controller_app
+            build_monitoring_app
             create_namespace  # Create namespace before ArgoCD deployment
             deploy_with_argocd
             setup_port_forwarding
