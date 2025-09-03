@@ -5,6 +5,10 @@ global:
 kubePrometheusStack:
   enabled: true
   
+  # Disable CRD installation as we install them manually
+  crds:
+    enabled: false
+  
   # Prometheus Configuration
   prometheus:
     prometheusSpec:
