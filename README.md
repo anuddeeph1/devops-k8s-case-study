@@ -35,35 +35,88 @@ This case study demonstrates a **production-grade microservices architecture** d
 
 ## 🏗️ Architecture
 
+```mermaid
+graph TD
+    DEV["👨‍💻 Developer"]
+
+    GIT["📁 GitHub Repository<br/>Helm Charts + App-of-Apps + Code"]
+
+    SCRIPT["🔧 deploy.sh Script<br/>Cluster + ArgoCD + Metrics + Build & Push Go Monitor image to docker hub"]
+
+    KIND["🏗️ KIND Cluster"]
+
+    METRICS["📊 Metrics Server"]
+
+    ARGO["🎯 ArgoCD"]
+
+    DOCKER["🐳 Docker Hub<br/>Go Monitor Image"]
+
+    APPOFAPPS["📦 App-of-Apps<br/> Applications"]
+
+    WEB["🌐 Web Server"]
+
+    DB["💾 MySQL Database"]
+
+    MON["👁 Go Monitoring Agent"]
+
+    SEC["🛡 Kyverno + PSS Policies"]
+
+    NETPOL["🌐 Network Policies"]
+
+    TEST["⚡ Load Testing"]
+
+    REPORTS["📊 Reports Server"]
+
+    %% Flow
+    DEV -->|"Push Charts + Code"| GIT
+    DEV -->|"Run Script"| SCRIPT
+
+    SCRIPT --> KIND
+    SCRIPT --> METRICS
+    SCRIPT --> ARGO
+    SCRIPT -->|"Build & Push Image"| DOCKER
+
+    ARGO -->|"Pulls from GitHub"| GIT
+    ARGO -->|"Deploys"| APPOFAPPS
+
+    %% App-of-Apps deploys
+    APPOFAPPS --> WEB
+    APPOFAPPS --> DB
+    APPOFAPPS --> MON
+    APPOFAPPS --> SEC
+    APPOFAPPS --> NETPOL
+    APPOFAPPS --> TEST
+    APPOFAPPS --> REPORTS
+
+    MON -->|"Image from"| DOCKER
+    WEB -->|"Uses"| DB
+
+    %% Styling
+    classDef developer fill:#FF6B6B,stroke:#C0392B,stroke-width:2px,color:#fff
+    classDef git fill:#2ECC71,stroke:#27AE60,stroke-width:2px,color:#fff
+    classDef script fill:#E67E22,stroke:#D35400,stroke-width:2px,color:#fff
+    classDef infrastructure fill:#3498DB,stroke:#2980B9,stroke-width:2px,color:#fff
+    classDef gitops fill:#9B59B6,stroke:#8E44AD,stroke-width:2px,color:#fff
+    classDef docker fill:#3498DB,stroke:#2980B9,stroke-width:2px,color:#fff
+    classDef master fill:#F39C12,stroke:#E67E22,stroke-width:2px,color:#fff
+    classDef apps fill:#1ABC9C,stroke:#16A085,stroke-width:2px,color:#fff
+
+    class DEV developer
+    class GIT git
+    class SCRIPT script
+    class KIND,METRICS infrastructure
+    class ARGO gitops
+    class DOCKER docker
+    class APPOFAPPS master
+    class WEB,DB,MON,SEC,NETPOL,TEST,REPORTS apps
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    KIND Kubernetes Cluster                  │
-├─────────────────────────────────────────────────────────────┤
-│  ┌─────────────────┐    ┌─────────────────┐                 │
-│  │   Web Server    │    │    Database     │                 │
-│  │   (Nginx 3x)    │    │   (MySQL 1x)    │                 │
-│  │                 │    │                 │                 │
-│  │ ┌─────────────┐ │    │ ┌─────────────┐ │                 │
-│  │ │InitContainer│ │    │ │PersistentVol│ │                 │
-│  │ │Dynamic HTML │ │    │ │   Storage   │ │                 │
-│  │ └─────────────┘ │    │ └─────────────┘ │                 │
-│  └─────────────────┘    └─────────────────┘                 │
-│           │                       │                         │
-│           │    ┌─────────────────┐│                         │
-│           │    │  Network Policy ││                         │
-│           └────┤   Port 3306     ├┘                         │
-│                └─────────────────┘                          │
-│  ┌─────────────────┐    ┌─────────────────┐                 │
-│  │      HPA        │    │  Pod Monitor    │                 │
-│  │   (Scaling)     │    │   (Golang)      │                 │
-│  └─────────────────┘    └─────────────────┘                 │
-│           │                                                 │
-│  ┌─────────────────┐    ┌─────────────────┐                 │
-│  │  Load Testing   │    │    Ingress      │                 │
-│  │    (Alpine)     │    │   (Nginx)       │                 │
-│  └─────────────────┘    └─────────────────┘                 │
-└─────────────────────────────────────────────────────────────┘
-```
+
+### 🔄 **DevOps Flow:**
+1. **👨‍💻 Developer** pushes Helm charts and Go monitoring code to GitHub
+2. **🔧 deploy.sh** script creates KIND cluster, installs ArgoCD, builds and pushes Go monitoring image
+3. **🎯 ArgoCD** pulls Helm charts from GitHub and deploys App-of-Apps
+4. **📦 App-of-Apps** manages and deploys all 8 applications using Helm charts
+5. **👁 Go Monitoring Agent** pulls its container image from Docker Hub
 
 ### Network Security (Auto-Generated via Kyverno)
 ```
