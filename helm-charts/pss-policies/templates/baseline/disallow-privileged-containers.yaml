@@ -27,7 +27,15 @@ spec:
         - resources:
             kinds:
             - Pod
-        {{ include "pss-policies.namespaceSelector" . | nindent 8 }}
+      exclude:
+        any:
+        - resources:
+            namespaces:
+            - kube-system
+            - kube-public
+            - kube-node-lease
+            - kyverno
+            - argocd
       validate:
         message: >-
           Privileged containers are disallowed. The fields spec.securityContext.privileged
