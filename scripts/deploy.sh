@@ -152,8 +152,8 @@ setup_argocd() {
 build_monitoring_app() {
     log_info "Building pod monitoring application..."
     
-    if [ -d "monitoring" ]; then
-        cd monitoring
+    if [ -d "../monitoring-go-controller" ]; then
+        cd ../monitoring-go-controller
         
         # Build the Go application
         docker build -t ${REGISTRY}/pod-monitor:latest .
@@ -178,7 +178,7 @@ deploy_with_argocd() {
     
     # Deploy the App-of-Apps which will manage all applications
     log_info "Deploying App-of-Apps pattern..."
-    kubectl apply -f argocd-apps/app-of-apps.yaml
+    kubectl apply -f ../argocd-apps/app-of-apps.yaml
     
     # Wait for app-of-apps to sync
     log_info "Waiting for App-of-Apps to sync..."
@@ -194,7 +194,7 @@ deploy_with_argocd() {
         fi
         
         if [ "$i" -eq 10 ]; then
-            log_warning "App-of-Apps deployment timed out. Continuing with individual app monitoring..."
+            log_warning "App-of-Apps deployment timed out. Continuing with individual app monitoring-go-controller..."
         fi
         
         sleep 5
@@ -208,7 +208,7 @@ deploy_with_argocd() {
     
     # Wait for all applications to be healthy (with sync waves)
     APPS=("reports-server" "kyverno" "kyverno-pss" "devops-database" "devops-web-server" "devops-monitoring" "load-testing" "network-policies")
-    log_info "Monitoring ArgoCD applications status (respecting sync waves)..."
+    log_info "monitoring-go-controller ArgoCD applications status (respecting sync waves)..."
     
     for app in "${APPS[@]}"; do
         log_info "Checking $app application..."
@@ -469,7 +469,7 @@ main() {
             setup_cluster
             sleep 10  # Give cluster time to stabilize
             setup_argocd
-            build_monitoring_app
+            build_monitoring-go-controller_app
             create_namespace  # Create namespace before ArgoCD deployment
             deploy_with_argocd
             setup_port_forwarding
