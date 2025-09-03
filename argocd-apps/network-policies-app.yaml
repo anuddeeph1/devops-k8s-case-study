@@ -1,0 +1,104 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: network-policies
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+    argocd.argoproj.io/sync-options: ServerSideApply=true
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/anuddeeph1/musical-giggle.git
+    targetRevision: gitops
+    path: helm-charts/network-policies
+    helm:
+      valueFiles:
+        - values.yaml
+      values: |
+        networkPolicies:
+          enabled: true
+          targetNamespace: "devops-case-study"
+        
+        # Enable all network policies for comprehensive coverage
+        networkPolicies:
+          policies:
+            defaultDenyAll:
+              enabled: true
+            allowDns:
+              enabled: true
+            allowWebToDatabase:
+              enabled: true
+            allowWebServerIngress:
+              enabled: true
+            allowWebServerEgress:
+              enabled: true
+            allowMonitoringAccess:
+              enabled: true
+            allowMonitoringIngress:
+              enabled: true
+            allowLoadTestingAccess:
+              enabled: true
+            allowWebServerLoadTesting:
+              enabled: true
+            allowDatabaseMonitoring:
+              enabled: true
+        
+        # Kyverno configuration
+        kyverno:
+          validationFailureAction: "Audit"  # Start with audit mode
+          background: true
+          generateExisting: false
+        
+        # Pod labels match our microservices
+        podLabels:
+          database: "database"
+          webServer: "web-server"
+          monitoring: "monitoring"
+          loadTesting: "load-testing"
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kyverno
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+      - SkipDryRunOnMissingResource=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+  
+  ignoreDifferences:
+  # Ignore system-managed fields in ClusterPolicies
+  - group: kyverno.io
+    kind: ClusterPolicy
+    jsonPointers:
+    - /metadata/annotations
+    - /metadata/generation
+    - /metadata/resourceVersion
+    - /metadata/uid
+    - /metadata/creationTimestamp
+    - /metadata/managedFields
+    - /status
+  
+  # Ignore generated NetworkPolicies (they're managed by Kyverno)
+  - group: networking.k8s.io
+    kind: NetworkPolicy
+    jsonPointers:
+    - /metadata/annotations
+    - /metadata/generation
+    - /metadata/resourceVersion
+    - /metadata/uid
+    - /metadata/creationTimestamp
+    - /metadata/managedFields
+    - /metadata/ownerReferences

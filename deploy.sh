@@ -250,6 +250,43 @@ deploy_with_argocd() {
         log_warning "No Kyverno pods found. Check deployment status."
     fi
     
+    # Verify Network Policies ClusterPolicies
+    log_info "Verifying Network Policies ClusterPolicies..."
+    sleep 10  # Give time for policies to be applied
+    
+    # Check for network-policies ClusterPolicies
+    NETWORK_CLUSTERPOLICIES=$(kubectl get clusterpolicies -l app.kubernetes.io/name=network-policies --no-headers 2>/dev/null | wc -l || echo "0")
+    if [ "$NETWORK_CLUSTERPOLICIES" -gt 0 ]; then
+        log_success "Network Policies ClusterPolicies deployed ($NETWORK_CLUSTERPOLICIES policies)"
+        
+        # List the specific policies
+        log_info "Network Policy generators deployed:"
+        kubectl get clusterpolicies -l app.kubernetes.io/name=network-policies -o custom-columns="NAME:.metadata.name,READY:.status.ready" --no-headers 2>/dev/null | while read name ready; do
+            if [[ "$name" == generate-*-networkpolicy ]]; then
+                log_info "  $name: Ready=$ready"
+            fi
+        done
+        
+        # Check if default-deny-all NetworkPolicy exists (it should be created when namespace exists)
+        DEFAULT_DENY=$(kubectl get networkpolicy default-deny-all -n devops-case-study --no-headers 2>/dev/null | wc -l || echo "0")
+        if [ "$DEFAULT_DENY" -gt 0 ]; then
+            log_success "Default deny-all NetworkPolicy automatically generated!"
+        else
+            log_warning "Default deny-all NetworkPolicy not found. May generate when namespace is created."
+        fi
+        
+        # Check if allow-dns NetworkPolicy exists
+        ALLOW_DNS=$(kubectl get networkpolicy allow-dns -n devops-case-study --no-headers 2>/dev/null | wc -l || echo "0")
+        if [ "$ALLOW_DNS" -gt 0 ]; then
+            log_success "Allow DNS NetworkPolicy automatically generated!"
+        else
+            log_warning "Allow DNS NetworkPolicy not found. May generate when namespace is created."
+        fi
+        
+    else
+        log_warning "No Network Policies ClusterPolicies found. Check network-policies application deployment."
+    fi
+    
     log_success "GitOps deployment completed - All applications deployed!"
 }
 
