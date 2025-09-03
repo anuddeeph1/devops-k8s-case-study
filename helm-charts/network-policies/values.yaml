@@ -1,0 +1,82 @@
+# Network Policies Configuration
+networkPolicies:
+  # Enable/disable network policy generation
+  enabled: true
+  
+  # Target namespace where NetworkPolicies will be generated
+  targetNamespace: "devops-case-study"
+  
+  # Enable individual network policies
+  policies:
+    defaultDenyAll:
+      enabled: true
+      description: "Default deny all ingress and egress traffic"
+    
+    allowDns:
+      enabled: true
+      description: "Allow DNS resolution for all pods"
+      
+    allowWebToDatabase:
+      enabled: true
+      description: "Allow web-server to access database on port 3306"
+      
+    allowWebServerIngress:
+      enabled: true
+      description: "Allow ingress traffic to web-server"
+      
+    allowWebServerEgress:
+      enabled: true
+      description: "Allow web-server egress traffic"
+      
+    allowMonitoringAccess:
+      enabled: true
+      description: "Allow monitoring to access other services"
+      
+    allowMonitoringIngress:
+      enabled: true
+      description: "Allow monitoring to access web-server"
+      
+    allowLoadTestingAccess:
+      enabled: true
+      description: "Allow load-testing to access web-server"
+      
+    allowWebServerLoadTesting:
+      enabled: true
+      description: "Allow web-server to receive load-testing traffic"
+      
+    allowDatabaseMonitoring:
+      enabled: true
+      description: "Allow monitoring to access database"
+
+# Pod labels configuration
+podLabels:
+  database: "database"
+  webServer: "web-server" 
+  monitoring: "monitoring"
+  loadTesting: "load-testing"
+
+# Ports configuration
+ports:
+  mysql: 3306
+  http: 80
+  httpAlt: 8080
+  https: 443
+  k8sApi: 6443
+  dns: 53
+
+# Kyverno policy configuration
+kyverno:
+  # Background processing
+  background: true
+  # Policy validation failure action
+  validationFailureAction: "audit"
+  # Generate policy settings
+  generateExisting: false
+
+# Namespace exclusions (where these policies should NOT apply)
+excludeNamespaces:
+  - kube-system
+  - kube-public
+  - kube-node-lease
+  - kyverno
+  - argocd

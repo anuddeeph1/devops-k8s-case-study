@@ -1,0 +1,68 @@
+{{- if and .Values.networkPolicies.enabled .Values.networkPolicies.policies.allowWebServerEgress.enabled }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: generate-allow-web-server-egress-networkpolicy
+  labels:
+    {{- include "network-policies.labels" . | nindent 4 }}
+  annotations:
+    {{- include "network-policies.annotations" . | nindent 4 }}
+    policies.kyverno.io/title: "Generate Allow Web Server Egress NetworkPolicy"
+    policies.kyverno.io/description: {{ .Values.networkPolicies.policies.allowWebServerEgress.description | quote }}
+spec:
+  validationFailureAction: {{ .Values.kyverno.validationFailureAction }}
+  background: {{ .Values.kyverno.background }}
+  rules:
+  - name: generate-allow-web-server-egress
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+          names:
+          - "*"
+          namespaces:
+          - {{ .Values.networkPolicies.targetNamespace }}
+      clusterRoles:
+      - "system:controller:*"
+      subjects:
+      - kind: ServiceAccount
+        name: "*"
+        namespace: {{ .Values.networkPolicies.targetNamespace }}
+    preconditions:
+      all:
+      - key: {{ `"{{ request.object.metadata.labels.\"app.kubernetes.io/name\" || '' }}"` }}
+        operator: Equals
+        value: {{ .Values.podLabels.webServer }}
+    generate:
+      apiVersion: networking.k8s.io/v1
+      kind: NetworkPolicy
+      name: allow-web-server-egress
+      namespace: {{ `"{{ request.object.metadata.namespace }}"` }}
+      synchronize: true
+      data:
+        metadata:
+          labels:
+            generated-by: kyverno
+            app.kubernetes.io/managed-by: {{ .Release.Service }}
+            policy-type: "web-server-egress"
+        spec:
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: {{ .Values.podLabels.webServer }}
+          policyTypes:
+          - Egress
+          egress:
+          - to:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ .Values.podLabels.database }}
+            ports:
+            - protocol: TCP
+              port: {{ .Values.ports.mysql }}
+          - ports:
+            - protocol: TCP
+              port: {{ .Values.ports.http }}
+            - protocol: TCP
+              port: {{ .Values.ports.https }}
+{{- end }}

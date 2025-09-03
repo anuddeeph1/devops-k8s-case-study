@@ -1,0 +1,40 @@
+{{- if and .Values.networkPolicies.enabled .Values.networkPolicies.policies.defaultDenyAll.enabled }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: generate-default-deny-all-networkpolicy
+  labels:
+    {{- include "network-policies.labels" . | nindent 4 }}
+  annotations:
+    {{- include "network-policies.annotations" . | nindent 4 }}
+    policies.kyverno.io/title: "Generate Default Deny All NetworkPolicy"
+    policies.kyverno.io/description: {{ .Values.networkPolicies.policies.defaultDenyAll.description | quote }}
+spec:
+  validationFailureAction: {{ .Values.kyverno.validationFailureAction }}
+  background: {{ .Values.kyverno.background }}
+  rules:
+  - name: generate-default-deny-all
+    match:
+      any:
+      - resources:
+          kinds:
+          - Namespace
+          names:
+          - {{ .Values.networkPolicies.targetNamespace }}
+    generate:
+      apiVersion: networking.k8s.io/v1
+      kind: NetworkPolicy
+      name: default-deny-all
+      namespace: {{ `"{{ request.object.metadata.name }}"` }}
+      synchronize: true
+      data:
+        metadata:
+          labels:
+            generated-by: kyverno
+            app.kubernetes.io/managed-by: {{ .Release.Service }}
+        spec:
+          podSelector: {}
+          policyTypes:
+          - Ingress
+          - Egress
+{{- end }}

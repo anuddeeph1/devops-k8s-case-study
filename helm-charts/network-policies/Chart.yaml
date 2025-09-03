@@ -1,0 +1,21 @@
+apiVersion: v2
+name: network-policies
+description: Kyverno policies that generate NetworkPolicies for microservices security
+type: application
+version: 0.1.0
+appVersion: "1.0"
+keywords:
+  - kyverno
+  - network-policies  
+  - security
+  - policy-as-code
+home: https://github.com/anuddeeph1/musical-giggle
+sources:
+  - https://github.com/anuddeeph1/musical-giggle
+maintainers:
+  - name: anuddeeph1
+    email: anudeep@example.com
+dependencies: []
+annotations:
+  category: Security
+  licenses: Apache-2.0

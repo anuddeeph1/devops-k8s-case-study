@@ -1,0 +1,45 @@
+{{- if and .Values.networkPolicies.enabled .Values.networkPolicies.policies.allowDns.enabled }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: generate-allow-dns-networkpolicy
+  labels:
+    {{- include "network-policies.labels" . | nindent 4 }}
+  annotations:
+    {{- include "network-policies.annotations" . | nindent 4 }}
+    policies.kyverno.io/title: "Generate Allow DNS NetworkPolicy"
+    policies.kyverno.io/description: {{ .Values.networkPolicies.policies.allowDns.description | quote }}
+spec:
+  validationFailureAction: {{ .Values.kyverno.validationFailureAction }}
+  background: {{ .Values.kyverno.background }}
+  rules:
+  - name: generate-allow-dns
+    match:
+      any:
+      - resources:
+          kinds:
+          - Namespace
+          names:
+          - {{ .Values.networkPolicies.targetNamespace }}
+    generate:
+      apiVersion: networking.k8s.io/v1
+      kind: NetworkPolicy
+      name: allow-dns
+      namespace: {{ `"{{ request.object.metadata.name }}"` }}
+      synchronize: true
+      data:
+        metadata:
+          labels:
+            generated-by: kyverno
+            app.kubernetes.io/managed-by: {{ .Release.Service }}
+        spec:
+          podSelector: {}
+          policyTypes:
+          - Egress
+          egress:
+          - ports:
+            - protocol: UDP
+              port: {{ .Values.ports.dns }}
+            - protocol: TCP
+              port: {{ .Values.ports.dns }}
+{{- end }}
