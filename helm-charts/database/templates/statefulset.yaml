@@ -1,11 +1,12 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: mysql
   namespace: {{ .Values.global.namespace }}
   labels:
     {{- include "database.labels" . | nindent 4 }}
 spec:
+  serviceName: mysql
   replicas: 1
   selector:
     matchLabels:
@@ -69,16 +70,13 @@ spec:
         resources:
           {{- toYaml .Values.mysql.resources | nindent 10 }}
       volumes:
-      - name: mysql-storage
-        {{- if .Values.mysql.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: mysql-pvc
-        {{- else }}
-        emptyDir: {}
-        {{- end }}
       - name: mysql-config
         configMap:
           name: mysql-config
+      {{- if not .Values.mysql.persistence.enabled }}
+      - name: mysql-storage
+        emptyDir: {}
+      {{- end }}
       {{- with .Values.mysql.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -91,3 +89,18 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- if .Values.mysql.persistence.enabled }}
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-storage
+      labels:
+        {{- include "database.labels" . | nindent 8 }}
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      {{- if .Values.mysql.persistence.storageClass }}
+      storageClassName: {{ .Values.mysql.persistence.storageClass }}
+      {{- end }}
+      resources:
+        requests:
+          storage: {{ .Values.mysql.persistence.size }}
+{{- end }}

@@ -147,9 +147,10 @@ persistence:
 
 ## 📦 Components
 
-### 🚀 **Deployment** (`templates/deployment.yaml`)
+### 🚀 **StatefulSet** (`templates/statefulset.yaml`)
 - **MySQL 8.0** container with optimized configuration
-- **Persistent storage** mounting for data durability
+- **Automatic storage** via volumeClaimTemplates (stable per-pod volumes)
+- **Ordered deployment** for database consistency and safety
 - **Health probes** for availability monitoring
 - **Resource limits** for performance stability
 - **Security context** with proper user permissions
@@ -246,7 +247,7 @@ kubectl get cronjobs -n devops-case-study
 kubectl logs cronjob/devops-database-backup-cronjob -n devops-case-study
 
 # List backup files
-kubectl exec deployment/mysql -n devops-case-study -- \
+kubectl exec statefulset/mysql -n devops-case-study -- \
   ls -la /var/lib/mysql-backup/
 ```
 
@@ -300,7 +301,7 @@ kubectl create job --from=cronjob/devops-database-backup-cronjob \
   manual-backup-$(date +%s) -n devops-case-study
 
 # 2. List available backups
-kubectl exec deployment/mysql -n devops-case-study -- \
+kubectl exec statefulset/mysql -n devops-case-study -- \
   ls -la /var/lib/mysql-backup/
 
 # 3. Verify backup integrity  
@@ -319,7 +320,7 @@ kubectl apply -f job-templates/backup-restore-job.yaml
 kubectl logs job/devops-database-restore-job -n devops-case-study -f
 
 # 4. Verify data integrity
-kubectl exec deployment/mysql -n devops-case-study -- \
+kubectl exec statefulset/mysql -n devops-case-study -- \
   mysql -u root -p$MYSQL_ROOT_PASSWORD -e "SHOW DATABASES;"
 
 # 5. Scale up applications
@@ -334,10 +335,10 @@ kubectl scale deployment web-server --replicas=2 -n devops-case-study
 kubectl get pods -l app.kubernetes.io/name=database -n devops-case-study
 
 # View database logs
-kubectl logs deployment/mysql -n devops-case-study
+kubectl logs statefulset/mysql -n devops-case-study
 
 # Test database connectivity
-kubectl exec -it deployment/mysql -n devops-case-study -- \
+kubectl exec -it statefulset/mysql -n devops-case-study -- \
   mysql -u root -p$MYSQL_ROOT_PASSWORD -e "SELECT 1;"
 ```
 
@@ -350,7 +351,7 @@ kubectl get cronjobs -n devops-case-study
 kubectl logs -l job-name=devops-database-backup-cronjob -n devops-case-study
 
 # Check backup storage
-kubectl exec deployment/mysql -n devops-case-study -- \
+kubectl exec statefulset/mysql -n devops-case-study -- \
   df -h /var/lib/mysql-backup/
 ```
 
@@ -363,7 +364,7 @@ kubectl get pvc -n devops-case-study
 kubectl describe pv $(kubectl get pvc mysql-pvc -n devops-case-study -o jsonpath='{.spec.volumeName}')
 
 # Verify mount points
-kubectl exec deployment/mysql -n devops-case-study -- \
+kubectl exec statefulset/mysql -n devops-case-study -- \
   mount | grep mysql
 ```
 
