@@ -1,0 +1,46 @@
+# Pod Security Standards Configuration
+pss:
+  # Validation failure action: "Audit" or "Enforce" 
+  # - Audit: Log violations but allow workloads
+  # - Enforce: Block non-compliant workloads
+  validationFailureAction: "Audit"
+  
+  # Enable/disable different policy sets
+  baseline:
+    enabled: true
+  
+  restricted:
+    enabled: true
+  
+  # Background scanning for existing resources
+  background: true
+  
+  # Emit warnings in addition to logging
+  emitWarning: false
+  
+  # Admission control (validate on create/update)
+  admission: true
+
+# Namespace exclusions (where policies should NOT apply)
+excludeNamespaces:
+  - kube-system
+  - kube-public
+  - kube-node-lease
+  - kyverno
+  - argocd
+
+# Policy-specific overrides (optional)
+policies:
+  # Override specific policies if needed
+  # Example:
+  # disallow-privileged-containers:
+  #   validationFailureAction: "Enforce"
+  #   background: false
+  
+# Labels and annotations to add to all policies
+commonLabels: {}
+  # environment: production
+  # team: platform
+
+commonAnnotations: {}
+  # managed-by: platform-team

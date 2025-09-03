@@ -10,15 +10,30 @@ metadata:
     argocd.argoproj.io/sync-wave: "3"  # Deploy AFTER Kyverno core
 spec:
   project: default
-  sources:
-    # Baseline PSS Audit Policies
-    - repoURL: https://github.com/anuddeeph1/musical-giggle.git
-      targetRevision: gitops
-      path: helm-charts/pss-policies/baseline/Audit
-    # Restricted PSS Audit Policies  
-    - repoURL: https://github.com/anuddeeph1/musical-giggle.git
-      targetRevision: gitops
-      path: helm-charts/pss-policies/restricted/Audit
+  source:
+    repoURL: https://github.com/anuddeeph1/musical-giggle.git
+    targetRevision: gitops
+    path: helm-charts/pss-policies
+    helm:
+      valueFiles:
+        - values.yaml
+      values: |
+        pss:
+          validationFailureAction: "Audit"  # Can be changed to "Enforce"
+          baseline:
+            enabled: true
+          restricted:
+            enabled: true
+          background: true
+          emitWarning: false
+          admission: true
+        
+        excludeNamespaces:
+          - kube-system
+          - kube-public
+          - kube-node-lease
+          - kyverno
+          - argocd  # Don't apply PSS to our demo app
   destination:
     server: https://kubernetes.default.svc
     namespace: kyverno

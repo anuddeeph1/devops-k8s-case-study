@@ -1,0 +1,20 @@
+apiVersion: v2
+name: pss-policies
+description: Kubernetes Pod Security Standards policies for Kyverno
+type: application
+version: 0.1.0
+appVersion: "1.0"
+keywords:
+  - kyverno
+  - pod-security-standards
+  - security
+  - policies
+  - pss
+home: https://github.com/anuddeeph1/musical-giggle
+maintainers:
+  - name: anuddeeph
+    email: anuddeeph@example.com
+dependencies: []
+annotations:
+  category: Security
+  licenses: Apache-2.0
