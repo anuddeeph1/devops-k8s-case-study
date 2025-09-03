@@ -51,12 +51,7 @@ spec:
               enabled: true
             allowDatabaseMonitoring:
               enabled: true
-        
-        # Kyverno configuration
-        kyverno:
-          validationFailureAction: "Audit"  # Start with audit mode
-          background: true
-          generateExisting: false
+
         
         # Pod labels match our microservices
         podLabels:
