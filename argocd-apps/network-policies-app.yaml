@@ -90,6 +90,7 @@ spec:
     - /metadata/uid
     - /metadata/creationTimestamp
     - /metadata/managedFields
+    - /spec/skipBackgroundRequests
     - /status
   
   # Ignore generated NetworkPolicies (they're managed by Kyverno)
