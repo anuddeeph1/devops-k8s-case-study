@@ -15,6 +15,7 @@ spec:
       labels:
         {{- include "load-testing.selectorLabels" . | nindent 8 }}
     spec:
+      serviceAccountName: load-tester-sa
       containers:
       - name: load-tester
         image: "{{ .Values.loadTesting.image.repository }}:{{ .Values.loadTesting.image.tag }}"
@@ -23,8 +24,13 @@ spec:
         - sh
         - -c
         - |
-          # Install bash for our scripts
-          apk add --no-cache bash
+          # Install bash and kubectl for our scripts
+          apk add --no-cache bash curl
+          
+          # Install kubectl
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          mv kubectl /usr/local/bin/
           
           # Make scripts executable
           chmod +x /scripts/load-test.sh
