@@ -14,6 +14,7 @@ spec:
   background: {{ .Values.kyverno.background }}
   rules:
   - name: generate-default-deny-all
+    skipBackgroundRequests: true
     match:
       any:
       - resources:
