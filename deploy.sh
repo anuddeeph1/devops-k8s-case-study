@@ -145,7 +145,7 @@ deploy_with_argocd() {
     fi
     
     # Wait for all applications to be healthy (with sync waves)
-    APPS=("reports-server" "kyverno" "kyverno-pss" "devops-database" "devops-web-server" "devops-monitoring" "load-testing")
+    APPS=("reports-server" "kyverno" "kyverno-pss" "devops-database" "devops-web-server" "devops-monitoring" "load-testing" "network-policies")
     log_info "Monitoring ArgoCD applications status (respecting sync waves)..."
     
     for app in "${APPS[@]}"; do
@@ -229,6 +229,14 @@ deploy_with_argocd() {
             log_success "Kyverno policies are loaded ($POLICIES policies)"
         else
             log_warning "No Kyverno policies found. This may be expected if using audit mode."
+        fi
+        
+        # Check if NetworkPolicies are deployed
+        NETPOLS=$(kubectl get networkpolicies -n devops-case-study --no-headers 2>/dev/null | wc -l || echo "0")
+        if [ "$NETPOLS" -gt 0 ]; then
+            log_success "NetworkPolicies deployed ($NETPOLS policies) - Database access secured!"
+        else
+            log_warning "No NetworkPolicies found yet. Check network-policies application status."
         fi
         
         # Show detailed Kyverno status

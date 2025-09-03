@@ -1,0 +1,240 @@
+# =============================================================================
+# NetworkPolicies for DevOps Case Study
+# Requirement 4: Only allow web-server pods to connect to database on port 3306
+# =============================================================================
+
+---
+# 1. DEFAULT DENY ALL - Baseline security (deny all traffic)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: devops-case-study
+spec:
+  podSelector: {}  # Applies to all pods in namespace
+  policyTypes:
+  - Ingress
+  - Egress
+
+---
+# 2. ALLOW DNS RESOLUTION - Essential for all pods
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dns
+  namespace: devops-case-study
+spec:
+  podSelector: {}  # Applies to all pods
+  policyTypes:
+  - Egress
+  egress:
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+
+---
+# 3. ALLOW WEB-SERVER TO DATABASE (Core Requirement)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-web-to-database
+  namespace: devops-case-study
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: database  # MySQL database pods
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: web-server  # Only web-server pods
+    ports:
+    - protocol: TCP
+      port: 3306  # MySQL port
+
+---
+# 4. ALLOW WEB-SERVER INGRESS - External traffic to web-server
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-web-server-ingress
+  namespace: devops-case-study
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: web-server  # Web server pods
+  policyTypes:
+  - Ingress
+  ingress:
+  - {}  # Allow all ingress (from ingress controller, load balancer, etc.)
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 8080
+
+---
+# 5. ALLOW WEB-SERVER EGRESS - Web-server can connect to database
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-web-server-egress
+  namespace: devops-case-study
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: web-server  # Web server pods
+  policyTypes:
+  - Egress
+  egress:
+  # Allow connection to database
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: database
+    ports:
+    - protocol: TCP
+      port: 3306
+  # Allow external connections (e.g., for health checks, APIs)
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 443
+
+---
+# 6. ALLOW MONITORING ACCESS - Monitoring can access all services
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-monitoring-access
+  namespace: devops-case-study
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: monitoring  # Monitoring pods
+  policyTypes:
+  - Egress
+  egress:
+  # Allow monitoring to access web-server metrics/health
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: web-server
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 8080
+  # Allow monitoring to access database metrics (if needed)
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: database
+    ports:
+    - protocol: TCP
+      port: 3306
+  # Allow Kubernetes API access for pod monitoring
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 6443
+
+---
+# 7. ALLOW SERVICES TO RESPOND TO MONITORING
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-monitoring-ingress
+  namespace: devops-case-study
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: web-server  # Web-server can receive monitoring requests
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: monitoring
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP  
+      port: 8080
+
+---
+# 8. ALLOW LOAD TESTING ACCESS - Load testing can access web-server
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-load-testing-access
+  namespace: devops-case-study
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: load-testing  # Load testing pods
+  policyTypes:
+  - Egress
+  egress:
+  # Allow load testing to access web-server
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: web-server
+    ports:
+    - protocol: TCP
+      port: 80
+
+---
+# 9. ALLOW WEB-SERVER TO RECEIVE LOAD TESTING
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-web-server-load-testing
+  namespace: devops-case-study
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: web-server  # Web-server receives load testing
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: load-testing
+    ports:
+    - protocol: TCP
+      port: 80
+
+---
+# 10. ALLOW DATABASE HEALTH CHECKS (Optional - for monitoring)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-database-monitoring
+  namespace: devops-case-study
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: database  # Database pods
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: monitoring  # Monitoring can check DB health
+    ports:
+    - protocol: TCP
+      port: 3306
