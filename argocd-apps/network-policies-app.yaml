@@ -11,8 +11,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/anuddeeph1/musical-giggle.git
-    targetRevision: gitops
+    repoURL: https://github.com/anuddeeph1/devops-k8s-case-study.git
+    targetRevision: main
     path: helm-charts/network-policies
     helm:
       valueFiles:

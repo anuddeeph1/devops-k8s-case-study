@@ -127,8 +127,8 @@ This case study demonstrates a **production-grade microservices architecture** d
 ### 1️⃣ Deploy Infrastructure
 ```bash
 # Clone and navigate to project
-git clone https://github.com/anuddeeph1/musical-giggle.git
-cd musical-giggle
+git clone https://github.com/anuddeeph1/devops-k8s-case-study.git
+cd devops-k8s-case-study
 
 # Deploy everything with one command
 ./scripts/deploy.sh gitops
