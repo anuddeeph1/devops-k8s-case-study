@@ -347,15 +347,21 @@ jobs:
       - name: Debug branch and violation info
         run: |
           echo "🔍 DEBUG INFO:"
-          echo "Current branch: ${{ github.ref }}"
+          echo "Current branch (ref): ${{ github.ref }}"
+          echo "Base branch (for PR): ${{ github.base_ref }}"
           echo "Event name: ${{ github.event_name }}"
           echo "Total violations: '${{ steps.kyverno-scan.outputs.total_violations }}'"
           echo "Violations != 0: ${{ steps.kyverno-scan.outputs.total_violations != '0' }}"
-          echo "Branch check (workflows): ${{ github.ref == 'refs/heads/workflows' }}"
-          echo "Branch check (main): ${{ github.ref == 'refs/heads/main' }}"
+          echo "Push to workflows: ${{ github.event_name == 'push' && github.ref == 'refs/heads/workflows' }}"
+          echo "Push to main: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}"  
+          echo "PR to main: ${{ github.event_name == 'pull_request' && github.base_ref == 'main' }}"
           
       - name: Fail if violations found (on important branches)
-        if: (github.ref == 'refs/heads/workflows' || github.ref == 'refs/heads/main') && steps.kyverno-scan.outputs.total_violations != '0'
+        if: |
+          (
+            (github.event_name == 'push' && (github.ref == 'refs/heads/workflows' || github.ref == 'refs/heads/main')) ||
+            (github.event_name == 'pull_request' && github.base_ref == 'main')
+          ) && steps.kyverno-scan.outputs.total_violations != '0'
         run: |
           echo "❌ Security violations found on protected branch!"
           echo "Branch: ${{ github.ref }}"
