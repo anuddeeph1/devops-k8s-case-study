@@ -344,6 +344,16 @@ jobs:
               View full scan results in the workflow artifacts.`
             });
       
+      - name: Debug branch and violation info
+        run: |
+          echo "🔍 DEBUG INFO:"
+          echo "Current branch: ${{ github.ref }}"
+          echo "Event name: ${{ github.event_name }}"
+          echo "Total violations: '${{ steps.kyverno-scan.outputs.total_violations }}'"
+          echo "Violations != 0: ${{ steps.kyverno-scan.outputs.total_violations != '0' }}"
+          echo "Branch check (workflows): ${{ github.ref == 'refs/heads/workflows' }}"
+          echo "Branch check (main): ${{ github.ref == 'refs/heads/main' }}"
+          
       - name: Fail if violations found (on important branches)
         if: (github.ref == 'refs/heads/workflows' || github.ref == 'refs/heads/main') && steps.kyverno-scan.outputs.total_violations != '0'
         run: |
@@ -352,6 +362,7 @@ jobs:
           echo "Total violations: ${{ steps.kyverno-scan.outputs.total_violations }}"
           echo "🚫 Protected branches (main, workflows) require security compliance."
           echo "📋 Please fix security issues before pushing to this branch."
+          echo "🚨 FAILING WORKFLOW DUE TO SECURITY VIOLATIONS"
           exit 1
 
   security-summary:
