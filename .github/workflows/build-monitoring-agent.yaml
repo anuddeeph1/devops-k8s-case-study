@@ -238,12 +238,17 @@ jobs:
             # Run Kyverno apply on manifests with policies
             echo "  Scanning $chart with PSS policies..."
             
-            CHART_VIOLATIONS=$(kyverno apply \
-              security-scan/policies/pss-policies/templates/ \
-              --resource security-scan/manifests/$chart/ \
-              --table=false \
-              --output=json 2>/dev/null | \
-              jq -r '.results[] | select(.result=="fail") | .rule' | wc -l || echo "0")
+            CHART_VIOLATIONS=0
+            for yaml_file in security-scan/manifests/$chart/templates/*.yaml; do
+              if [ -f "$yaml_file" ]; then
+                echo "    Scanning: $(basename $yaml_file)..."
+                result=$(kyverno apply \
+                  security-scan/policies/pss-policies/templates/ \
+                  --resource "$yaml_file" 2>/dev/null || true)
+                violations=$(echo "$result" | tail -1 | grep -o 'fail: [0-9]*' | cut -d' ' -f2 || echo "0")
+                CHART_VIOLATIONS=$((CHART_VIOLATIONS + violations))
+              fi
+            done
             
             # Ensure violations count is a valid number
             if ! [[ "$CHART_VIOLATIONS" =~ ^[0-9]+$ ]]; then
