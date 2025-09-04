@@ -387,10 +387,13 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           
           echo "## 🛡️ Security Scan" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ needs.kyverno-security-scan.result }}" = "success" ]; then
-            echo "✅ **Success** - All security scans passed" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ needs.kyverno-security-scan.result }}" = "success" ] && [ "${{ needs.kyverno-security-scan.outputs.total_violations }}" = "0" ]; then
+            echo "✅ **Success** - All security scans passed (0 violations)" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ needs.kyverno-security-scan.result }}" = "success" ] && [ "${{ needs.kyverno-security-scan.outputs.total_violations }}" != "0" ]; then
+            echo "⚠️ **Violations Found** - ${{ needs.kyverno-security-scan.outputs.total_violations }} security violations detected" >> $GITHUB_STEP_SUMMARY
+            echo "- Check artifacts for detailed violation report" >> $GITHUB_STEP_SUMMARY
           else
-            echo "⚠️ **Issues** - Security violations found or scan failed" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **Failed** - Security scan failed to complete" >> $GITHUB_STEP_SUMMARY
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
           
