@@ -6,7 +6,7 @@ monitoring:
   podMonitor:
     image:
       repository: anuddeeph/pod-monitor
-      tag: "latest-17457942777-18"
+      tag: "latest-17458191012-19"
       pullPolicy: Always
     
     resources:
