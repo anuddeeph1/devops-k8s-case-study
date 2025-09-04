@@ -123,7 +123,7 @@ graph TD
     class DEV developer
     class GIT git
     class PR,PUSH,BUILD,UPDATE,REPORT cicd
-    class SCAN,SEC security  
+    class SCAN,SEC security
     class KIND,METRICS infrastructure
     class ARGO gitops
     class DOCKER docker
