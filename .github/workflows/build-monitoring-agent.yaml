@@ -160,8 +160,8 @@ jobs:
       
       - name: Install Kyverno CLI
         run: |
-          # Download Kyverno CLI with explicit version to avoid redirect issues
-          KYVERNO_VERSION="v1.12.1"
+          # Download Kyverno CLI with explicit version to avoid redirect issues  
+          KYVERNO_VERSION="v1.15.0"
           curl -L -o kyverno-cli.tar.gz "https://github.com/kyverno/kyverno/releases/download/${KYVERNO_VERSION}/kyverno-cli_${KYVERNO_VERSION}_linux_x86_64.tar.gz"
           
           # Extract and install
@@ -221,7 +221,7 @@ jobs:
           echo "" >> $SCAN_SUMMARY
           echo "**Scan Date:** $(date)" >> $SCAN_SUMMARY
           echo "**Commit:** ${{ github.sha }}" >> $SCAN_SUMMARY
-          echo "**Kyverno CLI Version:** v1.12.1" >> $SCAN_SUMMARY
+          echo "**Kyverno CLI Version:** v1.15.0" >> $SCAN_SUMMARY
           echo "**Scan Type:** Helm Template Validation (Pre-deployment)" >> $SCAN_SUMMARY
           echo "" >> $SCAN_SUMMARY
           echo "> **Note:** This scan validates Helm templates before deployment." >> $SCAN_SUMMARY
