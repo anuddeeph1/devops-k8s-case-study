@@ -140,8 +140,9 @@ jobs:
   kyverno-security-scan:
     name: Kyverno Security Scan
     runs-on: ubuntu-latest
-    #needs: [update-helm-values]
-    if: always() # Run on PR to main (no dependencies) or push to workflows (after update-helm-values)
+    # For PRs: No dependencies (run immediately)
+    # For push: Run after update-helm-values (if it runs)
+    if: always() # Run on both PR and push events
     
     permissions:
       contents: read
@@ -354,7 +355,7 @@ jobs:
   security-summary:
     name: Security Summary
     runs-on: ubuntu-latest
-    needs: [build-and-push, update-helm-values, kyverno-security-scan]
+    needs: [kyverno-security-scan]
     if: always()
     
     steps:
