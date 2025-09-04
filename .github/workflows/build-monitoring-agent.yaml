@@ -65,9 +65,9 @@ jobs:
         with:
           images: ${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
-            type=raw,value=${{ steps.generate-tag.outputs.IMAGE_TAG }},enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
-            type=raw,value=${{ github.sha }},enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
+            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'workflows') }}
+            type=raw,value=${{ steps.generate-tag.outputs.IMAGE_TAG }},enable=${{ github.ref == format('refs/heads/{0}', 'workflows') }}
+            type=raw,value=${{ github.sha }},enable=${{ github.ref == format('refs/heads/{0}', 'workflows') }}
             type=ref,event=pr
       
       - name: Build and push Docker image
@@ -86,7 +86,7 @@ jobs:
     name: Update Helm Chart Values
     needs: build-and-push
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/workflows'
     
     permissions:
       contents: write
@@ -294,10 +294,10 @@ jobs:
               View full scan results in the workflow artifacts.`
             });
       
-      - name: Fail if violations found (on main branch)
-        if: github.ref == 'refs/heads/main' && steps.kyverno-scan.outputs.total_violations != '0'
+      - name: Fail if violations found (on workflows branch)
+        if: github.ref == 'refs/heads/workflows' && steps.kyverno-scan.outputs.total_violations != '0'
         run: |
-          echo "❌ Security violations found on main branch!"
+          echo "❌ Security violations found on workflows branch!"
           echo "Total violations: ${{ steps.kyverno-scan.outputs.total_violations }}"
           echo "Please review the scan results and fix security issues."
           exit 1
