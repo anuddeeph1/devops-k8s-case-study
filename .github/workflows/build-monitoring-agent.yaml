@@ -3,19 +3,19 @@ name: Build Monitoring Agent & Security Scan
 on:
   push:
     branches:
-      - 'workflows'
+      - 'workflows'  # Testing: Build + Push + Update + Security Scan
     # Build when monitoring agent or helm charts change
     paths:
       - 'monitoring-go-controller/**'
       - 'helm-charts/**'
       - '.github/workflows/build-monitoring-agent.yaml'
-  #pull_request:
-  #  branches:
-  #    - 'main'
-  #  paths:
-  #    - 'monitoring-go-controller/**'
-  #    - 'helm-charts/**'
-  #    - '.github/workflows/build-monitoring-agent.yaml'
+  pull_request:
+    branches:
+      - 'main'  # PR validation: Security Scan only
+    paths:
+      - 'monitoring-go-controller/**'
+      - 'helm-charts/**'
+      - '.github/workflows/build-monitoring-agent.yaml'
 
 env:
   IMAGE_NAME: anuddeeph/pod-monitor
@@ -25,8 +25,8 @@ jobs:
   build-and-push:
     name: Build Go Monitoring Agent
     runs-on: ubuntu-latest
-    # Skip workflow if it's an automated commit to prevent infinite loops
-    if: "!contains(github.event.head_commit.message, '🐳 Update monitoring agent image')"
+    # Only run on push to workflows branch (for testing), not on PRs, and skip update commits to prevent loops
+    if: github.event_name == 'push' && github.ref == 'refs/heads/workflows' && !contains(github.event.head_commit.message, '🐳 Update monitoring agent image')
     
     permissions:
       contents: read
@@ -140,8 +140,8 @@ jobs:
   kyverno-security-scan:
     name: Kyverno Security Scan
     runs-on: ubuntu-latest
-    needs: update-helm-values
-    if: always() # Run even if previous job is skipped
+    needs: [update-helm-values]
+    if: always() # Run on PR to main (no dependencies) or push to workflows (after update-helm-values)
     
     permissions:
       contents: read
