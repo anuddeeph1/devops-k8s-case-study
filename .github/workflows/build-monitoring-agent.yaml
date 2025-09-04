@@ -25,6 +25,8 @@ jobs:
   build-and-push:
     name: Build Go Monitoring Agent
     runs-on: ubuntu-latest
+    # Skip workflow if it's an automated commit to prevent infinite loops
+    if: "!contains(github.event.head_commit.message, '🐳 Update monitoring agent image')"
     
     permissions:
       contents: read
@@ -127,7 +129,9 @@ jobs:
             🚀 Automated update:
             - Built from commit: ${{ github.sha }}
             - New image tag: ${{ needs.build-and-push.outputs.image-tag }}
-            - Updated monitoring helm chart values"
+            - Updated monitoring helm chart values
+            
+            [skip ci]"
             
             # Try to push, retry with rebase if needed
             git push || (git pull --rebase origin workflows && git push)
@@ -203,7 +207,8 @@ jobs:
       - name: Run Kyverno Security Scan
         id: kyverno-scan
         run: |
-          echo "🛡️ Running Kyverno security scan..."
+          echo "🛡️ Running Kyverno security scan on Helm template outputs..."
+          echo "ℹ️ Note: This scans generated templates, not deployed cluster resources"
           
           # Create summary file
           SCAN_SUMMARY="security-scan/kyverno-scan-summary.md"
