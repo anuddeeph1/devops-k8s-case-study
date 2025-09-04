@@ -96,7 +96,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GIT_TOKEN }}
       
       - name: Configure Git
         run: |
@@ -104,7 +104,7 @@ jobs:
           git config --global user.email "actions@github.com"
           
       - name: Fetch latest changes
-        run: git pull origin main
+        run: git pull origin workflows
       
       - name: Update monitoring values.yaml
         run: |
@@ -130,7 +130,7 @@ jobs:
             - Updated monitoring helm chart values"
             
             # Try to push, retry with rebase if needed
-            git push || (git pull --rebase origin main && git push)
+            git push || (git pull --rebase origin workflows && git push)
           fi
 
   kyverno-security-scan:
