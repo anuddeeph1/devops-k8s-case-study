@@ -156,9 +156,15 @@ jobs:
       
       - name: Install Kyverno CLI
         run: |
-          curl -LO https://github.com/kyverno/kyverno/releases/latest/download/kyverno-cli_linux_x86_64.tar.gz
-          tar -xzf kyverno-cli_linux_x86_64.tar.gz
+          # Download Kyverno CLI with explicit version to avoid redirect issues
+          KYVERNO_VERSION="v1.12.1"
+          curl -L -o kyverno-cli.tar.gz "https://github.com/kyverno/kyverno/releases/download/${KYVERNO_VERSION}/kyverno-cli_${KYVERNO_VERSION}_linux_x86_64.tar.gz"
+          
+          # Extract and install
+          tar -xzf kyverno-cli.tar.gz
           sudo mv kyverno /usr/local/bin/
+          
+          # Verify installation
           kyverno version
       
       - name: Generate PSS Policies from Helm Chart
