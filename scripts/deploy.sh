@@ -148,29 +148,8 @@ setup_argocd() {
     log_info "ArgoCD UI: https://localhost:8081 (admin/$ARGO_PASSWORD)"
 }
 
-# Build monitoring application
-build_monitoring_app() {
-    log_info "Building pod monitoring application..."
-    
-    if [ -d "./monitoring-go-controller" ]; then
-        cd ./monitoring-go-controller
-        
-        # Build the Go application
-        docker build -t ${REGISTRY}/pod-monitor:latest .
-        
-        # Push to Docker Hub (make sure you're logged in)
-        echo "Pushing to Docker Hub..."
-        docker push ${REGISTRY}/pod-monitor:latest
-        
-        cd "$PROJECT_ROOT"
-        
-        log_success "Pod monitoring application built and pushed"
-    else
-        log_info "Monitoring source directory not found - using pre-built image"
-        log_info "Using image: ${REGISTRY}/pod-monitor:latest"
-        log_success "Pod monitoring application ready (pre-built)"
-    fi
-}
+# Docker build and push now handled by GitHub Actions CI/CD pipeline
+# Monitoring images are automatically built and pushed on code changes
 
 # Deploy applications via ArgoCD
 deploy_with_argocd() {
@@ -469,7 +448,6 @@ main() {
             setup_cluster
             sleep 10  # Give cluster time to stabilize
             setup_argocd
-            build_monitoring_app
             create_namespace  # Create namespace before ArgoCD deployment
             deploy_with_argocd
             setup_port_forwarding
