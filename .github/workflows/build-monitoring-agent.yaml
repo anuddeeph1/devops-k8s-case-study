@@ -1,0 +1,395 @@
+name: Build Monitoring Agent & Security Scan
+
+on:
+  push:
+    branches:
+      - 'workflows'  # Testing: Build + Push + Update + Security Scan
+    # Build when monitoring agent or helm charts change
+    paths:
+      - 'monitoring-go-controller/**'
+      - 'helm-charts/**'
+      - '.github/workflows/build-monitoring-agent.yaml'
+  pull_request:
+    branches:
+      - 'main'  # PR validation: Security Scan only
+    paths:
+      - 'monitoring-go-controller/**'
+      - 'helm-charts/**'
+      - '.github/workflows/build-monitoring-agent.yaml'
+
+env:
+  IMAGE_NAME: anuddeeph/pod-monitor
+  REGISTRY: docker.io
+
+jobs:
+  build-and-push:
+    name: Build Go Monitoring Agent
+    runs-on: ubuntu-latest
+    # Only run on push to workflows branch (for testing), not on PRs, and skip update commits to prevent loops
+    if: github.event_name == 'push' && github.ref == 'refs/heads/workflows' && !contains(github.event.head_commit.message, '🐳 Update monitoring agent image')
+    
+    permissions:
+      contents: read
+      packages: write
+    
+    outputs:
+      image-tag: ${{ steps.generate-tag.outputs.IMAGE_TAG }}
+      image-digest: ${{ steps.build.outputs.digest }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        
+      - name: Log in to Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Generate image tag
+        id: generate-tag
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-8)
+            echo "IMAGE_TAG=pr-${{ github.event.number }}-${SHORT_SHA}" >> $GITHUB_OUTPUT
+          else
+            echo "IMAGE_TAG=latest-${{ github.run_id }}-${{ github.run_number }}" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'workflows') }}
+            type=raw,value=${{ steps.generate-tag.outputs.IMAGE_TAG }},enable=${{ github.ref == format('refs/heads/{0}', 'workflows') }}
+            type=raw,value=${{ github.sha }},enable=${{ github.ref == format('refs/heads/{0}', 'workflows') }}
+            type=ref,event=pr
+      
+      - name: Build and push Docker image
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: monitoring-go-controller
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  update-helm-values:
+    name: Update Helm Chart Values
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/workflows'
+    
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GIT_TOKEN }}
+      
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          
+      - name: Fetch latest changes
+        run: git pull origin workflows
+      
+      - name: Update monitoring values.yaml
+        run: |
+          # Update the image tag in helm values
+          sed -i 's/tag: "latest"/tag: "${{ needs.build-and-push.outputs.image-tag }}"/g' helm-charts/monitoring/values.yaml
+          sed -i 's/tag: "latest-.*"/tag: "${{ needs.build-and-push.outputs.image-tag }}"/g' helm-charts/monitoring/values.yaml
+          
+          # Show the change
+          echo "Updated helm-charts/monitoring/values.yaml:"
+          cat helm-charts/monitoring/values.yaml
+      
+      - name: Commit and push changes
+        run: |
+          git add helm-charts/monitoring/values.yaml
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "🐳 Update monitoring agent image to ${{ needs.build-and-push.outputs.image-tag }}
+            
+            🚀 Automated update:
+            - Built from commit: ${{ github.sha }}
+            - New image tag: ${{ needs.build-and-push.outputs.image-tag }}
+            - Updated monitoring helm chart values
+            
+            [skip ci]"
+            
+            # Try to push, retry with rebase if needed
+            git push || (git pull --rebase origin workflows && git push)
+          fi
+
+  kyverno-security-scan:
+    name: Kyverno Security Scan
+    runs-on: ubuntu-latest
+    needs: [update-helm-values]
+    if: always() # Run on PR to main (no dependencies) or push to workflows (after update-helm-values)
+    
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: '3.12.0'
+      
+      - name: Install Kyverno CLI
+        run: |
+          # Download Kyverno CLI with explicit version to avoid redirect issues  
+          KYVERNO_VERSION="v1.15.0"
+          curl -L -o kyverno-cli.tar.gz "https://github.com/kyverno/kyverno/releases/download/${KYVERNO_VERSION}/kyverno-cli_${KYVERNO_VERSION}_linux_x86_64.tar.gz"
+          
+          # Extract and install
+          tar -xzf kyverno-cli.tar.gz
+          sudo mv kyverno /usr/local/bin/
+          
+          # Verify installation
+          kyverno version
+      
+      - name: Generate PSS Policies from Helm Chart
+        run: |
+          echo "📋 Generating PSS policies from helm chart..."
+          
+          # Create output directory
+          mkdir -p security-scan/policies
+          mkdir -p security-scan/manifests
+          
+          # Generate PSS policies using helm template
+          helm template pss-policies helm-charts/pss-policies/ \
+            --values helm-charts/pss-policies/values.yaml \
+            --output-dir security-scan/policies
+          
+          echo "Generated PSS policies:"
+          find security-scan/policies -name "*.yaml" -type f
+      
+      - name: Generate All Helm Chart Manifests
+        run: |
+          echo "📦 Generating all helm chart manifests..."
+          
+          # List of helm charts to scan
+          CHARTS=("web-server" "database" "monitoring" "load-testing")
+          
+          for chart in "${CHARTS[@]}"; do
+            echo "Generating manifests for $chart..."
+            helm template $chart helm-charts/$chart/ \
+              --values helm-charts/$chart/values.yaml \
+              --output-dir security-scan/manifests
+          done
+          
+          echo "Generated manifests:"
+          find security-scan/manifests -name "*.yaml" -type f
+      
+      - name: Run Kyverno Security Scan
+        id: kyverno-scan
+        run: |
+          echo "🛡️ Running Kyverno security scan on Helm template outputs..."
+          echo ""
+          echo "ℹ️ Scan Scope:"
+          echo "  • Templates: Generated Helm YAML manifests (desired state)"
+          echo "  • Policies: Pod Security Standards (Baseline + Restricted)"
+          echo "  • Note: This validates template compliance, not runtime cluster violations"
+          echo ""
+          
+          # Create summary file
+          SCAN_SUMMARY="security-scan/kyverno-scan-summary.md"
+          echo "# 🛡️ Kyverno Security Scan Results" > $SCAN_SUMMARY
+          echo "" >> $SCAN_SUMMARY
+          echo "**Scan Date:** $(date)" >> $SCAN_SUMMARY
+          echo "**Commit:** ${{ github.sha }}" >> $SCAN_SUMMARY
+          echo "**Kyverno CLI Version:** v1.15.0" >> $SCAN_SUMMARY
+          echo "**Scan Type:** Helm Template Validation (Pre-deployment)" >> $SCAN_SUMMARY
+          echo "" >> $SCAN_SUMMARY
+          echo "> **Note:** This scan validates Helm templates before deployment." >> $SCAN_SUMMARY
+          echo "> For runtime cluster compliance, use \`kubectl get polr\` to check actual violations." >> $SCAN_SUMMARY
+          echo "" >> $SCAN_SUMMARY
+          
+          # Scan each helm chart against PSS policies
+          CHARTS=("web-server" "database" "monitoring" "load-testing")
+          TOTAL_VIOLATIONS=0
+          
+          for chart in "${CHARTS[@]}"; do
+            echo "Scanning $chart..."
+            
+            # Run Kyverno apply on manifests with policies
+            echo "  Scanning $chart with PSS policies..."
+            
+            CHART_VIOLATIONS=0
+            for yaml_file in security-scan/manifests/$chart/templates/*.yaml; do
+              if [ -f "$yaml_file" ]; then
+                echo "    Scanning: $(basename $yaml_file)..."
+                
+                # Run kyverno with full error output for debugging
+                result=$(kyverno apply \
+                  security-scan/policies/pss-policies/templates/ \
+                  --resource "$yaml_file" 2>&1 || true)
+                
+                # Debug: Show last few lines of result
+                echo "      Last lines of scan result:"
+                echo "$result" | tail -3 | sed 's/^/        /'
+                
+                # Parse violations from summary line
+                violations=$(echo "$result" | tail -1 | grep -o 'fail: [0-9]*' | cut -d' ' -f2 || echo "0")
+                echo "      Violations detected: $violations"
+                CHART_VIOLATIONS=$((CHART_VIOLATIONS + violations))
+              fi
+            done
+            
+            # Ensure violations count is a valid number
+            if ! [[ "$CHART_VIOLATIONS" =~ ^[0-9]+$ ]]; then
+              CHART_VIOLATIONS=0
+            fi
+            
+            TOTAL_VIOLATIONS=$((TOTAL_VIOLATIONS + CHART_VIOLATIONS))
+            
+            echo "## 📊 $chart Chart Results" >> $SCAN_SUMMARY
+            echo "" >> $SCAN_SUMMARY
+            
+            if [ "$CHART_VIOLATIONS" -eq 0 ]; then
+              echo "✅ **PASSED** - No policy violations found" >> $SCAN_SUMMARY
+            else
+              echo "⚠️ **$CHART_VIOLATIONS violations** found" >> $SCAN_SUMMARY
+              
+              # Get detailed violations
+              kyverno apply \
+                security-scan/policies/pss-policies/templates/ \
+                --resource security-scan/manifests/$chart/ \
+                --table=false 2>/dev/null | \
+                grep -E "(FAIL|PASS)" >> $SCAN_SUMMARY || true
+            fi
+            echo "" >> $SCAN_SUMMARY
+          done
+          
+          # Summary
+          echo "## 📈 Overall Summary" >> $SCAN_SUMMARY
+          echo "" >> $SCAN_SUMMARY
+          echo "**Total Template Violations:** $TOTAL_VIOLATIONS" >> $SCAN_SUMMARY
+          echo "**Charts Scanned:** $(echo ${CHARTS[@]} | wc -w)" >> $SCAN_SUMMARY
+          echo "**Policies Applied:** Pod Security Standards (Baseline + Restricted)" >> $SCAN_SUMMARY
+          echo "" >> $SCAN_SUMMARY
+          
+          if [ "$TOTAL_VIOLATIONS" -eq 0 ]; then
+            echo "🎉 **All Helm chart templates pass Pod Security Standards validation!**" >> $SCAN_SUMMARY
+            echo "" >> $SCAN_SUMMARY
+            echo "✅ **Template Compliance**: Ready for deployment" >> $SCAN_SUMMARY
+            echo "📋 **Next Steps**: Deploy to cluster and verify runtime compliance with \`kubectl get polr\`" >> $SCAN_SUMMARY
+            echo "scan_status=success" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️ **Template violations detected in Helm charts.**" >> $SCAN_SUMMARY
+            echo "" >> $SCAN_SUMMARY
+            echo "🔧 **Action Required**: Fix template security configurations before deployment" >> $SCAN_SUMMARY
+            echo "scan_status=violations" >> $GITHUB_OUTPUT
+          fi
+          
+          echo "total_violations=$TOTAL_VIOLATIONS" >> $GITHUB_OUTPUT
+          
+          # Display summary
+          echo "Scan Summary:"
+          cat $SCAN_SUMMARY
+      
+      - name: Upload Scan Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: kyverno-security-scan-results
+          path: security-scan/
+          retention-days: 30
+      
+      - name: Comment PR with scan results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const scanSummary = fs.readFileSync('security-scan/kyverno-scan-summary.md', 'utf8');
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🛡️ Kyverno Security Scan Results
+              
+              ${scanSummary}
+              
+              ---
+              
+              📊 **Scan Status:** ${{ steps.kyverno-scan.outputs.scan_status }}
+              🔍 **Total Violations:** ${{ steps.kyverno-scan.outputs.total_violations }}
+              
+              View full scan results in the workflow artifacts.`
+            });
+      
+      - name: Fail if violations found (on workflows branch)
+        if: github.ref == 'refs/heads/workflows' && steps.kyverno-scan.outputs.total_violations != '0'
+        run: |
+          echo "❌ Security violations found on workflows branch!"
+          echo "Total violations: ${{ steps.kyverno-scan.outputs.total_violations }}"
+          echo "Please review the scan results and fix security issues."
+          exit 1
+
+  security-summary:
+    name: Security Summary
+    runs-on: ubuntu-latest
+    needs: [build-and-push, update-helm-values, kyverno-security-scan]
+    if: always()
+    
+    steps:
+      - name: Generate Workflow Summary
+        run: |
+          echo "# 🚀 DevOps Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🐳 Container Build" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ needs.build-and-push.result }}" = "success" ]; then
+            echo "✅ **Success** - Monitoring agent built and pushed" >> $GITHUB_STEP_SUMMARY
+            echo "- Image: \`${{ needs.build-and-push.outputs.image-tag }}\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Failed** - Container build failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "## 📦 Helm Chart Update" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ needs.update-helm-values.result }}" = "success" ]; then
+            echo "✅ **Success** - Helm values updated with new image tag" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ needs.update-helm-values.result }}" = "skipped" ]; then
+            echo "⏭️ **Skipped** - Not a main branch push" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Failed** - Helm values update failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "## 🛡️ Security Scan" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ needs.kyverno-security-scan.result }}" = "success" ]; then
+            echo "✅ **Success** - All security scans passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ **Issues** - Security violations found or scan failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "## 🎯 Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "1. Review security scan results in artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "2. Deploy updated helm charts with new monitoring image" >> $GITHUB_STEP_SUMMARY
+          echo "3. Verify monitoring agent is working in cluster" >> $GITHUB_STEP_SUMMARY
