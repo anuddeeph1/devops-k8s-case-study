@@ -1,5 +1,6 @@
 package main
 
+// Test comment to trigger GitHub Actions workflow
 import (
 	"context"
 	"encoding/json"
