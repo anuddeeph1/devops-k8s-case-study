@@ -140,7 +140,7 @@ jobs:
   kyverno-security-scan:
     name: Kyverno Security Scan
     runs-on: ubuntu-latest
-    needs: [update-helm-values]
+    #needs: [update-helm-values]
     if: always() # Run on PR to main (no dependencies) or push to workflows (after update-helm-values)
     
     permissions:
