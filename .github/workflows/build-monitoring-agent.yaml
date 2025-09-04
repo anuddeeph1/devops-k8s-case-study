@@ -9,13 +9,13 @@ on:
       - 'monitoring-go-controller/**'
       - 'helm-charts/**'
       - '.github/workflows/build-monitoring-agent.yaml'
-  pull_request:
-    branches:
-      - 'main'
-    paths:
-      - 'monitoring-go-controller/**'
-      - 'helm-charts/**'
-      - '.github/workflows/build-monitoring-agent.yaml'
+  #pull_request:
+  #  branches:
+  #    - 'main'
+  #  paths:
+  #    - 'monitoring-go-controller/**'
+  #    - 'helm-charts/**'
+  #    - '.github/workflows/build-monitoring-agent.yaml'
 
 env:
   IMAGE_NAME: anuddeeph/pod-monitor
