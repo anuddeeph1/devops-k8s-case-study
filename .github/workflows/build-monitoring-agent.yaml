@@ -344,12 +344,14 @@ jobs:
               View full scan results in the workflow artifacts.`
             });
       
-      - name: Fail if violations found (on workflows branch)
-        if: github.ref == 'refs/heads/workflows' && steps.kyverno-scan.outputs.total_violations != '0'
+      - name: Fail if violations found (on important branches)
+        if: (github.ref == 'refs/heads/workflows' || github.ref == 'refs/heads/main') && steps.kyverno-scan.outputs.total_violations != '0'
         run: |
-          echo "❌ Security violations found on workflows branch!"
+          echo "❌ Security violations found on protected branch!"
+          echo "Branch: ${{ github.ref }}"
           echo "Total violations: ${{ steps.kyverno-scan.outputs.total_violations }}"
-          echo "Please review the scan results and fix security issues."
+          echo "🚫 Protected branches (main, workflows) require security compliance."
+          echo "📋 Please fix security issues before pushing to this branch."
           exit 1
 
   security-summary:
