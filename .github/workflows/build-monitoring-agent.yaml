@@ -357,7 +357,7 @@ jobs:
   security-summary:
     name: Security Summary
     runs-on: ubuntu-latest
-    needs: [kyverno-security-scan]
+    needs: [build-and-push, update-helm-values, kyverno-security-scan]
     if: always()
     
     steps:
@@ -369,6 +369,8 @@ jobs:
           if [ "${{ needs.build-and-push.result }}" = "success" ]; then
             echo "✅ **Success** - Monitoring agent built and pushed" >> $GITHUB_STEP_SUMMARY
             echo "- Image: \`${{ needs.build-and-push.outputs.image-tag }}\`" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ needs.build-and-push.result }}" = "skipped" ]; then
+            echo "⏭️ **Skipped** - Not required for this event (PR validation only)" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ **Failed** - Container build failed" >> $GITHUB_STEP_SUMMARY
           fi
@@ -378,7 +380,7 @@ jobs:
           if [ "${{ needs.update-helm-values.result }}" = "success" ]; then
             echo "✅ **Success** - Helm values updated with new image tag" >> $GITHUB_STEP_SUMMARY
           elif [ "${{ needs.update-helm-values.result }}" = "skipped" ]; then
-            echo "⏭️ **Skipped** - Not a main branch push" >> $GITHUB_STEP_SUMMARY
+            echo "⏭️ **Skipped** - Not required for this event (PR validation only)" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ **Failed** - Helm values update failed" >> $GITHUB_STEP_SUMMARY
           fi
