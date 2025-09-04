@@ -41,7 +41,7 @@ This case study demonstrates a **production-grade microservices architecture** d
 ```mermaid
 graph TD
     %% Developer and Git
-    DEV["👨‍💻 Developer"]
+    DEV["👨‍💻 Developer<br/>DevOps Engineer"]
     GIT["📁 GitHub Repository<br/>Helm Charts + App-of-Apps + Code"]
     
     %% CI/CD Pipeline  
