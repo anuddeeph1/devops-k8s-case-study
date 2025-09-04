@@ -20,66 +20,84 @@
 
 This case study demonstrates a **production-grade microservices architecture** deployed on Kubernetes using modern DevOps practices. It showcases:
 
-- **GitOps deployment** with ArgoCD
+- **GitHub Actions CI/CD Pipeline** with automated build, security scan & deployment
+- **GitOps deployment** with ArgoCD and App-of-Apps pattern
+- **Security-First Approach** with Kyverno CLI scanning in CI/CD
+- **Balanced Security Policy**: Fail on protected branches, warn on PRs
+- **Automated Helm Values Management** with image tag updates
 - **Kubernetes Cluster**: KIND cluster with Docker Hub registry  
-- **Database Deployment**: MySQL with persistent storage  
+- **Database Deployment**: MySQL with persistent storage & backup automation
 - **Web Server**: Nginx with multiple replicas and custom features 
-- **Pod Monitoring**: Golang application tracking pod lifecycle  
-- **Helm Charts**: Complete application packaging  
-- **Policy-as-Code** with Kyverno for automated security
+- **Pod Monitoring**: Golang application with automated builds
+- **Helm Charts**: Complete application packaging with 8+ components
+- **Policy-as-Code** with Kyverno for 17+ Pod Security Standards
 - **Network policy automation** for zero-trust networking
 - **Load Testing**: Automated load generation for HPA demonstration 
-- **Disaster Recovery**: Comprehensive DR plan for database 
-- **Horizontal pod autoscaling** with load testing
-- **Pod Security Standards** 
+- **Disaster Recovery**: Comprehensive DR plan with automated backups
+- **Horizontal pod autoscaling** with metrics-driven scaling 
 
 ## 🏗️ Architecture
 
 ```mermaid
 graph TD
-    DEV["👨‍💻 Developer"]
-
+    %% Developer and Git
+    DEV["👨‍💻 Developer<br/>DevOps Engineer"]
     GIT["📁 GitHub Repository<br/>Helm Charts + App-of-Apps + Code"]
-
-    SCRIPT["🔧 deploy.sh Script<br/>Cluster + ArgoCD + Metrics + Build & Push Go Monitor image to docker hub"]
-
-    KIND["🏗️ KIND Cluster"]
-
+    
+    %% CI/CD Pipeline  
+    PR["🔀 Pull Request → main<br/>Security Validation Only"]
+    PUSH["🚀 Push → workflows<br/>Full CI/CD Pipeline"]
+    
+    %% GitHub Actions Jobs
+    BUILD["🏗️ Build & Push Job<br/>Multi-arch Docker Build<br/>anuddeeph/pod-monitor:latest-{run-id}"]
+    SCAN["🛡️ Security Scan Job<br/>Kyverno CLI v1.15.0<br/>17+ PSS Policies"]
+    UPDATE["🔄 Update Helm Values<br/>Auto-update values.yaml<br/>New Image Tags"]
+    REPORT["📋 PR Comments<br/>Violation Reports<br/>Security Summary"]
+    
+    %% Infrastructure
+    DOCKER["🐳 Docker Hub<br/>Automated Image Registry"]
+    KIND["🏗️ KIND Cluster<br/>Local Infrastructure"]
     METRICS["📊 Metrics Server"]
+    ARGO["🎯 ArgoCD<br/>GitOps Controller"]
+    
+    %% Applications
+    APPOFAPPS["📦 App-of-Apps<br/>8 Application Manager"]
+    WEB["🌐 Web Server<br/>Nginx + HPA"]
+    DB["💾 MySQL Database<br/>StatefulSet + DR"]
+    MON["👁 Go Monitoring Agent<br/>Auto-updated Images"]
+    SEC["🛡 Kyverno + PSS<br/>17+ Security Policies"]
+    NETPOL["🌐 Network Policies<br/>Zero-Trust Networking"]
+    TEST["⚡ Load Testing<br/>HPA Triggers"]
+    REPORTS["📊 Reports Server<br/>Policy Compliance"]
 
-    ARGO["🎯 ArgoCD"]
-
-    DOCKER["🐳 Docker Hub<br/>Go Monitor Image"]
-
-    APPOFAPPS["📦 App-of-Apps<br/> Applications"]
-
-    WEB["🌐 Web Server"]
-
-    DB["💾 MySQL Database"]
-
-    MON["👁 Go Monitoring Agent"]
-
-    SEC["🛡 Kyverno + PSS Policies"]
-
-    NETPOL["🌐 Network Policies"]
-
-    TEST["⚡ Load Testing"]
-
-    REPORTS["📊 Reports Server"]
-
-    %% Flow
-    DEV -->|"Push Charts + Code"| GIT
-    DEV -->|"Run Script"| SCRIPT
-
-    SCRIPT --> KIND
-    SCRIPT --> METRICS
-    SCRIPT --> ARGO
-    SCRIPT -->|"Build & Push Image"| DOCKER
-
-    ARGO -->|"Pulls from GitHub"| GIT
+    %% Developer Workflows
+    DEV -->|"Create PR"| PR
+    DEV -->|"Push to workflows"| PUSH
+    DEV -->|"Code + Helm Charts"| GIT
+    
+    %% PR Workflow (Security Only)
+    PR --> SCAN
+    SCAN --> REPORT
+    REPORT -->|"⚠️ Warn (Allow Merge)"| DEV
+    
+    %% Production Workflow (workflows branch)
+    PUSH --> BUILD
+    PUSH --> SCAN
+    BUILD --> DOCKER
+    BUILD --> UPDATE
+    SCAN -->|"❌ Fail on Violations"| DEV
+    UPDATE -->|"Auto-commit"| GIT
+    
+    %% Infrastructure Setup (One-time)
+    DEV -->|"./scripts/deploy.sh"| KIND
+    KIND --> METRICS
+    KIND --> ARGO
+    
+    %% GitOps Flow
+    ARGO -->|"Pulls Charts"| GIT  
     ARGO -->|"Deploys"| APPOFAPPS
-
-    %% App-of-Apps deploys
+    
+    %% App Deployments
     APPOFAPPS --> WEB
     APPOFAPPS --> DB
     APPOFAPPS --> MON
@@ -87,36 +105,52 @@ graph TD
     APPOFAPPS --> NETPOL
     APPOFAPPS --> TEST
     APPOFAPPS --> REPORTS
-
-    MON -->|"Image from"| DOCKER
-    WEB -->|"Uses"| DB
+    
+    %% Image Flow
+    MON -->|"Pulls Updated Images"| DOCKER
+    WEB -->|"Database Connection"| DB
 
     %% Styling
-    classDef developer fill:#FF6B6B,stroke:#C0392B,stroke-width:2px,color:#fff
-    classDef git fill:#2ECC71,stroke:#27AE60,stroke-width:2px,color:#fff
-    classDef script fill:#E67E22,stroke:#D35400,stroke-width:2px,color:#fff
-    classDef infrastructure fill:#3498DB,stroke:#2980B9,stroke-width:2px,color:#fff
-    classDef gitops fill:#9B59B6,stroke:#8E44AD,stroke-width:2px,color:#fff
-    classDef docker fill:#3498DB,stroke:#2980B9,stroke-width:2px,color:#fff
-    classDef master fill:#F39C12,stroke:#E67E22,stroke-width:2px,color:#fff
+    classDef developer fill:#E74C3C,stroke:#C0392B,stroke-width:2px,color:#fff
+    classDef git fill:#F39C12,stroke:#E67E22,stroke-width:2px,color:#fff
+    classDef cicd fill:#9B59B6,stroke:#8E44AD,stroke-width:2px,color:#fff
+    classDef security fill:#E67E22,stroke:#D35400,stroke-width:2px,color:#fff
+    classDef infrastructure fill:#2ECC71,stroke:#27AE60,stroke-width:2px,color:#fff
+    classDef gitops fill:#3498DB,stroke:#2980B9,stroke-width:2px,color:#fff
+    classDef docker fill:#0DB7ED,stroke:#0DB7ED,stroke-width:2px,color:#fff
     classDef apps fill:#1ABC9C,stroke:#16A085,stroke-width:2px,color:#fff
 
     class DEV developer
     class GIT git
-    class SCRIPT script
+    class PR,PUSH,BUILD,UPDATE,REPORT cicd
+    class SCAN,SEC security
     class KIND,METRICS infrastructure
     class ARGO gitops
     class DOCKER docker
-    class APPOFAPPS master
-    class WEB,DB,MON,SEC,NETPOL,TEST,REPORTS apps
+    class APPOFAPPS,WEB,DB,MON,NETPOL,TEST,REPORTS apps
 ```
 
-### 🔄 **DevOps Flow:**
-1. **👨‍💻 Developer** pushes Helm charts and Go monitoring code to GitHub
-2. **🔧 deploy.sh** script creates KIND cluster, installs ArgoCD, builds and pushes Go monitoring image
-3. **🎯 ArgoCD** pulls Helm charts from GitHub and deploys App-of-Apps
-4. **📦 App-of-Apps** manages and deploys all 8 applications using Helm charts
-5. **👁 Go Monitoring Agent** pulls its container image from Docker Hub
+### 🔄 **Modern CI/CD Flow:**
+
+#### **🔀 Pull Request Workflow (Security Validation):**
+1. **👨‍💻 Developer** creates PR with code/Helm changes → **⚡ GitHub Actions** triggers
+2. **🛡️ Kyverno Security Scan** validates all Helm templates against Pod Security Standards  
+3. **📋 PR Comments** show detailed security report with violation details
+4. **⚠️ Warnings Only** - PRs can merge with violations (allows iterative development)
+
+#### **🚀 Production Deployment (workflows branch):**
+1. **👨‍💻 Developer** pushes to `workflows` branch → **⚡ Full CI/CD Pipeline** triggers
+2. **🏗️ Build & Push** - Go monitoring agent built and pushed to Docker Hub with unique tags
+3. **🔄 Helm Values Update** - Automated update of `values.yaml` with new image tags
+4. **🛡️ Security Scan** - All templates validated against 17+ Pod Security Standards
+5. **❌ Strict Enforcement** - Pipeline FAILS on any security violations
+6. **📦 ArgoCD Sync** - GitOps controller deploys updated Helm charts automatically
+
+#### **🎯 Infrastructure Setup:**
+1. **🔧 deploy.sh** creates KIND cluster and installs ArgoCD + Metrics Server  
+2. **🎯 ArgoCD** pulls Helm charts from GitHub and deploys App-of-Apps pattern
+3. **📦 App-of-Apps** manages and deploys all 8 applications using Helm charts
+4. **👁 Go Monitoring Agent** automatically pulls latest built images from Docker Hub
 
 ### Network Security (Auto-Generated via Kyverno)
 ```
@@ -142,8 +176,57 @@ graph TD
 | **Monitoring** | Custom Pod Monitor
 | **Load Testing** | Custom load generator | Performance validation |
 | **Backup** | mysqldump + CronJob | Disaster recovery |
+| **CI/CD Pipeline** | GitHub Actions | Automated build, scan & deploy |
+| **Security Scanning** | Kyverno CLI v1.15.0 | Policy compliance validation |
 
 ## ✨ Key Features
+
+### ⚡ **GitHub Actions CI/CD Pipeline**
+
+**Modern automation replacing manual deployment scripts with enterprise-grade CI/CD:**
+
+#### **🔀 Workflow Triggers:**
+```yaml
+# Pull Request Validation
+on:
+  pull_request:
+    branches: ['main']
+    paths: ['monitoring-go-controller/**', 'helm-charts/**']
+
+# Production Deployment  
+on:
+  push:
+    branches: ['workflows']
+    paths: ['monitoring-go-controller/**', 'helm-charts/**']
+```
+
+#### **📊 Pipeline Jobs:**
+
+| **Job** | **PR→main** | **Push→workflows** | **Purpose** |
+|---------|-------------|-------------------|-------------|
+| **🏗️ Build & Push** | ⏭️ Skipped | ✅ Runs | Multi-arch Docker builds with unique tags |
+| **🔄 Helm Update** | ⏭️ Skipped | ✅ Runs | Auto-update `values.yaml` with new image tags |
+| **🛡️ Security Scan** | ✅ Runs | ✅ Runs | Kyverno CLI validates all Helm templates |
+| **📋 PR Comments** | ✅ Runs | ⏭️ Skipped | Detailed violation reports in PR comments |
+| **❌ Failure Policy** | ⚠️ **Warn** | ❌ **Fail** | Balanced enforcement for development vs production |
+
+#### **🛡️ Security Integration:**
+- **Kyverno CLI v1.15.0** scans all Helm chart outputs against Pod Security Standards
+- **17+ Policies Applied**: Baseline + Restricted PSS compliance
+- **Template Validation**: Scans desired state (Helm templates) vs runtime violations
+- **Detailed Reporting**: Violation count, affected charts, and actionable remediation steps
+
+#### **🎯 Automated Image Management:**
+```bash
+# Unique tag generation for each build
+IMAGE_TAG="latest-${github.run_id}-${github.run_number}"
+
+# Multi-platform builds
+docker buildx build --platform linux/amd64,linux/arm64
+
+# Automated Helm values update  
+sed -i "s/tag: \".*\"/tag: \"$IMAGE_TAG\"/g" helm-charts/monitoring/values.yaml
+```
 
 ### 🤖 **Automated Security (Policy-as-Code)**
 - **17 Pod Security Standards** policies (Baseline + Restricted)
@@ -208,11 +291,32 @@ curl http://localhost:8080
 # View auto-generated NetworkPolicies
 kubectl get networkpolicies -n devops-case-study
 
-# Check Pod Security policies
+# Check Pod Security policies  
 kubectl get clusterpolicies
 
 # Monitor HPA scaling
 kubectl get hpa -n devops-case-study
+
+# Check security violations (if any)
+kubectl get policyreports -A
+```
+
+### 🔄 **CI/CD Development Workflow:**
+```bash
+# 1. Make changes to monitoring app or Helm charts
+echo "// Updated monitoring logic" >> monitoring-go-controller/main.go
+
+# 2. Create PR to main → Triggers security validation workflow
+git checkout -b feature/monitoring-update
+git add . && git commit -m "Update monitoring logic"
+git push origin feature/monitoring-update
+# → GitHub Actions runs security scan and reports violations in PR
+
+# 3. Push to workflows branch → Triggers full CI/CD pipeline  
+git checkout workflows
+git merge feature/monitoring-update  
+git push origin workflows
+# → Builds image, updates Helm values, validates security, deploys via ArgoCD
 ```
 
 ## 📁 Project Structure
@@ -417,13 +521,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 | **DR Testing** | ✅ Ready | `kubectl create job --from=cronjob/mysql-backup-job test` |
 
 ### 🚀 **Ready For:**
-- ✅ **Technical Interviews** - Full GitOps + Policy-as-Code demonstration
-- ✅ **Production Deployment** - All security and operational best practices implemented  
-- ✅ **Architecture Reviews** - Enterprise-grade microservices with proper separation
-- ✅ **DevOps Showcases** - Complete CI/CD pipeline with automated compliance
+- ✅ **Technical Interviews** - Full GitOps + Modern CI/CD + Policy-as-Code demonstration
+- ✅ **Production Deployment** - Enterprise-grade pipeline with automated security scanning
+- ✅ **Architecture Reviews** - Modern microservices with GitHub Actions automation
+- ✅ **DevOps Showcases** - Complete CI/CD pipeline with balanced security enforcement
+- ✅ **Security Audits** - Kyverno CLI integration with 17+ Pod Security Standards
+- ✅ **Team Collaboration** - PR-based workflow with automated validation and reporting
 
 ---
 
-**💡 This case study demonstrates mastery of modern DevOps practices with production-ready implementations!**
+**💡 This case study demonstrates mastery of modern DevOps practices with production-ready CI/CD automation!**
 
 **Built with ❤️ for the DevOps community** 🚀# Test push to main branch for security failure debug
