@@ -3,7 +3,7 @@ name: Build Monitoring Agent & Security Scan
 on:
   push:
     branches:
-      - 'main'
+      - 'workflows'
     # Build when monitoring agent or helm charts change
     paths:
       - 'monitoring-go-controller/**'
