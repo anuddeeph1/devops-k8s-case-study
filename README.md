@@ -40,49 +40,64 @@ This case study demonstrates a **production-grade microservices architecture** d
 
 ```mermaid
 graph TD
+    %% Developer and Git
     DEV["👨‍💻 Developer"]
-
     GIT["📁 GitHub Repository<br/>Helm Charts + App-of-Apps + Code"]
-
-    SCRIPT["🔧 deploy.sh Script<br/>Cluster + ArgoCD + Metrics + Build & Push Go Monitor image to docker hub"]
-
-    KIND["🏗️ KIND Cluster"]
-
+    
+    %% CI/CD Pipeline  
+    PR["🔀 Pull Request → main<br/>Security Validation Only"]
+    PUSH["🚀 Push → workflows<br/>Full CI/CD Pipeline"]
+    
+    %% GitHub Actions Jobs
+    BUILD["🏗️ Build & Push Job<br/>Multi-arch Docker Build<br/>anuddeeph/pod-monitor:latest-{run-id}"]
+    SCAN["🛡️ Security Scan Job<br/>Kyverno CLI v1.15.0<br/>17+ PSS Policies"]
+    UPDATE["🔄 Update Helm Values<br/>Auto-update values.yaml<br/>New Image Tags"]
+    REPORT["📋 PR Comments<br/>Violation Reports<br/>Security Summary"]
+    
+    %% Infrastructure
+    DOCKER["🐳 Docker Hub<br/>Automated Image Registry"]
+    KIND["🏗️ KIND Cluster<br/>Local Infrastructure"]
     METRICS["📊 Metrics Server"]
+    ARGO["🎯 ArgoCD<br/>GitOps Controller"]
+    
+    %% Applications
+    APPOFAPPS["📦 App-of-Apps<br/>8 Application Manager"]
+    WEB["🌐 Web Server<br/>Nginx + HPA"]
+    DB["💾 MySQL Database<br/>StatefulSet + DR"]
+    MON["👁 Go Monitoring Agent<br/>Auto-updated Images"]
+    SEC["🛡 Kyverno + PSS<br/>17+ Security Policies"]
+    NETPOL["🌐 Network Policies<br/>Zero-Trust Networking"]
+    TEST["⚡ Load Testing<br/>HPA Triggers"]
+    REPORTS["📊 Reports Server<br/>Policy Compliance"]
 
-    ARGO["🎯 ArgoCD"]
-
-    DOCKER["🐳 Docker Hub<br/>Go Monitor Image"]
-
-    APPOFAPPS["📦 App-of-Apps<br/> Applications"]
-
-    WEB["🌐 Web Server"]
-
-    DB["💾 MySQL Database"]
-
-    MON["👁 Go Monitoring Agent"]
-
-    SEC["🛡 Kyverno + PSS Policies"]
-
-    NETPOL["🌐 Network Policies"]
-
-    TEST["⚡ Load Testing"]
-
-    REPORTS["📊 Reports Server"]
-
-    %% Flow
-    DEV -->|"Push Charts + Code"| GIT
-    DEV -->|"Run Script"| SCRIPT
-
-    SCRIPT --> KIND
-    SCRIPT --> METRICS
-    SCRIPT --> ARGO
-    SCRIPT -->|"Build & Push Image"| DOCKER
-
-    ARGO -->|"Pulls from GitHub"| GIT
+    %% Developer Workflows
+    DEV -->|"Create PR"| PR
+    DEV -->|"Push to workflows"| PUSH
+    DEV -->|"Code + Helm Charts"| GIT
+    
+    %% PR Workflow (Security Only)
+    PR --> SCAN
+    SCAN --> REPORT
+    REPORT -->|"⚠️ Warn (Allow Merge)"| DEV
+    
+    %% Production Workflow (workflows branch)
+    PUSH --> BUILD
+    PUSH --> SCAN
+    BUILD --> DOCKER
+    BUILD --> UPDATE
+    SCAN -->|"❌ Fail on Violations"| DEV
+    UPDATE -->|"Auto-commit"| GIT
+    
+    %% Infrastructure Setup (One-time)
+    DEV -->|"./scripts/deploy.sh"| KIND
+    KIND --> METRICS
+    KIND --> ARGO
+    
+    %% GitOps Flow
+    ARGO -->|"Pulls Charts"| GIT  
     ARGO -->|"Deploys"| APPOFAPPS
-
-    %% App-of-Apps deploys
+    
+    %% App Deployments
     APPOFAPPS --> WEB
     APPOFAPPS --> DB
     APPOFAPPS --> MON
@@ -90,28 +105,29 @@ graph TD
     APPOFAPPS --> NETPOL
     APPOFAPPS --> TEST
     APPOFAPPS --> REPORTS
-
-    MON -->|"Image from"| DOCKER
-    WEB -->|"Uses"| DB
+    
+    %% Image Flow
+    MON -->|"Pulls Updated Images"| DOCKER
+    WEB -->|"Database Connection"| DB
 
     %% Styling
-    classDef developer fill:#FF6B6B,stroke:#C0392B,stroke-width:2px,color:#fff
-    classDef git fill:#2ECC71,stroke:#27AE60,stroke-width:2px,color:#fff
-    classDef script fill:#E67E22,stroke:#D35400,stroke-width:2px,color:#fff
-    classDef infrastructure fill:#3498DB,stroke:#2980B9,stroke-width:2px,color:#fff
-    classDef gitops fill:#9B59B6,stroke:#8E44AD,stroke-width:2px,color:#fff
-    classDef docker fill:#3498DB,stroke:#2980B9,stroke-width:2px,color:#fff
-    classDef master fill:#F39C12,stroke:#E67E22,stroke-width:2px,color:#fff
+    classDef developer fill:#E74C3C,stroke:#C0392B,stroke-width:2px,color:#fff
+    classDef git fill:#F39C12,stroke:#E67E22,stroke-width:2px,color:#fff
+    classDef cicd fill:#9B59B6,stroke:#8E44AD,stroke-width:2px,color:#fff
+    classDef security fill:#E67E22,stroke:#D35400,stroke-width:2px,color:#fff
+    classDef infrastructure fill:#2ECC71,stroke:#27AE60,stroke-width:2px,color:#fff
+    classDef gitops fill:#3498DB,stroke:#2980B9,stroke-width:2px,color:#fff
+    classDef docker fill:#0DB7ED,stroke:#0DB7ED,stroke-width:2px,color:#fff
     classDef apps fill:#1ABC9C,stroke:#16A085,stroke-width:2px,color:#fff
 
     class DEV developer
     class GIT git
-    class SCRIPT script
+    class PR,PUSH,BUILD,UPDATE,REPORT cicd
+    class SCAN,SEC security  
     class KIND,METRICS infrastructure
     class ARGO gitops
     class DOCKER docker
-    class APPOFAPPS master
-    class WEB,DB,MON,SEC,NETPOL,TEST,REPORTS apps
+    class APPOFAPPS,WEB,DB,MON,NETPOL,TEST,REPORTS apps
 ```
 
 ### 🔄 **Modern CI/CD Flow:**
