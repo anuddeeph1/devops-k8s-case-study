@@ -53,7 +53,8 @@ jobs:
         id: generate-tag
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "IMAGE_TAG=pr-${{ github.event.number }}-${{ github.sha::8 }}" >> $GITHUB_OUTPUT
+            SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-8)
+            echo "IMAGE_TAG=pr-${{ github.event.number }}-${SHORT_SHA}" >> $GITHUB_OUTPUT
           else
             echo "IMAGE_TAG=latest-${{ github.run_id }}-${{ github.run_number }}" >> $GITHUB_OUTPUT
           fi
