@@ -242,10 +242,19 @@ jobs:
             for yaml_file in security-scan/manifests/$chart/templates/*.yaml; do
               if [ -f "$yaml_file" ]; then
                 echo "    Scanning: $(basename $yaml_file)..."
+                
+                # Run kyverno with full error output for debugging
                 result=$(kyverno apply \
                   security-scan/policies/pss-policies/templates/ \
-                  --resource "$yaml_file" 2>/dev/null || true)
+                  --resource "$yaml_file" 2>&1 || true)
+                
+                # Debug: Show last few lines of result
+                echo "      Last lines of scan result:"
+                echo "$result" | tail -3 | sed 's/^/        /'
+                
+                # Parse violations from summary line
                 violations=$(echo "$result" | tail -1 | grep -o 'fail: [0-9]*' | cut -d' ' -f2 || echo "0")
+                echo "      Violations detected: $violations"
                 CHART_VIOLATIONS=$((CHART_VIOLATIONS + violations))
               fi
             done
