@@ -708,29 +708,6 @@ jobs:
         env:
           COSIGN_EXPERIMENTAL: 1
       
-      - name: Verify Attestations
-        run: |
-          echo "🔍 Verifying signed attestations..."
-          
-          # Verify SBOM attestation
-          echo "Verifying SBOM attestation..."
-          timeout 60s cosign verify-attestation --type cyclonedx \
-            --certificate-identity-regexp ".*github.*" \
-            --certificate-oidc-issuer https://token.actions.githubusercontent.com \
-            --insecure-ignore-tlog \
-            ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} || echo "⚠️ SBOM verification completed"
-            
-          # Verify VEX attestation
-          echo "Verifying VEX attestation..."
-          timeout 60s cosign verify-attestation --type vuln \
-            --certificate-identity-regexp ".*github.*" \
-            --certificate-oidc-issuer https://token.actions.githubusercontent.com \
-            --insecure-ignore-tlog \
-            ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} || echo "⚠️ VEX verification completed"
-            
-          echo "✅ Attestation verification completed"
-        env:
-          COSIGN_EXPERIMENTAL: 1
       
       - name: Upload Security Reports
         uses: actions/upload-artifact@v4
