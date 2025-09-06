@@ -82,19 +82,19 @@ spec:
             command:
             - /usr/local/bin/pod-monitor
             - --health-check
-          initialDelaySeconds: 30
+          initialDelaySeconds: 45
           periodSeconds: 30
-          timeoutSeconds: 10
+          timeoutSeconds: 12
           failureThreshold: 3
         readinessProbe:
           exec:
             command:
             - /usr/local/bin/pod-monitor
             - --health-check
-          initialDelaySeconds: 5
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          timeoutSeconds: 12
+          failureThreshold: 5
       restartPolicy: Always
       {{- if .Values.security.enabled }}
       volumes:

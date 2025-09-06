@@ -296,8 +296,8 @@ func healthCheck() {
 		os.Exit(1)
 	}
 
-	// Test connectivity with a quick namespace check (fast timeout for probes)
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	// Test connectivity with a quick namespace check (allow more time for network conditions)
+	ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
 	defer cancel()
 
 	_, err = monitor.clientset.CoreV1().Namespaces().Get(ctx, "default", metav1.GetOptions{})
