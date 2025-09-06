@@ -11,7 +11,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/anuddeeph1/devops-k8s-case-study.git
-    targetRevision: workflows
+    targetRevision: main
     path: helm-charts/kyverno
     helm:
       valueFiles:
