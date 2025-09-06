@@ -42,11 +42,21 @@ This case study demonstrates a **production-grade microservices architecture** d
 graph TD
     %% Developer and Git
     DEV["👨‍💻 Developer<br/>DevOps Engineer"]
-    GIT["📁 GitHub Repository<br/>Helm Charts + App-of-Apps + Code"]
+    GIT["📁 GitHub Repository<br/>workflows branch<br/>Enhanced Security Pipeline"]
     
     %% CI/CD Pipeline  
     PR["🔀 Pull Request → main<br/>Security Validation Only"]
-    PUSH["🚀 Push → workflows<br/>Full CI/CD Pipeline"]
+    PUSH["🚀 Push → workflows<br/>Full CI/CD + Security Pipeline"]
+    
+    %% Security Scanning Pipeline (NEW)
+    subgraph SECURITY["🛡️ Container Security Pipeline"]
+        BUILD["🐳 Docker Build<br/>Distroless + Multi-stage"]
+        GRYPE["🔍 Grype Scan<br/>Vulnerability Detection<br/>JSON + SARIF + Table"]
+        SYFT["📋 Syft SBOM<br/>CycloneDX + SPDX<br/>Supply Chain Analysis"] 
+        VEX["📊 VEX Document<br/>Exploitability Assessment<br/>OpenVEX Compliance"]
+        COSIGN["🔐 Cosign Signing<br/>Keyless Attestation<br/>OIDC + GitHub"]
+        REPORTS["📁 Organized Reports<br/>security-reports/<br/>grype/ sbom/ vex/"]
+    end
     
     %% GitHub Actions Jobs
     BUILD["🏗️ Build & Push Job<br/>Multi-arch Docker Build<br/>anuddeeph/pod-monitor:latest-{run-id}"]
@@ -164,6 +174,17 @@ graph TD
 ```
 
 ## 🛠️ Technology Stack
+
+### **🛡️ Security Scanning & Attestation**
+| Component | Purpose | Integration |
+|-----------|---------|-------------|
+| **Grype** | Vulnerability scanning | GitHub Actions + Local scripts |
+| **Syft** | SBOM generation | CycloneDX, SPDX formats |
+| **VEX** | Vulnerability exploitability | OpenVEX compliance |
+| **Cosign** | Container signing | Keyless signing with GitHub OIDC |
+| **Kyverno** | Policy enforcement | Pod Security Standards |
+
+### **🏗️ Infrastructure & Platform**
 
 | Component | Technology | Purpose |
 |-----------|------------|---------|
