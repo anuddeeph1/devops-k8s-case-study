@@ -13,7 +13,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/anuddeeph1/devops-k8s-case-study.git
-    targetRevision: main
+    targetRevision: workflows
     path: helm-charts/database
     helm:
       valueFiles:
