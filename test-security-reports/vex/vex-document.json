@@ -1,0 +1,55 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://github.com/anuddeeph1/devops-k8s-case-study/vex/alpine-latest",
+  "author": "Local Security Scanner",
+  "timestamp": "2025-09-06T10:05:23.678978Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2024-58251",
+        "description": "In netstat in BusyBox through 1.37.0, local users can launch of network application with an argv[0] containing an ANSI terminal escape sequence, leading to a denial of service (terminal locked up) when netstat is used by a victim."
+      },
+      "products": [
+        {
+          "@id": "alpine:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/busybox@1.37.0-r18?arch=aarch64&distro=alpine-3.22.1&package-id=cfbeef858806724b",
+              "name": "busybox",
+              "version": "1.37.0-r18",
+              "purl": "pkg:apk/alpine/busybox@1.37.0-r18?arch=aarch64&distro=alpine-3.22.1"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "component_not_present",
+      "impact_statement": "Severity: LOW - In netstat in BusyBox through 1.37.0, local users can launch of network application with an argv[0] containing an ANSI terminal escape sequence, leading to a denial of service (terminal locked up) when netstat is used by a victim.",
+      "action_statement": "Component found in SBOM: busybox"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-46394",
+        "description": "In tar in BusyBox through 1.37.0, a TAR archive can have filenames hidden from a listing through the use of terminal escape sequences."
+      },
+      "products": [
+        {
+          "@id": "alpine:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/busybox@1.37.0-r18?arch=aarch64&distro=alpine-3.22.1&package-id=cfbeef858806724b",
+              "name": "busybox",
+              "version": "1.37.0-r18",
+              "purl": "pkg:apk/alpine/busybox@1.37.0-r18?arch=aarch64&distro=alpine-3.22.1"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "component_not_present",
+      "impact_statement": "Severity: LOW - In tar in BusyBox through 1.37.0, a TAR archive can have filenames hidden from a listing through the use of terminal escape sequences.",
+      "action_statement": "Component found in SBOM: busybox"
+    }
+  ]
+}
