@@ -440,19 +440,26 @@ jobs:
         id: grype-scan
         run: |
           echo "🔍 Running Grype vulnerability scan..."
+          
+          # Create structured security-reports directory
           mkdir -p security-reports/grype
+          mkdir -p security-reports/sbom
+          mkdir -p security-reports/vex
+          
+          # Generate image-based filename
+          IMAGE_FILE_NAME=$(echo "${{ steps.image-details.outputs.FULL_IMAGE_NAME }}" | sed 's/:/-/g' | sed 's/\//_/g')
           
           # Run Grype scan with multiple output formats
-          grype ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} -o json > security-reports/grype/vulnerabilities.json
-          grype ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} -o table > security-reports/grype/vulnerabilities.txt
-          grype ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} -o sarif > security-reports/grype/vulnerabilities.sarif
+          grype ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} -o json > security-reports/grype/${IMAGE_FILE_NAME}-vulnerabilities.json
+          grype ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} -o table > security-reports/grype/${IMAGE_FILE_NAME}-vulnerabilities.txt
+          grype ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} -o sarif > security-reports/grype/${IMAGE_FILE_NAME}-vulnerabilities.sarif
           
-          # Count vulnerabilities
-          VULN_COUNT=$(jq '.matches | length' security-reports/grype/vulnerabilities.json)
-          CRITICAL_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "Critical")] | length' security-reports/grype/vulnerabilities.json)
-          HIGH_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "High")] | length' security-reports/grype/vulnerabilities.json)
-          MEDIUM_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "Medium")] | length' security-reports/grype/vulnerabilities.json)
-          LOW_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "Low")] | length' security-reports/grype/vulnerabilities.json)
+          # Count vulnerabilities using image-specific filename
+          VULN_COUNT=$(jq '.matches | length' security-reports/grype/${IMAGE_FILE_NAME}-vulnerabilities.json)
+          CRITICAL_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "Critical")] | length' security-reports/grype/${IMAGE_FILE_NAME}-vulnerabilities.json)
+          HIGH_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "High")] | length' security-reports/grype/${IMAGE_FILE_NAME}-vulnerabilities.json)
+          MEDIUM_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "Medium")] | length' security-reports/grype/${IMAGE_FILE_NAME}-vulnerabilities.json)
+          LOW_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "Low")] | length' security-reports/grype/${IMAGE_FILE_NAME}-vulnerabilities.json)
           
           echo "📊 Vulnerability Summary:"
           echo "  Total: $VULN_COUNT"
@@ -472,15 +479,17 @@ jobs:
         id: sbom-generation
         run: |
           echo "📋 Generating Software Bill of Materials (SBOM)..."
-          mkdir -p security-reports/sbom
           
-          # Generate SBOM in multiple formats
-          syft ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} -o cyclonedx-json > security-reports/sbom/sbom.cyclonedx.json
-          syft ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} -o spdx-json > security-reports/sbom/sbom.spdx.json
-          syft ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} -o table > security-reports/sbom/sbom.txt
+          # Generate image-based filename
+          IMAGE_FILE_NAME=$(echo "${{ steps.image-details.outputs.FULL_IMAGE_NAME }}" | sed 's/:/-/g' | sed 's/\//_/g')
+          
+          # Generate SBOM in multiple formats with image-specific names
+          syft ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} -o cyclonedx-json > security-reports/sbom/${IMAGE_FILE_NAME}-sbom.cyclonedx.json
+          syft ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} -o spdx-json > security-reports/sbom/${IMAGE_FILE_NAME}-sbom.spdx.json
+          syft ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} -o table > security-reports/sbom/${IMAGE_FILE_NAME}-sbom.txt
           
           # Count components
-          COMPONENT_COUNT=$(jq '.components | length' security-reports/sbom/sbom.cyclonedx.json)
+          COMPONENT_COUNT=$(jq '.components | length' security-reports/sbom/${IMAGE_FILE_NAME}-sbom.cyclonedx.json)
           echo "📦 SBOM contains $COMPONENT_COUNT components"
           
           echo "sbom_generated=true" >> $GITHUB_OUTPUT
@@ -490,7 +499,9 @@ jobs:
         id: vex-generation
         run: |
           echo "📑 Generating VEX (Vulnerability Exploitability eXchange) document..."
-          mkdir -p security-reports/vex
+          
+          # Generate image-based filename
+          IMAGE_FILE_NAME=$(echo "${{ steps.image-details.outputs.FULL_IMAGE_NAME }}" | sed 's/:/-/g' | sed 's/\//_/g')
           
           # Create VEX document with Python script
           python3 << 'PYTHON_SCRIPT'
@@ -498,9 +509,14 @@ jobs:
           import os
           from datetime import datetime
           
-          # Read SBOM and Grype results
-          sbom_file = "security-reports/sbom/sbom.cyclonedx.json"
-          grype_file = "security-reports/grype/vulnerabilities.json"
+          # Get image filename for file paths
+          import os
+          image_name = os.environ.get('FULL_IMAGE_NAME', '${{ steps.image-details.outputs.FULL_IMAGE_NAME }}')
+          image_file_name = image_name.replace(':', '-').replace('/', '_')
+          
+          # Read SBOM and Grype results with image-specific names
+          sbom_file = f"security-reports/sbom/{image_file_name}-sbom.cyclonedx.json"
+          grype_file = f"security-reports/grype/{image_file_name}-vulnerabilities.json"
           
           with open(sbom_file, 'r') as f:
               sbom_data = json.load(f)
@@ -604,14 +620,17 @@ jobs:
               
               vex_doc["statements"].append(statement)
           
-          # Write VEX document
-          with open("security-reports/vex/vex-document.json", 'w') as f:
+          # Write VEX document with image-specific name
+          vex_file = f"security-reports/vex/{image_file_name}-vex-document.json"
+          with open(vex_file, 'w') as f:
               json.dump(vex_doc, f, indent=2)
               
           print(f"Generated VEX document with {len(vex_doc['statements'])} statements")
           PYTHON_SCRIPT
           
-          VEX_STATEMENTS=$(jq '.statements | length' security-reports/vex/vex-document.json)
+          # Get image filename for file path
+          IMAGE_FILE_NAME=$(echo "${{ steps.image-details.outputs.FULL_IMAGE_NAME }}" | sed 's/:/-/g' | sed 's/\//_/g')
+          VEX_STATEMENTS=$(jq '.statements | length' security-reports/vex/${IMAGE_FILE_NAME}-vex-document.json)
           echo "📑 VEX document created with $VEX_STATEMENTS statements"
           
           echo "vex_created=true" >> $GITHUB_OUTPUT
@@ -692,14 +711,17 @@ jobs:
         run: |
           echo "🔏 Signing SBOM and VEX documents with Cosign..."
           
+          # Generate image-based filename
+          IMAGE_FILE_NAME=$(echo "${{ steps.image-details.outputs.FULL_IMAGE_NAME }}" | sed 's/:/-/g' | sed 's/\//_/g')
+          
           # Attest SBOM to image
-          cosign attest --predicate security-reports/sbom/sbom.cyclonedx.json \
+          cosign attest --predicate security-reports/sbom/${IMAGE_FILE_NAME}-sbom.cyclonedx.json \
             --type cyclonedx \
             --yes \
             ${{ steps.image-details.outputs.FULL_IMAGE_NAME }}
             
           # Attest VEX to image
-          cosign attest --predicate security-reports/vex/vex-document.json \
+          cosign attest --predicate security-reports/vex/${IMAGE_FILE_NAME}-vex-document.json \
             --type vuln \
             --yes \
             ${{ steps.image-details.outputs.FULL_IMAGE_NAME }}
@@ -720,31 +742,33 @@ jobs:
         run: |
           echo "📝 Committing security reports to repository..."
           
-          # Create security-reports directory in repo if it doesn't exist
-          mkdir -p security-reports
+          # The security-reports directory structure is already organized:
+          # security-reports/
+          # ├── grype/
+          # ├── sbom/
+          # └── vex/
           
-          # Copy reports with image tag for versioning
-          cp -r security-reports/ security-reports-${{ steps.image-details.outputs.IMAGE_TAG }}/
-          
-          # Add to git
-          git add security-reports-${{ steps.image-details.outputs.IMAGE_TAG }}/
+          # Add the organized security-reports directory to git
+          git add security-reports/
           
           if git diff --staged --quiet; then
             echo "No security report changes to commit"
           else
-            git commit -m "🔒 Add security analysis reports for pod-monitor:${{ steps.image-details.outputs.IMAGE_TAG }}
+            IMAGE_FILE_NAME=$(echo "${{ steps.image-details.outputs.FULL_IMAGE_NAME }}" | sed 's/:/-/g' | sed 's/\//_/g')
+            
+            git commit -m "🔒 Add security analysis reports for ${{ steps.image-details.outputs.FULL_IMAGE_NAME }}
             
             📊 Security Scan Summary:
+            - Image: ${{ steps.image-details.outputs.FULL_IMAGE_NAME }}
             - Vulnerabilities: ${{ steps.grype-scan.outputs.vulnerabilities_found }} (Critical: ${{ steps.grype-scan.outputs.critical_vulns }}, High: ${{ steps.grype-scan.outputs.high_vulns }})
             - SBOM Components: ${{ steps.sbom-generation.outputs.component_count }}
             - VEX Statements: ${{ steps.vex-generation.outputs.vex_statements }}
             - Attestations: ✅ Signed with Cosign
             
-            🔍 Reports included:
-            - Grype vulnerability scan (JSON, SARIF, Table)
-            - Syft SBOM (CycloneDX, SPDX, Table)  
-            - VEX document (OpenVEX v0.2.0)
-            - Security summary report
+            📁 Organized Report Structure:
+            - security-reports/grype/${IMAGE_FILE_NAME}-vulnerabilities.{json,txt,sarif}
+            - security-reports/sbom/${IMAGE_FILE_NAME}-sbom.{cyclonedx.json,spdx.json,txt}
+            - security-reports/vex/${IMAGE_FILE_NAME}-vex-document.json
             
             [skip ci]"
             

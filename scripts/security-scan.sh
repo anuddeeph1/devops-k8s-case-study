@@ -80,20 +80,26 @@ install_security_tools() {
 run_vulnerability_scan() {
     log_info "Running Grype vulnerability scan on $IMAGE_NAME..."
     
+    # Create structured security-reports directory
     mkdir -p "$OUTPUT_DIR/grype"
+    mkdir -p "$OUTPUT_DIR/sbom"
+    mkdir -p "$OUTPUT_DIR/vex"
     
-    # Generate vulnerability reports in multiple formats
-    grype "$IMAGE_NAME" -o json > "$OUTPUT_DIR/grype/vulnerabilities.json"
-    grype "$IMAGE_NAME" -o table > "$OUTPUT_DIR/grype/vulnerabilities.txt"
-    grype "$IMAGE_NAME" -o sarif > "$OUTPUT_DIR/grype/vulnerabilities.sarif"
+    # Generate image-based filename
+    local image_file_name=$(echo "$IMAGE_NAME" | sed 's/:/-/g' | sed 's/\//_/g')
     
-    # Parse vulnerability counts
+    # Generate vulnerability reports in multiple formats with image-specific names
+    grype "$IMAGE_NAME" -o json > "$OUTPUT_DIR/grype/${image_file_name}-vulnerabilities.json"
+    grype "$IMAGE_NAME" -o table > "$OUTPUT_DIR/grype/${image_file_name}-vulnerabilities.txt"
+    grype "$IMAGE_NAME" -o sarif > "$OUTPUT_DIR/grype/${image_file_name}-vulnerabilities.sarif"
+    
+    # Parse vulnerability counts using image-specific filename
     if command -v jq &> /dev/null; then
-        TOTAL_VULNS=$(jq '.matches | length' "$OUTPUT_DIR/grype/vulnerabilities.json")
-        CRITICAL_VULNS=$(jq '[.matches[] | select(.vulnerability.severity == "Critical")] | length' "$OUTPUT_DIR/grype/vulnerabilities.json")
-        HIGH_VULNS=$(jq '[.matches[] | select(.vulnerability.severity == "High")] | length' "$OUTPUT_DIR/grype/vulnerabilities.json")
-        MEDIUM_VULNS=$(jq '[.matches[] | select(.vulnerability.severity == "Medium")] | length' "$OUTPUT_DIR/grype/vulnerabilities.json")
-        LOW_VULNS=$(jq '[.matches[] | select(.vulnerability.severity == "Low")] | length' "$OUTPUT_DIR/grype/vulnerabilities.json")
+        TOTAL_VULNS=$(jq '.matches | length' "$OUTPUT_DIR/grype/${image_file_name}-vulnerabilities.json")
+        CRITICAL_VULNS=$(jq '[.matches[] | select(.vulnerability.severity == "Critical")] | length' "$OUTPUT_DIR/grype/${image_file_name}-vulnerabilities.json")
+        HIGH_VULNS=$(jq '[.matches[] | select(.vulnerability.severity == "High")] | length' "$OUTPUT_DIR/grype/${image_file_name}-vulnerabilities.json")
+        MEDIUM_VULNS=$(jq '[.matches[] | select(.vulnerability.severity == "Medium")] | length' "$OUTPUT_DIR/grype/${image_file_name}-vulnerabilities.json")
+        LOW_VULNS=$(jq '[.matches[] | select(.vulnerability.severity == "Low")] | length' "$OUTPUT_DIR/grype/${image_file_name}-vulnerabilities.json")
         
         log_info "Vulnerability Summary:"
         echo "  Total: $TOTAL_VULNS"
@@ -123,16 +129,17 @@ run_vulnerability_scan() {
 generate_sbom() {
     log_info "Generating Software Bill of Materials (SBOM) for $IMAGE_NAME..."
     
-    mkdir -p "$OUTPUT_DIR/sbom"
+    # Generate image-based filename
+    local image_file_name=$(echo "$IMAGE_NAME" | sed 's/:/-/g' | sed 's/\//_/g')
     
-    # Generate SBOM in multiple formats
-    syft "$IMAGE_NAME" -o cyclonedx-json > "$OUTPUT_DIR/sbom/sbom.cyclonedx.json"
-    syft "$IMAGE_NAME" -o spdx-json > "$OUTPUT_DIR/sbom/sbom.spdx.json"
-    syft "$IMAGE_NAME" -o table > "$OUTPUT_DIR/sbom/sbom.txt"
+    # Generate SBOM in multiple formats with image-specific names
+    syft "$IMAGE_NAME" -o cyclonedx-json > "$OUTPUT_DIR/sbom/${image_file_name}-sbom.cyclonedx.json"
+    syft "$IMAGE_NAME" -o spdx-json > "$OUTPUT_DIR/sbom/${image_file_name}-sbom.spdx.json"
+    syft "$IMAGE_NAME" -o table > "$OUTPUT_DIR/sbom/${image_file_name}-sbom.txt"
     
     # Count components
     if command -v jq &> /dev/null; then
-        COMPONENT_COUNT=$(jq '.components | length' "$OUTPUT_DIR/sbom/sbom.cyclonedx.json")
+        COMPONENT_COUNT=$(jq '.components | length' "$OUTPUT_DIR/sbom/${image_file_name}-sbom.cyclonedx.json")
         log_info "SBOM contains $COMPONENT_COUNT components"
         export SBOM_COMPONENTS=$COMPONENT_COUNT
     else
@@ -146,7 +153,11 @@ generate_sbom() {
 generate_vex_document() {
     log_info "Generating VEX (Vulnerability Exploitability eXchange) document..."
     
-    mkdir -p "$OUTPUT_DIR/vex"
+    # Generate image-based filename
+    local image_file_name=$(echo "$IMAGE_NAME" | sed 's/:/-/g' | sed 's/\//_/g')
+    
+    # Export image filename for Python script
+    export IMAGE_FILE_NAME="$image_file_name"
     
     # Generate VEX document using Python
     python3 << 'EOF'
@@ -157,9 +168,13 @@ from datetime import datetime
 
 def generate_vex():
     try:
-        # Read SBOM and Grype results
-        sbom_file = os.environ.get('OUTPUT_DIR', './security-reports') + "/sbom/sbom.cyclonedx.json"
-        grype_file = os.environ.get('OUTPUT_DIR', './security-reports') + "/grype/vulnerabilities.json"
+        # Get paths with image-specific filenames
+        output_dir = os.environ.get('OUTPUT_DIR', './security-reports')
+        image_file_name = os.environ.get('IMAGE_FILE_NAME', 'unknown-image')
+        
+        # Read SBOM and Grype results with image-specific names
+        sbom_file = f"{output_dir}/sbom/{image_file_name}-sbom.cyclonedx.json"
+        grype_file = f"{output_dir}/grype/{image_file_name}-vulnerabilities.json"
         
         if not os.path.exists(sbom_file) or not os.path.exists(grype_file):
             print("SBOM or vulnerability file not found")
@@ -268,9 +283,10 @@ def generate_vex():
             
             vex_doc["statements"].append(statement)
         
-        # Write VEX document
+        # Write VEX document with image-specific name
         output_dir = os.environ.get('OUTPUT_DIR', './security-reports')
-        vex_file = f"{output_dir}/vex/vex-document.json"
+        image_file_name = os.environ.get('IMAGE_FILE_NAME', 'unknown-image')
+        vex_file = f"{output_dir}/vex/{image_file_name}-vex-document.json"
         with open(vex_file, 'w') as f:
             json.dump(vex_doc, f, indent=2)
             
@@ -287,7 +303,9 @@ if __name__ == "__main__":
     generate_vex()
 EOF
 
-    export VEX_STATEMENTS=$(jq '.statements | length' "$OUTPUT_DIR/vex/vex-document.json" 2>/dev/null || echo "0")
+    # Get image filename for file path
+    local image_file_name=$(echo "$IMAGE_NAME" | sed 's/:/-/g' | sed 's/\//_/g')
+    export VEX_STATEMENTS=$(jq '.statements | length' "$OUTPUT_DIR/vex/${image_file_name}-vex-document.json" 2>/dev/null || echo "0")
     log_success "VEX document generated with $VEX_STATEMENTS statements"
 }
 
@@ -355,13 +373,13 @@ EOF
 
 ## 📁 Report Files
 
-- \`grype/vulnerabilities.json\` - Detailed vulnerability data (JSON format)
-- \`grype/vulnerabilities.txt\` - Human-readable vulnerability report
-- \`grype/vulnerabilities.sarif\` - SARIF format for code scanning integration
-- \`sbom/sbom.cyclonedx.json\` - Software Bill of Materials (CycloneDX format)
-- \`sbom/sbom.spdx.json\` - Software Bill of Materials (SPDX format)
-- \`sbom/sbom.txt\` - Human-readable SBOM
-- \`vex/vex-document.json\` - Vulnerability Exploitability Exchange document
+- \`grype/\${IMAGE_NAME}-vulnerabilities.json\` - Detailed vulnerability data (JSON format)
+- \`grype/\${IMAGE_NAME}-vulnerabilities.txt\` - Human-readable vulnerability report
+- \`grype/\${IMAGE_NAME}-vulnerabilities.sarif\` - SARIF format for code scanning integration
+- \`sbom/\${IMAGE_NAME}-sbom.cyclonedx.json\` - Software Bill of Materials (CycloneDX format)
+- \`sbom/\${IMAGE_NAME}-sbom.spdx.json\` - Software Bill of Materials (SPDX format)
+- \`sbom/\${IMAGE_NAME}-sbom.txt\` - Human-readable SBOM
+- \`vex/\${IMAGE_NAME}-vex-document.json\` - Vulnerability Exploitability Exchange document
 
 ## 🔧 Command References
 
@@ -382,10 +400,10 @@ jq '.matches[] | select(.vulnerability.severity == "Critical")' $OUTPUT_DIR/gryp
 
 \`\`\`bash
 # Sign SBOM with Cosign (requires setup)
-cosign attest --predicate $OUTPUT_DIR/sbom/sbom.cyclonedx.json --type cyclonedx $IMAGE_NAME
+cosign attest --predicate $OUTPUT_DIR/sbom/\${IMAGE_NAME}-sbom.cyclonedx.json --type cyclonedx $IMAGE_NAME
 
 # Sign VEX with Cosign
-cosign attest --predicate $OUTPUT_DIR/vex/vex-document.json --type vuln $IMAGE_NAME
+cosign attest --predicate $OUTPUT_DIR/vex/\${IMAGE_NAME}-vex-document.json --type vuln $IMAGE_NAME
 \`\`\`
 EOF
 
