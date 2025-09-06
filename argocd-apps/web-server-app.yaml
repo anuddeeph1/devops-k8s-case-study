@@ -13,7 +13,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/anuddeeph1/musical-giggle.git
-    targetRevision: main
+    targetRevision: workflows
     path: helm-charts/web-server
     helm:
       valueFiles:
