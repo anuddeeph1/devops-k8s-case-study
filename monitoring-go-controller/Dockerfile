@@ -28,28 +28,8 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
     -buildvcs=false \
     -o pod-monitor .
 
-# Security scan stage (optional for local development)
-FROM alpine:3.18 AS security-scanner
-
-# Install security scanning tools (if building with security scan)
-ARG ENABLE_SECURITY_SCAN=false
-RUN if [ "$ENABLE_SECURITY_SCAN" = "true" ]; then \
-        apk add --no-cache curl jq && \
-        curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin && \
-        curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin; \
-    fi
-
-# Copy binary for scanning
-COPY --from=builder /app/pod-monitor /tmp/pod-monitor
-
-# Run security scan if enabled
-RUN if [ "$ENABLE_SECURITY_SCAN" = "true" ]; then \
-        echo "Running security scan..." && \
-        grype /tmp/pod-monitor --fail-on medium || true && \
-        syft /tmp/pod-monitor -o cyclonedx-json > /tmp/sbom.json || true; \
-    fi
-
 # Final stage - Distroless for maximum security
+# Security scanning is handled externally via CI/CD pipeline and security scripts
 FROM gcr.io/distroless/static-debian11:nonroot
 
 # Metadata for security scanning and attestation
@@ -80,8 +60,8 @@ LABEL application.security.compliance="pod-security-standards"
 # Copy binary from builder stage
 COPY --from=builder /app/pod-monitor /usr/local/bin/pod-monitor
 
-# Copy SBOM if generated during build
-COPY --from=security-scanner /tmp/sbom.json /etc/sbom.json 2>/dev/null || true
+# Note: SBOM can be generated at runtime or via external tools
+# Keeping the container minimal and focused
 
 # Set environment variables for security compliance
 ENV NAMESPACE=devops-case-study
