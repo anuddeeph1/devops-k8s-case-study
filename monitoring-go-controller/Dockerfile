@@ -1,11 +1,11 @@
 FROM golang:1.21-alpine AS builder
 
 # Install git and other build dependencies
-# Use specific versions to ensure reproducible builds
+# Use latest available versions for compatibility
 RUN apk add --no-cache \
-    git=~2 \
-    ca-certificates=~20230506 \
-    tzdata=~2023c
+    git \
+    ca-certificates \
+    tzdata
 
 # Set working directory
 WORKDIR /app
