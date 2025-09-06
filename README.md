@@ -540,12 +540,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 | Feature | Status | Demo Command |
 |---------|--------|--------------|
-| **Web App** | ✅ Running | `open http://localhost:8080` |
-| **ArgoCD UI** | ✅ Ready | `open https://localhost:8081` |  
-| **HPA Scaling** | ✅ Active | `kubectl create job --from=cronjob/load-test-job demo` |
-| **Policy Compliance** | ✅ Clean | `kubectl get policyreports -A` |
-| **Network Security** | ✅ Enforced | `kubectl get networkpolicies -n devops-case-study` |
-| **DR Testing** | ✅ Ready | `kubectl create job --from=cronjob/mysql-backup-job test` |
+| **🔍 Security Scanning** | ✅ **Active** | `./scripts/security-scan.sh nginx:latest ./demo-reports` |
+| **📋 SBOM Generation** | ✅ **Ready** | `ls security-reports/sbom/` |
+| **📊 VEX Documents** | ✅ **Ready** | `cat security-reports/vex/*-vex-document.json` |
+| **🔐 Container Signing** | ✅ **Active** | `cosign verify --certificate-identity-regexp=".*" anuddeeph/pod-monitor:latest` |
+| **🌐 Web App** | ✅ Running | `open http://localhost:8080` |
+| **🔄 ArgoCD UI** | ✅ Ready | `open https://localhost:8081` |  
+| **⚡ HPA Scaling** | ✅ Active | `kubectl create job --from=cronjob/load-test-job demo` |
+| **🛡️ Policy Compliance** | ✅ Clean | `kubectl get policyreports -A` |
+| **🔒 Network Security** | ✅ Enforced | `kubectl get networkpolicies -n devops-case-study` |
+| **💾 DR Testing** | ✅ Ready | `kubectl create job --from=cronjob/mysql-backup-job test` |
+| **📊 Health Checks** | ✅ **Active** | `kubectl exec deployment/pod-monitor -- /usr/local/bin/pod-monitor --health-check` |
 
 ### 🚀 **Ready For:**
 - ✅ **🛡️ Security Interviews** - Complete container security scanning with Grype, Syft, VEX, and Cosign attestation
