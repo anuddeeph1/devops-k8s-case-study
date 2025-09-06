@@ -283,7 +283,41 @@ func (pm *PodMonitor) Start() error {
 	return pm.watchPods(ctx)
 }
 
+func healthCheck() {
+	// Simple health check - verify we can connect to Kubernetes API
+	namespace := os.Getenv("NAMESPACE")
+	if namespace == "" {
+		namespace = "devops-case-study"
+	}
+
+	monitor, err := NewPodMonitor(namespace)
+	if err != nil {
+		log.Printf("Health check failed: unable to create monitor: %v", err)
+		os.Exit(1)
+	}
+
+	// Test connectivity with a quick namespace check
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	_, err = monitor.clientset.CoreV1().Namespaces().Get(ctx, "default", metav1.GetOptions{})
+	if err != nil {
+		log.Printf("Health check failed: unable to connect to Kubernetes API: %v", err)
+		os.Exit(1)
+	}
+
+	// Success - exit with 0
+	fmt.Println("Health check passed: pod monitor is healthy")
+	os.Exit(0)
+}
+
 func main() {
+	// Check for health check flag
+	if len(os.Args) > 1 && os.Args[1] == "--health-check" {
+		healthCheck()
+		return
+	}
+
 	namespace := os.Getenv("NAMESPACE")
 	if namespace == "" {
 		namespace = "devops-case-study"

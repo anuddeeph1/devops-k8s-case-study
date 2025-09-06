@@ -52,11 +52,11 @@ security:
 
   # Pod Security Standards compliance
   podSecurity:
-    # Security context settings
+    # Security context settings - Match Dockerfile USER 65532:65532
     runAsNonRoot: true
-    runAsUser: 10001
-    runAsGroup: 10001
-    fsGroup: 10001
+    runAsUser: 65532
+    runAsGroup: 65532
+    fsGroup: 65532
     
     # Container security context
     allowPrivilegeEscalation: false

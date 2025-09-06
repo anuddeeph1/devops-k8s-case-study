@@ -80,19 +80,21 @@ spec:
         livenessProbe:
           exec:
             command:
-            - pgrep
-            - -f
-            - pod-monitor
+            - /usr/local/bin/pod-monitor
+            - --health-check
           initialDelaySeconds: 30
           periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
         readinessProbe:
           exec:
             command:
-            - pgrep
-            - -f
-            - pod-monitor
+            - /usr/local/bin/pod-monitor
+            - --health-check
           initialDelaySeconds: 5
           periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
       restartPolicy: Always
       {{- if .Values.security.enabled }}
       volumes:
