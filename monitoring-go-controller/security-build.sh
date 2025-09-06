@@ -62,7 +62,6 @@ build_image() {
     # Build the image with security scanning enabled
     docker build \
         --build-arg ENABLE_SECURITY_SCAN="$ENABLE_SECURITY_SCAN" \
-        --build-arg GIT_COMMIT="$GIT_COMMIT" \
         --label "build.time=$(date -u +%Y%m%d%H%M%S)" \
         --label "build.git.commit=$GIT_COMMIT" \
         --label "security.scan.date=$(date -u +%Y-%m-%d)" \

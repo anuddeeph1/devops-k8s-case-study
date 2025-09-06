@@ -21,7 +21,7 @@ COPY main.go ./
 
 # Build the application with security-focused optimizations
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
-    -ldflags='-w -s -extldflags "-static" -X main.buildTime=$(date -u +%Y%m%d%H%M%S) -X main.gitCommit=${GIT_COMMIT:-unknown}' \
+    -ldflags='-w -s -extldflags "-static"' \
     -a -installsuffix cgo \
     -trimpath \
     -mod=readonly \
@@ -66,9 +66,9 @@ LABEL syft.anchore.io/enabled="true"
 LABEL cosign.sigstore.dev/attestation="true"
 
 # Build and security information
-LABEL build.time=""
-LABEL build.git.commit=""
-LABEL security.scan.date=""
+LABEL build.date="2024-01-01"
+LABEL build.system="github-actions"
+LABEL security.scan.enabled="true"
 LABEL security.base.image="gcr.io/distroless/static-debian11:nonroot"
 
 # Application metadata
