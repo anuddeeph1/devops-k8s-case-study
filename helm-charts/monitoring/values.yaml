@@ -20,3 +20,64 @@ monitoring:
     nodeSelector: {}
     tolerations: []
     affinity: {}
+
+# Security scanning configuration
+security:
+  # Enable security scanning features
+  enabled: true
+  
+  # Security scanning labels and annotations
+  labels:
+    security.scanning.enabled: "true"
+    security.sbom.enabled: "true"
+    security.vex.enabled: "true"
+    security.grype.enabled: "true"
+  
+  annotations:
+    # Grype vulnerability scanning
+    grype.anchore.io/enabled: "true"
+    grype.anchore.io/severity-threshold: "medium"
+    
+    # Syft SBOM generation
+    syft.anchore.io/enabled: "true"
+    syft.anchore.io/format: "cyclonedx-json"
+    
+    # VEX document generation
+    vex.openvex.org/enabled: "true"
+    vex.openvex.org/compliance: "v0.2.0"
+    
+    # Cosign attestation verification
+    cosign.sigstore.dev/verify: "true"
+    cosign.sigstore.dev/attestation-policy: "require-sbom-vex"
+
+  # Pod Security Standards compliance
+  podSecurity:
+    # Security context settings
+    runAsNonRoot: true
+    runAsUser: 10001
+    runAsGroup: 10001
+    fsGroup: 10001
+    
+    # Container security context
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+        - ALL
+    
+    # Seccomp profile
+    seccompProfile:
+      type: RuntimeDefault
+
+  # Security-enhanced volume mounts
+  volumeMounts:
+    - name: tmp
+      mountPath: /tmp
+    - name: var-run
+      mountPath: /var/run
+
+  volumes:
+    - name: tmp
+      emptyDir: {}
+    - name: var-run
+      emptyDir: {}

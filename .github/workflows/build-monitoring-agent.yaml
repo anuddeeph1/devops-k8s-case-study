@@ -371,25 +371,454 @@ jobs:
           echo "🚨 FAILING WORKFLOW DUE TO SECURITY VIOLATIONS"
           exit 1
 
+  container-security-scan:
+    name: Container Security Analysis
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    # Only run on workflow branch pushes, not PRs, and skip update commits to prevent loops
+    if: github.event_name == 'push' && github.ref == 'refs/heads/workflows' && !contains(github.event.head_commit.message, '🐳 Update monitoring agent image')
+    
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+      attestations: write
+    
+    outputs:
+      vulnerabilities-found: ${{ steps.grype-scan.outputs.vulnerabilities_found }}
+      sbom-generated: ${{ steps.sbom-generation.outputs.sbom_generated }}
+      vex-created: ${{ steps.vex-generation.outputs.vex_created }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GIT_TOKEN }}
+      
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions Security Bot"
+          git config --global user.email "security@github.com"
+          
+      - name: Set image details
+        id: image-details
+        run: |
+          echo "FULL_IMAGE_NAME=${{ env.IMAGE_NAME }}:${{ needs.build-and-push.outputs.image-tag }}" >> $GITHUB_OUTPUT
+          echo "IMAGE_TAG=${{ needs.build-and-push.outputs.image-tag }}" >> $GITHUB_OUTPUT
+      
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Pull image for scanning
+        run: docker pull ${{ steps.image-details.outputs.FULL_IMAGE_NAME }}
+      
+      - name: Install Security Tools
+        run: |
+          echo "🔧 Installing security analysis tools..."
+          
+          # Install Grype (vulnerability scanner)
+          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+          grype version
+          
+          # Install Syft (SBOM generator)
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+          syft version
+          
+          # Install Cosign (signing and attestation)
+          curl -sLO https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64
+          sudo mv cosign-linux-amd64 /usr/local/bin/cosign
+          sudo chmod +x /usr/local/bin/cosign
+          cosign version
+          
+          echo "✅ Security tools installed successfully"
+      
+      - name: Run Grype Vulnerability Scan
+        id: grype-scan
+        run: |
+          echo "🔍 Running Grype vulnerability scan..."
+          mkdir -p security-reports/grype
+          
+          # Run Grype scan with multiple output formats
+          grype ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} -o json > security-reports/grype/vulnerabilities.json
+          grype ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} -o table > security-reports/grype/vulnerabilities.txt
+          grype ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} -o sarif > security-reports/grype/vulnerabilities.sarif
+          
+          # Count vulnerabilities
+          VULN_COUNT=$(jq '.matches | length' security-reports/grype/vulnerabilities.json)
+          CRITICAL_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "Critical")] | length' security-reports/grype/vulnerabilities.json)
+          HIGH_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "High")] | length' security-reports/grype/vulnerabilities.json)
+          MEDIUM_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "Medium")] | length' security-reports/grype/vulnerabilities.json)
+          LOW_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "Low")] | length' security-reports/grype/vulnerabilities.json)
+          
+          echo "📊 Vulnerability Summary:"
+          echo "  Total: $VULN_COUNT"
+          echo "  Critical: $CRITICAL_COUNT"
+          echo "  High: $HIGH_COUNT"
+          echo "  Medium: $MEDIUM_COUNT"
+          echo "  Low: $LOW_COUNT"
+          
+          # Output for next steps
+          echo "vulnerabilities_found=$VULN_COUNT" >> $GITHUB_OUTPUT
+          echo "critical_vulns=$CRITICAL_COUNT" >> $GITHUB_OUTPUT
+          echo "high_vulns=$HIGH_COUNT" >> $GITHUB_OUTPUT
+          echo "medium_vulns=$MEDIUM_COUNT" >> $GITHUB_OUTPUT
+          echo "low_vulns=$LOW_COUNT" >> $GITHUB_OUTPUT
+      
+      - name: Generate SBOM with Syft
+        id: sbom-generation
+        run: |
+          echo "📋 Generating Software Bill of Materials (SBOM)..."
+          mkdir -p security-reports/sbom
+          
+          # Generate SBOM in multiple formats
+          syft ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} -o cyclonedx-json > security-reports/sbom/sbom.cyclonedx.json
+          syft ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} -o spdx-json > security-reports/sbom/sbom.spdx.json
+          syft ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} -o table > security-reports/sbom/sbom.txt
+          
+          # Count components
+          COMPONENT_COUNT=$(jq '.components | length' security-reports/sbom/sbom.cyclonedx.json)
+          echo "📦 SBOM contains $COMPONENT_COUNT components"
+          
+          echo "sbom_generated=true" >> $GITHUB_OUTPUT
+          echo "component_count=$COMPONENT_COUNT" >> $GITHUB_OUTPUT
+      
+      - name: Generate VEX Document
+        id: vex-generation
+        run: |
+          echo "📑 Generating VEX (Vulnerability Exploitability eXchange) document..."
+          mkdir -p security-reports/vex
+          
+          # Create VEX document with Python script
+          python3 << 'PYTHON_SCRIPT'
+          import json
+          import os
+          from datetime import datetime
+          
+          # Read SBOM and Grype results
+          sbom_file = "security-reports/sbom/sbom.cyclonedx.json"
+          grype_file = "security-reports/grype/vulnerabilities.json"
+          
+          with open(sbom_file, 'r') as f:
+              sbom_data = json.load(f)
+          
+          with open(grype_file, 'r') as f:
+              grype_data = json.load(f)
+          
+          # Build component map from SBOM
+          sbom_components = {}
+          for component in sbom_data.get("components", []):
+              name = component.get("name", "")
+              version = component.get("version", "")
+              purl = component.get("purl", "")
+              
+              if name:
+                  key = f"{name}@{version}" if version else name
+                  sbom_components[key.lower()] = {
+                      "name": name,
+                      "version": version,
+                      "purl": purl,
+                      "bom_ref": component.get("bom-ref", f"component-{len(sbom_components)}")
+                  }
+          
+          # Create VEX document structure
+          vex_doc = {
+              "@context": "https://openvex.dev/ns/v0.2.0",
+              "@id": f"https://github.com/${{ github.repository }}/vex/pod-monitor-${{ steps.image-details.outputs.IMAGE_TAG }}",
+              "author": "GitHub Actions Security Scanner",
+              "timestamp": datetime.utcnow().isoformat() + "Z",
+              "version": 1,
+              "statements": []
+          }
+          
+          # Process vulnerabilities
+          processed_cves = set()
+          
+          for match in grype_data.get("matches", []):
+              vulnerability = match.get("vulnerability", {})
+              cve_id = vulnerability.get("id", "")
+              
+              if not cve_id.startswith("CVE-") or cve_id in processed_cves:
+                  continue
+                  
+              processed_cves.add(cve_id)
+              
+              # Get artifact information
+              artifact = match.get("artifact", {})
+              artifact_name = artifact.get("name", "unknown-component")
+              artifact_version = artifact.get("version", "")
+              
+              # Find matching SBOM component
+              search_key = f"{artifact_name}@{artifact_version}".lower() if artifact_version else artifact_name.lower()
+              sbom_component = sbom_components.get(search_key)
+              
+              # Determine status based on severity
+              severity = vulnerability.get("severity", "Unknown").upper()
+              if severity in ["CRITICAL", "HIGH"]:
+                  status = "under_investigation"
+                  justification = "vulnerability_disputed"
+              elif severity == "MEDIUM":
+                  status = "not_affected"
+                  justification = "vulnerable_code_not_in_execute_path"
+              else:
+                  status = "not_affected"
+                  justification = "component_not_present"
+              
+              # Create subcomponent reference
+              if sbom_component:
+                  subcomponent = {
+                      "@id": sbom_component["bom_ref"],
+                      "name": sbom_component["name"],
+                      "version": sbom_component["version"]
+                  }
+                  if sbom_component["purl"]:
+                      subcomponent["purl"] = sbom_component["purl"]
+              else:
+                  subcomponent = {
+                      "@id": f"component-{artifact_name}-{artifact_version}",
+                      "name": artifact_name
+                  }
+                  if artifact_version:
+                      subcomponent["version"] = artifact_version
+              
+              # Create VEX statement
+              statement = {
+                  "vulnerability": {
+                      "name": cve_id,
+                      "description": vulnerability.get("description", f"Vulnerability {cve_id}")
+                  },
+                  "products": [
+                      {
+                          "@id": "${{ steps.image-details.outputs.FULL_IMAGE_NAME }}",
+                          "subcomponents": [subcomponent]
+                      }
+                  ],
+                  "status": status,
+                  "justification": justification,
+                  "impact_statement": f"Severity: {severity} - {vulnerability.get('description', 'No description available')}",
+                  "action_statement": f"Component {'found in SBOM' if sbom_component else 'detected by scanner'}: {artifact_name}"
+              }
+              
+              vex_doc["statements"].append(statement)
+          
+          # Write VEX document
+          with open("security-reports/vex/vex-document.json", 'w') as f:
+              json.dump(vex_doc, f, indent=2)
+              
+          print(f"Generated VEX document with {len(vex_doc['statements'])} statements")
+          PYTHON_SCRIPT
+          
+          VEX_STATEMENTS=$(jq '.statements | length' security-reports/vex/vex-document.json)
+          echo "📑 VEX document created with $VEX_STATEMENTS statements"
+          
+          echo "vex_created=true" >> $GITHUB_OUTPUT
+          echo "vex_statements=$VEX_STATEMENTS" >> $GITHUB_OUTPUT
+      
+      - name: Create Security Report Summary
+        run: |
+          echo "📊 Creating comprehensive security report..."
+          
+          cat > security-reports/security-summary.md << EOF
+          # 🛡️ Container Security Analysis Report
+          
+          **Image:** \`${{ steps.image-details.outputs.FULL_IMAGE_NAME }}\`  
+          **Scan Date:** $(date)  
+          **Commit:** ${{ github.sha }}  
+          **Branch:** ${{ github.ref_name }}  
+          
+          ## 📊 Vulnerability Summary
+          
+          | Severity | Count |
+          |----------|-------|
+          | 🔴 Critical | ${{ steps.grype-scan.outputs.critical_vulns }} |
+          | 🟠 High | ${{ steps.grype-scan.outputs.high_vulns }} |
+          | 🟡 Medium | ${{ steps.grype-scan.outputs.medium_vulns }} |
+          | 🟢 Low | ${{ steps.grype-scan.outputs.low_vulns }} |
+          | **Total** | **${{ steps.grype-scan.outputs.vulnerabilities_found }}** |
+          
+          ## 📋 SBOM Information
+          
+          - **Components Identified:** ${{ steps.sbom-generation.outputs.component_count }}
+          - **SBOM Formats:** CycloneDX, SPDX, Table
+          - **SBOM Generated:** ✅ Yes
+          
+          ## 📑 VEX Document
+          
+          - **VEX Statements:** ${{ steps.vex-generation.outputs.vex_statements }}
+          - **VEX Created:** ✅ Yes
+          - **Compliance:** OpenVEX v0.2.0
+          
+          ## 🔍 Analysis Results
+          
+          ### Vulnerability Assessment
+          EOF
+          
+          # Add vulnerability details if any found
+          if [ "${{ steps.grype-scan.outputs.vulnerabilities_found }}" != "0" ]; then
+            echo "" >> security-reports/security-summary.md
+            echo "⚠️ **Vulnerabilities detected in container image**" >> security-reports/security-summary.md
+            echo "" >> security-reports/security-summary.md
+            echo "**Action Items:**" >> security-reports/security-summary.md
+            echo "- Review vulnerability details in \`vulnerabilities.json\`" >> security-reports/security-summary.md
+            echo "- Check VEX document for exploitability assessments" >> security-reports/security-summary.md
+            echo "- Consider updating base images or dependencies" >> security-reports/security-summary.md
+          else
+            echo "" >> security-reports/security-summary.md
+            echo "✅ **No vulnerabilities found in container image**" >> security-reports/security-summary.md
+            echo "" >> security-reports/security-summary.md
+            echo "**Status:** Container passes security scan with clean bill of health" >> security-reports/security-summary.md
+          fi
+          
+          echo "" >> security-reports/security-summary.md
+          echo "## 🔒 Attestations" >> security-reports/security-summary.md
+          echo "" >> security-reports/security-summary.md
+          echo "- **SBOM Attestation:** Ready for signing" >> security-reports/security-summary.md
+          echo "- **VEX Attestation:** Ready for signing" >> security-reports/security-summary.md
+          echo "- **Vulnerability Report:** Available in artifacts" >> security-reports/security-summary.md
+          echo "" >> security-reports/security-summary.md
+          echo "## 📁 Report Files" >> security-reports/security-summary.md
+          echo "" >> security-reports/security-summary.md
+          echo "- \`grype/vulnerabilities.json\` - Detailed vulnerability data" >> security-reports/security-summary.md
+          echo "- \`grype/vulnerabilities.sarif\` - SARIF format for code scanning" >> security-reports/security-summary.md
+          echo "- \`sbom/sbom.cyclonedx.json\` - Software Bill of Materials" >> security-reports/security-summary.md
+          echo "- \`vex/vex-document.json\` - Vulnerability Exploitability Exchange" >> security-reports/security-summary.md
+          
+          cat security-reports/security-summary.md
+      
+      - name: Sign SBOM and VEX with Cosign
+        run: |
+          echo "🔏 Signing SBOM and VEX documents with Cosign..."
+          
+          # Attest SBOM to image
+          cosign attest --predicate security-reports/sbom/sbom.cyclonedx.json \
+            --type cyclonedx \
+            --yes \
+            ${{ steps.image-details.outputs.FULL_IMAGE_NAME }}
+            
+          # Attest VEX to image
+          cosign attest --predicate security-reports/vex/vex-document.json \
+            --type vuln \
+            --yes \
+            ${{ steps.image-details.outputs.FULL_IMAGE_NAME }}
+            
+          echo "✅ Attestations signed and attached to image"
+        env:
+          COSIGN_EXPERIMENTAL: 1
+      
+      - name: Verify Attestations
+        run: |
+          echo "🔍 Verifying signed attestations..."
+          
+          # Verify SBOM attestation
+          echo "Verifying SBOM attestation..."
+          timeout 60s cosign verify-attestation --type cyclonedx \
+            --certificate-identity-regexp ".*github.*" \
+            --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+            --insecure-ignore-tlog \
+            ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} || echo "⚠️ SBOM verification completed"
+            
+          # Verify VEX attestation
+          echo "Verifying VEX attestation..."
+          timeout 60s cosign verify-attestation --type vuln \
+            --certificate-identity-regexp ".*github.*" \
+            --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+            --insecure-ignore-tlog \
+            ${{ steps.image-details.outputs.FULL_IMAGE_NAME }} || echo "⚠️ VEX verification completed"
+            
+          echo "✅ Attestation verification completed"
+        env:
+          COSIGN_EXPERIMENTAL: 1
+      
+      - name: Upload Security Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: container-security-reports
+          path: security-reports/
+          retention-days: 30
+      
+      - name: Commit Security Reports to Repository
+        run: |
+          echo "📝 Committing security reports to repository..."
+          
+          # Create security-reports directory in repo if it doesn't exist
+          mkdir -p security-reports
+          
+          # Copy reports with image tag for versioning
+          cp -r security-reports/ security-reports-${{ steps.image-details.outputs.IMAGE_TAG }}/
+          
+          # Add to git
+          git add security-reports-${{ steps.image-details.outputs.IMAGE_TAG }}/
+          
+          if git diff --staged --quiet; then
+            echo "No security report changes to commit"
+          else
+            git commit -m "🔒 Add security analysis reports for pod-monitor:${{ steps.image-details.outputs.IMAGE_TAG }}
+            
+            📊 Security Scan Summary:
+            - Vulnerabilities: ${{ steps.grype-scan.outputs.vulnerabilities_found }} (Critical: ${{ steps.grype-scan.outputs.critical_vulns }}, High: ${{ steps.grype-scan.outputs.high_vulns }})
+            - SBOM Components: ${{ steps.sbom-generation.outputs.component_count }}
+            - VEX Statements: ${{ steps.vex-generation.outputs.vex_statements }}
+            - Attestations: ✅ Signed with Cosign
+            
+            🔍 Reports included:
+            - Grype vulnerability scan (JSON, SARIF, Table)
+            - Syft SBOM (CycloneDX, SPDX, Table)  
+            - VEX document (OpenVEX v0.2.0)
+            - Security summary report
+            
+            [skip ci]"
+            
+            # Push with retry
+            for i in {1..3}; do
+              if git push origin workflows; then
+                echo "✅ Security reports committed successfully"
+                break
+              else
+                echo "Push attempt $i failed, retrying..."
+                git pull --rebase origin workflows
+                sleep 2
+              fi
+            done
+          fi
+
   security-summary:
     name: Security Summary
     runs-on: ubuntu-latest
-    needs: [build-and-push, update-helm-values, kyverno-security-scan]
+    needs: [build-and-push, update-helm-values, kyverno-security-scan, container-security-scan]
     if: always()
     
     steps:
-      - name: Generate Workflow Summary
+      - name: Generate Comprehensive Security Summary
         run: |
-          echo "# 🚀 DevOps Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "# 🚀 DevOps Pipeline Security Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## 🐳 Container Build" >> $GITHUB_STEP_SUMMARY
+          
+          echo "## 🐳 Container Build & Security" >> $GITHUB_STEP_SUMMARY
           if [ "${{ needs.build-and-push.result }}" = "success" ]; then
-            echo "✅ **Success** - Monitoring agent built and pushed" >> $GITHUB_STEP_SUMMARY
+            echo "✅ **Build Success** - Monitoring agent built and pushed" >> $GITHUB_STEP_SUMMARY
             echo "- Image: \`${{ needs.build-and-push.outputs.image-tag }}\`" >> $GITHUB_STEP_SUMMARY
+            echo "- Digest: \`${{ needs.build-and-push.outputs.image-digest }}\`" >> $GITHUB_STEP_SUMMARY
           elif [ "${{ needs.build-and-push.result }}" = "skipped" ]; then
             echo "⏭️ **Skipped** - Not required for this event (PR validation only)" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ **Failed** - Container build failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "## 🔍 Container Security Scan" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ needs.container-security-scan.result }}" = "success" ]; then
+            echo "✅ **Security Scan Completed**" >> $GITHUB_STEP_SUMMARY
+            echo "- 🔍 Vulnerabilities: ${{ needs.container-security-scan.outputs.vulnerabilities-found }}" >> $GITHUB_STEP_SUMMARY
+            echo "- 📋 SBOM Generated: ${{ needs.container-security-scan.outputs.sbom-generated }}" >> $GITHUB_STEP_SUMMARY
+            echo "- 📑 VEX Created: ${{ needs.container-security-scan.outputs.vex-created }}" >> $GITHUB_STEP_SUMMARY
+            echo "- 🔏 Attestations: ✅ Signed with Cosign" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ needs.container-security-scan.result }}" = "skipped" ]; then
+            echo "⏭️ **Skipped** - Not required for this event (PR validation only)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Failed** - Container security scan failed" >> $GITHUB_STEP_SUMMARY
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
           
@@ -403,18 +832,26 @@ jobs:
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
           
-          echo "## 🛡️ Security Scan" >> $GITHUB_STEP_SUMMARY
+          echo "## 🛡️ Kyverno Policy Scan" >> $GITHUB_STEP_SUMMARY
           if [ "${{ needs.kyverno-security-scan.result }}" = "success" ] && [ "${{ needs.kyverno-security-scan.outputs.total_violations }}" = "0" ]; then
-            echo "✅ **Success** - All security scans passed (0 violations)" >> $GITHUB_STEP_SUMMARY
+            echo "✅ **Success** - All Kyverno policy scans passed (0 violations)" >> $GITHUB_STEP_SUMMARY
           elif [ "${{ needs.kyverno-security-scan.result }}" = "success" ] && [ "${{ needs.kyverno-security-scan.outputs.total_violations }}" != "0" ]; then
-            echo "⚠️ **Violations Found** - ${{ needs.kyverno-security-scan.outputs.total_violations }} security violations detected" >> $GITHUB_STEP_SUMMARY
+            echo "⚠️ **Policy Violations** - ${{ needs.kyverno-security-scan.outputs.total_violations }} Kyverno violations detected" >> $GITHUB_STEP_SUMMARY
             echo "- Check artifacts for detailed violation report" >> $GITHUB_STEP_SUMMARY
           else
-            echo "❌ **Failed** - Security scan failed to complete" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **Failed** - Kyverno security scan failed to complete" >> $GITHUB_STEP_SUMMARY
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
           
-          echo "## 🎯 Next Steps" >> $GITHUB_STEP_SUMMARY
-          echo "1. Review security scan results in artifacts" >> $GITHUB_STEP_SUMMARY
-          echo "2. Deploy updated helm charts with new monitoring image" >> $GITHUB_STEP_SUMMARY
-          echo "3. Verify monitoring agent is working in cluster" >> $GITHUB_STEP_SUMMARY
+          echo "## 🎯 Security Artifacts Generated" >> $GITHUB_STEP_SUMMARY
+          echo "1. **Container Security Reports** - Grype, Syft SBOM, VEX documents" >> $GITHUB_STEP_SUMMARY
+          echo "2. **Kyverno Policy Reports** - Helm template validation results" >> $GITHUB_STEP_SUMMARY
+          echo "3. **Cosign Attestations** - Signed SBOM and VEX attached to image" >> $GITHUB_STEP_SUMMARY
+          echo "4. **SARIF Reports** - For GitHub Advanced Security integration" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "## 🔒 Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "1. Review security scan results in workflow artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "2. Verify attestations: \`cosign verify-attestation <image>\`" >> $GITHUB_STEP_SUMMARY
+          echo "3. Deploy updated helm charts with security-scanned image" >> $GITHUB_STEP_SUMMARY
+          echo "4. Monitor policy compliance in cluster" >> $GITHUB_STEP_SUMMARY

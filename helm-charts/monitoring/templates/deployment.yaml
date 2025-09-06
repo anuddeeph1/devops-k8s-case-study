@@ -5,6 +5,17 @@ metadata:
   namespace: {{ .Values.global.namespace }}
   labels:
     {{- include "monitoring.labels" . | nindent 4 }}
+    {{- if .Values.security.enabled }}
+    {{- with .Values.security.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- end }}
+  {{- if .Values.security.enabled }}
+  annotations:
+    {{- with .Values.security.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
 spec:
   replicas: 1
   selector:
@@ -14,17 +25,58 @@ spec:
     metadata:
       labels:
         {{- include "monitoring.selectorLabels" . | nindent 8 }}
+        {{- if .Values.security.enabled }}
+        {{- with .Values.security.labels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- end }}
+      {{- if .Values.security.enabled }}
+      annotations:
+        {{- with .Values.security.annotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
     spec:
       serviceAccountName: pod-monitor
+      {{- if .Values.security.enabled }}
+      securityContext:
+        {{- with .Values.security.podSecurity }}
+        runAsNonRoot: {{ .runAsNonRoot }}
+        runAsUser: {{ .runAsUser }}
+        runAsGroup: {{ .runAsGroup }}
+        fsGroup: {{ .fsGroup }}
+        {{- with .seccompProfile }}
+        seccompProfile:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- end }}
+      {{- end }}
       containers:
       - name: pod-monitor
         image: "{{ .Values.monitoring.podMonitor.image.repository }}:{{ .Values.monitoring.podMonitor.image.tag }}"
         imagePullPolicy: {{ .Values.monitoring.podMonitor.image.pullPolicy }}
+        {{- if .Values.security.enabled }}
+        securityContext:
+          {{- with .Values.security.podSecurity }}
+          allowPrivilegeEscalation: {{ .allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .readOnlyRootFilesystem }}
+          {{- with .capabilities }}
+          capabilities:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- end }}
+        {{- end }}
         env:
         - name: NAMESPACE
           value: {{ .Values.global.namespace | quote }}
         resources:
           {{- toYaml .Values.monitoring.podMonitor.resources | nindent 10 }}
+        {{- if .Values.security.enabled }}
+        volumeMounts:
+          {{- with .Values.security.volumeMounts }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+        {{- end }}
         livenessProbe:
           exec:
             command:
@@ -42,6 +94,12 @@ spec:
           initialDelaySeconds: 5
           periodSeconds: 10
       restartPolicy: Always
+      {{- if .Values.security.enabled }}
+      volumes:
+        {{- with .Values.security.volumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
       {{- with .Values.monitoring.podMonitor.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
