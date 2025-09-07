@@ -200,6 +200,124 @@ graph TD
 | **CI/CD Pipeline** | GitHub Actions | Automated build, scan & deploy |
 | **Security Scanning** | Kyverno CLI v1.15.0 | Policy compliance validation |
 
+## 🔧 **Technical Implementation Deep Dive**
+
+### **🚀 CI/CD Pipeline Workflows**
+
+This section provides detailed technical flow diagrams for understanding the complete automation pipeline.
+
+#### **📋 Workflow 1: Development Pipeline (workflows branch)**
+
+**Full CI/CD pipeline with security scanning and deployment:**
+
+```mermaid
+flowchart LR
+    %% Input
+    PUSH["🚀 Git Push<br/>workflows branch"]
+    
+    %% CI Pipeline Stages
+    TRIGGER["⚡ Trigger<br/>Path Filter"]
+    BUILD["🏗️ Build<br/>Docker Image"]
+    SCAN["🛡️ Security Scan<br/>Grype + Syft + VEX"]
+    SIGN["🔐 Sign & Attest<br/>Cosign"]
+    UPDATE["📝 Update GitOps<br/>Helm Values"]
+    VALIDATE["✅ Policy Check<br/>Kyverno CLI"]
+    
+    %% Outputs
+    REGISTRY["🏪 Registry<br/>Signed Image"]
+    REPORTS["📊 Security Reports<br/>Vulnerability + SBOM"]
+    DEPLOY["🎯 Deploy<br/>ArgoCD → K8s"]
+    
+    %% Flow
+    PUSH --> TRIGGER
+    TRIGGER --> BUILD
+    BUILD --> SCAN
+    SCAN --> SIGN
+    SIGN --> UPDATE
+    UPDATE --> VALIDATE
+    
+    %% Outputs
+    BUILD --> REGISTRY
+    SCAN --> REPORTS  
+    SIGN --> REGISTRY
+    VALIDATE --> DEPLOY
+    
+    %% Styling
+    classDef trigger fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef build fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef security fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    classDef output fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    
+    class PUSH,TRIGGER trigger
+    class BUILD build
+    class SCAN,SIGN,VALIDATE security
+    class REGISTRY,REPORTS,DEPLOY output
+    class UPDATE build
+```
+
+**🎯 Pipeline Stages:**
+1. **⚡ Trigger**: Path-filtered activation on `monitoring-go-controller/**`, `helm-charts/**`
+2. **🏗️ Build**: Multi-stage Docker build with distroless base image
+3. **🛡️ Security Scan**: Grype (vulnerabilities) + Syft (SBOM) + VEX (exploitability)
+4. **🔐 Sign & Attest**: Cosign keyless signing with GitHub OIDC
+5. **📝 Update GitOps**: Automated Helm values update with new image tags
+6. **✅ Policy Check**: Kyverno CLI validation against 17+ Pod Security Standards
+7. **🎯 Deploy**: ArgoCD GitOps deployment to Kubernetes
+
+#### **📋 Workflow 2: PR Validation Pipeline (→ main branch)**
+
+**Policy validation only - no builds or deployments:**
+
+```mermaid
+flowchart LR
+    %% Input
+    PR["🔀 Create PR<br/>→ main branch"]
+    
+    %% PR Pipeline Stage (Validation Only)
+    TRIGGER_PR["⚡ PR Trigger<br/>Path Filter"]
+    KYVERNO_SCAN["🛡️ Kyverno Policy Scan<br/>17+ PSS Policies<br/>Template Validation"]
+    
+    %% PR Outputs
+    PR_REPORT["📋 PR Comment<br/>Policy Violations<br/>Security Summary"]
+    STATUS_CHECK["✅/❌ Status Check<br/>Pass/Fail Validation"]
+    
+    %% Flow
+    PR --> TRIGGER_PR
+    TRIGGER_PR --> KYVERNO_SCAN
+    KYVERNO_SCAN --> PR_REPORT
+    KYVERNO_SCAN --> STATUS_CHECK
+    
+    %% Styling
+    classDef trigger fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef security fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    classDef output fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    
+    class PR,TRIGGER_PR trigger
+    class KYVERNO_SCAN security
+    class PR_REPORT,STATUS_CHECK output
+```
+
+**🎯 PR Validation Features:**
+- **⚡ Lightweight**: Only policy validation, no expensive builds
+- **🛡️ Security Gates**: Prevents non-compliant code from reaching main
+- **📋 Feedback**: Detailed violation reports in PR comments
+- **✅ Status Checks**: GitHub integration for merge requirements
+
+### **🔄 Branch Strategy**
+
+| Branch | Purpose | Pipeline Behavior |
+|--------|---------|-------------------|
+| **workflows** | Development & Testing | Full CI/CD pipeline with security scanning |
+| **main** | Production Deployment | ArgoCD GitOps source (PR validation only) |
+
+### **🛡️ Security Integration Points**
+
+1. **Container Scanning**: Every build analyzed for vulnerabilities
+2. **Supply Chain Security**: SBOM generation for complete visibility
+3. **Cryptographic Attestation**: Signed images with verifiable provenance
+4. **Policy Enforcement**: Kubernetes security standards validation
+5. **Organized Reporting**: Structured security artifacts in repository
+
 ## ✨ Key Features
 
 ### ⚡ **GitHub Actions CI/CD Pipeline**
