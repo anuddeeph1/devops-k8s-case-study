@@ -595,7 +595,7 @@ git push origin workflows
 ## 📁 Project Structure
 
 ```
-musical-giggle/
+devops-k8s-case-study/
 ├── 📋 README.md                          # This file
 ├── 🚀 Scripts/                           # Deployment script
 │   ├── 🚀 deploy.sh                      # Main Deployment Scripts
