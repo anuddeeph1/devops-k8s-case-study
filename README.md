@@ -200,6 +200,258 @@ graph TD
 | **CI/CD Pipeline** | GitHub Actions | Automated build, scan & deploy |
 | **Security Scanning** | Kyverno CLI v1.15.0 | Policy compliance validation |
 
+## 🔧 **Technical Implementation Deep Dive**
+
+### **🚀 CI/CD Pipeline Workflows**
+
+This section provides detailed technical flow diagrams for understanding the complete automation pipeline.
+
+#### **📋 Workflow 1: Development Pipeline (workflows branch)**
+
+**Full CI/CD pipeline with security scanning and deployment:**
+
+```mermaid
+flowchart LR
+    %% Input
+    PUSH["🚀 Git Push<br/>workflows branch"]
+    
+    %% CI Pipeline Stages
+    TRIGGER["⚡ Trigger<br/>Path Filter"]
+    BUILD["🏗️ Build<br/>Docker Image"]
+    SCAN["🛡️ Security Scan<br/>Grype + Syft + VEX"]
+    SIGN["🔐 Attest<br/>Cosign"]
+    UPDATE["📝 Update GitOps<br/>Helm Values"]
+    VALIDATE["✅ Policy Check<br/>Kyverno CLI"]
+    
+    %% Outputs
+    REGISTRY["🏪 Docker Registry<br/>"]
+    REPORTS["📊 Security Reports<br/>Vulnerability + SBOM"]
+    
+    %% Flow
+    PUSH --> TRIGGER
+    TRIGGER --> BUILD
+    BUILD --> SCAN
+    SCAN --> SIGN
+    SIGN --> UPDATE
+    UPDATE --> VALIDATE
+    
+    %% Outputs
+    BUILD --> REGISTRY
+    SCAN --> REPORTS  
+    SIGN --> REGISTRY
+ 
+    
+    %% Styling
+    classDef trigger fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef build fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef security fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    classDef output fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    
+    class PUSH,TRIGGER trigger
+    class BUILD build
+    class SCAN,SIGN,VALIDATE security
+    class REGISTRY,REPORTS,DEPLOY output
+    class UPDATE build
+```
+
+**🎯 Pipeline Stages:**
+1. **⚡ Trigger**: Path-filtered activation on `monitoring-go-controller/**`, `helm-charts/**`
+2. **🏗️ Build**: Multi-stage Docker build with distroless base image
+3. **🛡️ Security Scan**: Grype (vulnerabilities) + Syft (SBOM) + VEX (exploitability)
+4. **🔐 Sign & Attest**: Cosign keyless signing with GitHub OIDC
+5. **📝 Update GitOps**: Automated Helm values update with new image tags
+6. **✅ Policy Check**: Kyverno CLI validation against 17+ Pod Security Standards
+7. **🎯 Deploy**: ArgoCD GitOps deployment to Kubernetes
+
+#### **📋 Workflow 2: PR Validation Pipeline (→ main branch)**
+
+**Policy validation only - no builds or deployments:**
+
+```mermaid
+flowchart LR
+    %% Input
+    PR["🔀 Create PR<br/>→ main branch"]
+    
+    %% PR Pipeline Stage (Validation Only)
+    TRIGGER_PR["⚡ PR Trigger<br/>Path Filter"]
+    KYVERNO_SCAN["🛡️ Kyverno Policy Scan<br/>17+ PSS Policies<br/>"]
+    
+    %% PR Outputs
+    PR_REPORT["📋 PR Comment<br/>Policy Violations<br/>Security Summary"]
+    STATUS_CHECK["✅/❌ Status Check<br/>Pass/Fail Validation"]
+    
+    %% Flow
+    PR --> TRIGGER_PR
+    TRIGGER_PR --> KYVERNO_SCAN
+    KYVERNO_SCAN --> PR_REPORT
+    KYVERNO_SCAN --> STATUS_CHECK
+    
+    %% Styling
+    classDef trigger fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef security fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    classDef output fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    
+    class PR,TRIGGER_PR trigger
+    class KYVERNO_SCAN security
+    class PR_REPORT,STATUS_CHECK output
+```
+
+**🎯 PR Validation Features:**
+- **⚡ Lightweight**: Only policy validation, no expensive builds
+- **🛡️ Security Gates**: Prevents non-compliant code from reaching main
+- **📋 Feedback**: Detailed violation reports in PR comments
+- **✅ Status Checks**: GitHub integration for merge requirements
+
+### **🔄 Branch Strategy**
+
+| Branch | Purpose | Pipeline Behavior |
+|--------|---------|-------------------|
+| **workflows** | Development & Testing | Full CI/CD pipeline with security scanning |
+| **main** | Production Deployment | ArgoCD GitOps source (PR validation only) |
+
+### **🛡️ Security Integration Points**
+
+1. **Container Scanning**: Every build analyzed for vulnerabilities
+2. **Supply Chain Security**: SBOM generation for complete visibility
+3. **Cryptographic Attestation**: Signed images with verifiable provenance
+4. **Policy Enforcement**: Kubernetes security standards validation
+5. **Organized Reporting**: Structured security artifacts in repository
+
+#### **📋 Workflow 3: Infrastructure Deployment Script (deploy.sh)**
+
+**Complete infrastructure setup and application deployment:**
+
+```mermaid
+flowchart TD
+    %% Input
+    START["🚀 ./deploy.sh gitops<br/>Infrastructure Setup"]
+    
+    %% Prerequisites Check
+    PREREQ["✅ Prerequisites Check<br/>kind, kubectl, helm, docker, go"]
+    
+    %% Cluster Setup Phase
+    subgraph CLUSTER["🏗️ KIND Cluster Setup"]
+        KIND_CREATE["🎯 Create KIND Cluster<br/>Control-plane + 2 Workers<br/>Port mapping: 80, 443"]
+        INGRESS_INSTALL["🌐 Install NGINX Ingress<br/>Controller for routing"]
+        METRICS_INSTALL["📊 Install Metrics Server<br/>For HPA support"]
+        CLUSTER_READY["✅ Cluster Ready<br/>All nodes available"]
+    end
+    
+    %% ArgoCD Setup Phase
+    subgraph ARGOCD_SETUP["🔄 ArgoCD GitOps Setup"]
+        ARGOCD_NS["📁 Create argocd namespace"]
+        ARGOCD_INSTALL["🔄 Install ArgoCD<br/>GitOps controller"]
+        ARGOCD_WAIT["⏳ Wait for ArgoCD<br/>Server ready"]
+        ARGOCD_PASSWORD["🔐 Get admin password<br/>Extract from secret"]
+        ARGOCD_PORT["🌐 Port forward 8081<br/>ArgoCD UI access"]
+    end
+    
+    %% Application Deployment Phase
+    subgraph APP_DEPLOY["📦 Application Deployment"]
+        APP_NS["📁 Create devops-case-study<br/>namespace"]
+        APP_OF_APPS["🎯 Deploy App-of-Apps<br/>ArgoCD application pattern"]
+        
+        subgraph APPS["🚀 8 Applications Deployed"]
+            REPORTS["📊 Reports Server<br/>Kyverno policy reports"]
+            KYVERNO_CORE["🛡️ Kyverno Core<br/>Policy engine"]
+            KYVERNO_PSS["🔒 Kyverno PSS<br/>17+ Security policies"]
+            DATABASE["🗄️ MySQL Database<br/>StatefulSet with PVC"]
+            WEB_SERVER["🌐 Web Server<br/>Nginx with HPA"]
+            MONITORING["📊 Pod Monitor<br/>Custom Go application"]
+            LOAD_TEST["⚡ Load Testing<br/>Performance validation"]
+            NETWORK_POL["🔒 Network Policies<br/>Zero-trust networking"]
+        end
+    end
+    
+    %% Verification Phase
+    subgraph VERIFY["✅ Verification & Testing"]
+        KYVERNO_CHECK["🛡️ Verify Kyverno<br/>Pods running, policies loaded"]
+        NETPOL_CHECK["🔒 Check Network Policies<br/>Auto-generated rules"]
+        REPORTS_CHECK["📋 Verify Reports Server<br/>API service available"]
+        PORT_FORWARD["🌐 Setup Port Forwarding<br/>Web:8080, DB:3306"]
+        HEALTH_TEST["🧪 Health Tests<br/>Web server & DB connectivity"]
+    end
+    
+    %% Final Output
+    STATUS["📊 Show Status<br/>Deployments, Pods, Services<br/>Access information"]
+    
+    %% Flow Connections
+    START --> PREREQ
+    PREREQ --> KIND_CREATE
+    KIND_CREATE --> INGRESS_INSTALL
+    INGRESS_INSTALL --> METRICS_INSTALL
+    METRICS_INSTALL --> CLUSTER_READY
+    
+    CLUSTER_READY --> ARGOCD_NS
+    ARGOCD_NS --> ARGOCD_INSTALL
+    ARGOCD_INSTALL --> ARGOCD_WAIT
+    ARGOCD_WAIT --> ARGOCD_PASSWORD
+    ARGOCD_PASSWORD --> ARGOCD_PORT
+    
+    ARGOCD_PORT --> APP_NS
+    APP_NS --> APP_OF_APPS
+    APP_OF_APPS --> REPORTS
+    APP_OF_APPS --> KYVERNO_CORE
+    APP_OF_APPS --> KYVERNO_PSS
+    APP_OF_APPS --> DATABASE
+    APP_OF_APPS --> WEB_SERVER
+    APP_OF_APPS --> MONITORING
+    APP_OF_APPS --> LOAD_TEST
+    APP_OF_APPS --> NETWORK_POL
+    
+    NETWORK_POL --> KYVERNO_CHECK
+    KYVERNO_CHECK --> NETPOL_CHECK
+    NETPOL_CHECK --> REPORTS_CHECK
+    REPORTS_CHECK --> PORT_FORWARD
+    PORT_FORWARD --> HEALTH_TEST
+    HEALTH_TEST --> STATUS
+    
+    %% Styling
+    classDef start fill:#e3f2fd,stroke:#1976d2,stroke-width:3px
+    classDef cluster fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef gitops fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
+    classDef apps fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    classDef verify fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    classDef output fill:#fce4ec,stroke:#ad1457,stroke-width:2px
+    
+    class START start
+    class KIND_CREATE,INGRESS_INSTALL,METRICS_INSTALL,CLUSTER_READY,PREREQ cluster
+    class ARGOCD_NS,ARGOCD_INSTALL,ARGOCD_WAIT,ARGOCD_PASSWORD,ARGOCD_PORT,APP_NS,APP_OF_APPS gitops
+    class REPORTS,KYVERNO_CORE,KYVERNO_PSS,DATABASE,WEB_SERVER,MONITORING,LOAD_TEST,NETWORK_POL apps
+    class KYVERNO_CHECK,NETPOL_CHECK,REPORTS_CHECK,PORT_FORWARD,HEALTH_TEST verify
+    class STATUS output
+```
+
+**🎯 Infrastructure Components Installed:**
+
+| Component | Purpose | Configuration |
+|-----------|---------|---------------|
+| **KIND Cluster** | Local Kubernetes | Control-plane + 2 workers |
+| **NGINX Ingress** | Traffic routing | Port mapping 80/443 |
+| **Metrics Server** | HPA support | Patched for KIND |
+| **ArgoCD** | GitOps controller | Admin UI on port 8081 |
+
+**📦 Applications Deployed via ArgoCD:**
+
+| Application | Technology | Purpose |
+|-------------|------------|---------|
+| **Reports Server** | Kyverno Policy Reporter | Policy violation reporting |
+| **Kyverno Core** | Policy Engine | Admission control & validation |
+| **Kyverno PSS** | 17+ Security Policies | Pod Security Standards |
+| **MySQL Database** | StatefulSet | Persistent data with backup |
+| **Web Server** | Nginx + HPA | Frontend with auto-scaling |
+| **Pod Monitor** | Go Application | Custom monitoring agent |
+| **Load Testing** | Custom Generator | Performance validation |
+| **Network Policies** | Kyverno Generated | Zero-trust networking |
+
+**🔧 Deployment Features:**
+- **🎯 App-of-Apps Pattern**: Single ArgoCD application managing all others
+- **⏳ Sync Waves**: Ordered deployment with dependencies
+- **🛡️ Policy Enforcement**: Automatic security policy application
+- **🔒 Network Security**: Auto-generated network policies for zero-trust
+- **📊 Monitoring**: Custom pod monitor with health checks
+- **⚡ Auto-scaling**: HPA configuration with load testing integration
+
 ## ✨ Key Features
 
 ### ⚡ **GitHub Actions CI/CD Pipeline**
