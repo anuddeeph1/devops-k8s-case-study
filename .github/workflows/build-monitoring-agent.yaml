@@ -1190,3 +1190,5 @@ jobs:
           echo "3. **Check Multi-Image Reports:** Review timestamped reports in security-reports/ directory" >> $GITHUB_STEP_SUMMARY
           echo "4. **Deploy Security-Compliant Images:** Use scanned and validated images" >> $GITHUB_STEP_SUMMARY
           echo "5. **Monitor Runtime Compliance:** \`kubectl get polr\` for cluster policy violations" >> $GITHUB_STEP_SUMMARY
+
+          
