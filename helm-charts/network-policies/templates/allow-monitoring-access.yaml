@@ -58,7 +58,24 @@ spec:
           # Allow access to Kubernetes API server (both service and direct API ports)
           - ports:
             - protocol: TCP
-              port: {{ .Values.ports.https }}
+              port: {{ .Values.ports.https }}  # 443 - HTTPS
             - protocol: TCP
-              port: {{ .Values.ports.k8sApi }}
+              port: {{ .Values.ports.k8sApi }}  # 443/6443 - Kubernetes API
+          # Allow monitoring of web server pods (HTTP)
+          - to:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ .Values.podLabels.webServer }}
+            ports:
+            - protocol: TCP
+              port: {{ .Values.ports.http }}  # 80 - Web server HTTP
+          # Allow monitoring of load testing pods (HTTP)
+          - to:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ .Values.podLabels.loadTesting }}
+            ports:
+            - protocol: TCP
+              port: {{ .Values.ports.http }}  # 80 - Load tester HTTP
+          # NOTE: Database access is intentionally NOT allowed (violates "only web server to database" requirement)
 {{- end }}
