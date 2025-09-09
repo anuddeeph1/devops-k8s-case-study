@@ -58,7 +58,7 @@ spec:
           # Allow access to Kubernetes API server (both service and direct API ports)
           - ports:
             - protocol: TCP
-              port: {{ .Values.ports.k8sApi }}  # 443 - Kubernetes API service port
+              port: {{ .Values.ports.https }}
             - protocol: TCP
-              port: 6443  # 6443 - Kubernetes API server port
+              port: {{ .Values.ports.k8sApi }}
 {{- end }}
