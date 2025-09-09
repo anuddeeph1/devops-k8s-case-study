@@ -253,8 +253,19 @@ jobs:
                 echo "      Last lines of scan result:"
                 echo "$result" | tail -3 | sed 's/^/        /'
                 
-                # Parse violations from summary line
-                violations=$(echo "$result" | tail -1 | grep -o 'fail: [0-9]*' | cut -d' ' -f2 || echo "0")
+                # Parse violations from summary line (try multiple patterns)
+                violations=$(echo "$result" | tail -5 | grep -oE 'fail: [0-9]+' | cut -d' ' -f2 || echo "0")
+                if [ "$violations" = "0" ]; then
+                  # Try alternative patterns
+                  violations=$(echo "$result" | grep -oE '[0-9]+ fail' | head -1 | cut -d' ' -f1 || echo "0")
+                fi
+                if [ "$violations" = "0" ]; then
+                  # Try counting FAIL occurrences
+                  violations=$(echo "$result" | grep -c "FAIL" || echo "0")
+                fi
+                
+                echo "      Raw Kyverno output (last 5 lines):"
+                echo "$result" | tail -5 | sed 's/^/        /'
                 echo "      Violations detected: $violations"
                 CHART_VIOLATIONS=$((CHART_VIOLATIONS + violations))
               fi
@@ -307,6 +318,10 @@ jobs:
           fi
           
           echo "total_violations=$TOTAL_VIOLATIONS" >> $GITHUB_OUTPUT
+          
+          # Debug: Show final violation count
+          echo "🔍 DEBUG: Final TOTAL_VIOLATIONS count: $TOTAL_VIOLATIONS"
+          echo "📊 This value will be passed to security-summary job"
           
           # Display summary
           echo "Scan Summary:"
@@ -467,6 +482,13 @@ jobs:
           echo "  High: $HIGH_COUNT"
           echo "  Medium: $MEDIUM_COUNT"
           echo "  Low: $LOW_COUNT"
+          
+          # Generate workflow annotations
+          if [ "$VULN_COUNT" -gt 0 ]; then
+            echo "::notice::Pod-monitor security scan completed successfully - $VULN_COUNT vulnerabilities found (Critical: $CRITICAL_COUNT, High: $HIGH_COUNT)"
+          else
+            echo "::notice::Pod-monitor security scan completed successfully - no vulnerabilities found"
+          fi
           
           # Output for next steps
           echo "vulnerabilities_found=$VULN_COUNT" >> $GITHUB_OUTPUT
@@ -1201,6 +1223,7 @@ jobs:
           echo "## 🛡️ Kyverno Policy Scan" >> $GITHUB_STEP_SUMMARY
           if [ "${{ needs.kyverno-security-scan.result }}" = "success" ]; then
             KYVERNO_VIOLATIONS="${{ needs.kyverno-security-scan.outputs.total_violations }}"
+            echo "🔍 DEBUG: Kyverno violations in success branch: '${KYVERNO_VIOLATIONS}'"
             if [ -z "$KYVERNO_VIOLATIONS" ] || [ "$KYVERNO_VIOLATIONS" = "0" ]; then
               echo "✅ **Success** - All Kyverno policy scans passed (0 violations)" >> $GITHUB_STEP_SUMMARY
             else
@@ -1225,6 +1248,8 @@ jobs:
           echo "- **Project Images:** ${{ needs.multi-image-security-scan.outputs.total-images-scanned }} images scanned comprehensively" >> $GITHUB_STEP_SUMMARY
           echo "- **Total Vulnerabilities:** Pod-Monitor: ${{ needs.container-security-scan.outputs.vulnerabilities-found }} + Multi-Image: ${{ needs.multi-image-security-scan.outputs.total-vulnerabilities }}" >> $GITHUB_STEP_SUMMARY
           KYVERNO_VIOLATIONS="${{ needs.kyverno-security-scan.outputs.total_violations }}"
+          echo "🔍 DEBUG: Received Kyverno violations count: '${KYVERNO_VIOLATIONS}'"
+          echo "🔍 DEBUG: Kyverno scan job result: ${{ needs.kyverno-security-scan.result }}"
           echo "- **Policy Compliance:** ${KYVERNO_VIOLATIONS:-0} Kyverno violations" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
