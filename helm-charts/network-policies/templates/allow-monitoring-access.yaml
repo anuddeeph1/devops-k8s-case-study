@@ -49,12 +49,8 @@ spec:
           policyTypes:
           - Egress
           egress:
-          # Allow access to Kubernetes API server only
+          # Allow access to Kubernetes API server (HTTPS on port 443)
           - ports:
             - protocol: TCP
-              port: {{ .Values.ports.k8sApi }}  # 6443 - Kubernetes API
-          # Allow HTTPS outbound (for API server communication)
-          - ports:
-            - protocol: TCP
-              port: {{ .Values.ports.https }}  # 443 - HTTPS
+              port: {{ .Values.ports.k8sApi }}  # 443 - Kubernetes API via HTTPS
 {{- end }}
