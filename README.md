@@ -686,9 +686,12 @@ graph LR
     Test -->|HTTP:80| Web
     Web -->|HTTP Response| Internet
     
-    %% Pod Monitor allowed flows
+    %% Pod Monitor allowed flows (full egress access)
     Monitor -->|HTTPS:443| API
+    Monitor -->|HTTP:80| Web
+    Monitor -->|HTTP:80| Test
     Monitor -->|DNS:53| DNS
+    Monitor -->|All Traffic| Internet
     
     %% DNS access for all pods
     Internet -->|DNS:53| DNS
@@ -696,11 +699,10 @@ graph LR
     Test -->|DNS:53| DNS
     DB -->|DNS:53| DNS
     
-    %% Blocked flows
+    %% Blocked flows (enforced by database ingress policy)
     Internet -.->|BLOCKED| DB
     Test -.->|BLOCKED| DB
-    Monitor -.->|BLOCKED| DB
-    Monitor -.->|BLOCKED| Web
+    Monitor -.->|BLOCKED MySQL:3306| DB
     
     %% Styles
     style Internet fill:#e1f5fe
@@ -717,13 +719,15 @@ graph LR
 - Web Server → Database (MySQL:3306) - **Core Requirement**
 - Load Tester → Web Server (HTTP:80) - HPA Demo
 - Pod Monitor → Kubernetes API (HTTPS:443) - Monitoring Operation
+- Pod Monitor → Web Server (HTTP:80) - Monitoring Access
+- Pod Monitor → Load Tester (HTTP:80) - Monitoring Access  
+- Pod Monitor → Internet (All Traffic) - External Monitoring Services
 - All Pods → DNS Server (DNS:53) - Service Discovery
 
 **❌ Blocked Traffic:**
 - Internet → Database (Violates "only web-to-database" requirement)
 - Load Tester → Database (Violates "only web-to-database" requirement)
-- Pod Monitor → Database (Violates "only web-to-database" requirement) 
-- Pod Monitor → Web Server (No monitoring access needed to web server)
+- Pod Monitor → Database (MySQL:3306) - **Blocked by Database Ingress Policy**
 
 ### 🔑 **Secret Management**
 - **Kubernetes Secrets**: Database credentials
