@@ -9,6 +9,10 @@ monitoring:
       tag: "latest-17586345028-80"
       pullPolicy: Always
     
+    # Health check configuration
+    healthCheck:
+      enabled: false  # Temporarily disabled to test network connectivity
+    
     resources:
       requests:
         memory: "32Mi"
