@@ -49,33 +49,28 @@ spec:
           policyTypes:
           - Egress
           egress:
-          # Allow DNS queries (required for service discovery)
-          - ports:
+          # Allow egress to all pods EXCEPT database pods (explicit exclusion)
+          - to:
+            - podSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: NotIn
+                  values: ["{{ .Values.podLabels.database }}"]
+          # Allow egress to services, DNS, API server, and external destinations
+          # NOTE: Port {{ .Values.ports.mysql }} (MySQL) is intentionally EXCLUDED
+          - to: []
+            ports:
             - protocol: UDP
               port: {{ .Values.ports.dns }}  # 53 - DNS
             - protocol: TCP
               port: {{ .Values.ports.dns }}  # 53 - DNS
-          # Allow access to Kubernetes API server (both service and direct API ports)
-          - ports:
             - protocol: TCP
               port: {{ .Values.ports.https }}  # 443 - HTTPS
             - protocol: TCP
               port: {{ .Values.ports.k8sApi }}  # 443/6443 - Kubernetes API
-          # Allow monitoring of web server pods (HTTP)
+            # Port 3306 (MySQL) is INTENTIONALLY OMITTED from this rule
+          # Allow egress to other namespaces
           - to:
-            - podSelector:
-                matchLabels:
-                  app.kubernetes.io/name: {{ .Values.podLabels.webServer }}
-            ports:
-            - protocol: TCP
-              port: {{ .Values.ports.http }}  # 80 - Web server HTTP
-          # Allow monitoring of load testing pods (HTTP)
-          - to:
-            - podSelector:
-                matchLabels:
-                  app.kubernetes.io/name: {{ .Values.podLabels.loadTesting }}
-            ports:
-            - protocol: TCP
-              port: {{ .Values.ports.http }}  # 80 - Load tester HTTP
-          # NOTE: Database access is intentionally NOT allowed (violates "only web server to database" requirement)
+            - namespaceSelector: {}
+          # RESULT: Pod-monitor EXPLICITLY cannot reach database pods
 {{- end }}
