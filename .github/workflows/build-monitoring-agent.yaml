@@ -822,6 +822,8 @@ jobs:
     outputs:
       total-images-scanned: ${{ steps.multi-scan.outputs.total_images_scanned || '0' }}
       total-vulnerabilities: ${{ steps.multi-scan.outputs.total_vulnerabilities || '0' }}
+      total-critical: ${{ steps.multi-scan.outputs.total_critical || '0' }}
+      total-high: ${{ steps.multi-scan.outputs.total_high || '0' }}
       total-components: ${{ steps.multi-scan.outputs.total_components || '0' }}
       scan-timestamp: ${{ steps.multi-scan.outputs.scan_timestamp || '0' }}
       scan-success: ${{ steps.multi-scan.outputs.scan_success || 'false' }}
@@ -970,11 +972,30 @@ jobs:
             fi
           fi
           
+          # Extract severity breakdown from individual Grype JSON files
+          TOTAL_CRITICAL=0
+          TOTAL_HIGH=0
+          if [ -d "./security-reports/grype" ]; then
+            echo "🔍 Aggregating vulnerability severity across all scanned images..."
+            for json_file in ./security-reports/grype/*-vulnerabilities.json; do
+              if [ -f "$json_file" ]; then
+                CRITICAL_IN_FILE=$(jq '[.matches[] | select(.vulnerability.severity == "Critical")] | length' "$json_file" 2>/dev/null || echo "0")
+                HIGH_IN_FILE=$(jq '[.matches[] | select(.vulnerability.severity == "High")] | length' "$json_file" 2>/dev/null || echo "0")
+                TOTAL_CRITICAL=$((TOTAL_CRITICAL + CRITICAL_IN_FILE))
+                TOTAL_HIGH=$((TOTAL_HIGH + HIGH_IN_FILE))
+                echo "  $(basename "$json_file"): Critical: $CRITICAL_IN_FILE, High: $HIGH_IN_FILE"
+              fi
+            done
+            echo "📊 Multi-Image Severity Summary: Critical: $TOTAL_CRITICAL, High: $TOTAL_HIGH"
+          fi
+          
           # Output for next steps - always provide values
           echo "scan_success=$SCAN_SUCCESS" >> $GITHUB_OUTPUT
           echo "total_images_scanned=$TOTAL_SCANNED" >> $GITHUB_OUTPUT
           echo "total_vulnerabilities=$TOTAL_VULNS" >> $GITHUB_OUTPUT
           echo "total_components=$TOTAL_COMPONENTS" >> $GITHUB_OUTPUT
+          echo "total_critical=$TOTAL_CRITICAL" >> $GITHUB_OUTPUT
+          echo "total_high=$TOTAL_HIGH" >> $GITHUB_OUTPUT
           echo "scan_timestamp=$(date +%s)" >> $GITHUB_OUTPUT
           echo "exit_code=$SCAN_EXIT_CODE" >> $GITHUB_OUTPUT
           
@@ -984,7 +1005,7 @@ jobs:
           elif [ "$SCAN_SUCCESS" = "partial" ]; then
             echo "::warning::Multi-image security scan had some scan failures - $TOTAL_SCANNED images scanned successfully"
           elif [ "$TOTAL_VULNS" -gt 0 ]; then
-            echo "::notice::Multi-image security scan completed successfully - $TOTAL_VULNS vulnerabilities found across $TOTAL_SCANNED images"
+            echo "::notice::Multi-image security scan completed successfully - $TOTAL_VULNS vulnerabilities found across $TOTAL_SCANNED images (Critical: $TOTAL_CRITICAL, High: $TOTAL_HIGH)"
           else
             echo "::notice::Multi-image security scan completed successfully - no vulnerabilities found"
           fi
