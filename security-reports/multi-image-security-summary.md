@@ -1,9 +1,9 @@
 # 🛡️ Multi-Image Container Security Analysis Report
 
-**Scan Date:** 2025-09-09 09:13:07  
+**Scan Date:** 2025-09-09 09:37:53  
 **Scanner:** Multi-Image Security Scanner  
 **Output Directory:** ./security-reports  
-**Timestamp:** 1757409187  
+**Timestamp:** 1757410673  
 
 ## 📊 Overall Summary
 
@@ -23,82 +23,82 @@
   - Vulnerabilities: 18
   - SBOM Components: 269  
   - VEX Statements: 10
-  - Reports: `reg_nirmata_io_nirmata_kubectl-1_32_1-1757409187-*`
+  - Reports: `reg_nirmata_io_nirmata_kubectl-1_32_1-1757410673-*`
 - **reg.nirmata.io/nirmata/cleanup-controller:latest**
   - Vulnerabilities: 23
   - SBOM Components: 1023  
   - VEX Statements: 7
-  - Reports: `reg_nirmata_io_nirmata_cleanup-controller-latest-1757409187-*`
+  - Reports: `reg_nirmata_io_nirmata_cleanup-controller-latest-1757410673-*`
 - **reg.nirmata.io/nirmata/reports-server:latest**
   - Vulnerabilities: 0
   - SBOM Components: 1521  
   - VEX Statements: 0
-  - Reports: `reg_nirmata_io_nirmata_reports-server-latest-1757409187-*`
+  - Reports: `reg_nirmata_io_nirmata_reports-server-latest-1757410673-*`
 - **ghcr.io/nirmata/kubectl:1.30.2**
   - Vulnerabilities: 14
   - SBOM Components: 1032  
   - VEX Statements: 11
-  - Reports: `ghcr_io_nirmata_kubectl-1_30_2-1757409187-*`
+  - Reports: `ghcr_io_nirmata_kubectl-1_30_2-1757410673-*`
 - **reg.nirmata.io/nirmata/kubectl:1.31.1**
   - Vulnerabilities: 27
   - SBOM Components: 264  
   - VEX Statements: 16
-  - Reports: `reg_nirmata_io_nirmata_kubectl-1_31_1-1757409187-*`
+  - Reports: `reg_nirmata_io_nirmata_kubectl-1_31_1-1757410673-*`
 - **alpine:3.18**
   - Vulnerabilities: 6
   - SBOM Components: 95  
   - VEX Statements: 2
-  - Reports: `alpine-3_18-1757409187-*`
+  - Reports: `alpine-3_18-1757410673-*`
 - **nginx:1.25-alpine**
   - Vulnerabilities: 88
   - SBOM Components: 1402  
   - VEX Statements: 55
-  - Reports: `nginx-1_25-alpine-1757409187-*`
+  - Reports: `nginx-1_25-alpine-1757410673-*`
 - **reg.nirmata.io/nirmata/kyverno:latest**
   - Vulnerabilities: 23
   - SBOM Components: 1026  
   - VEX Statements: 7
-  - Reports: `reg_nirmata_io_nirmata_kyverno-latest-1757409187-*`
+  - Reports: `reg_nirmata_io_nirmata_kyverno-latest-1757410673-*`
 - **alpine/curl:latest**
   - Vulnerabilities: 6
   - SBOM Components: 119  
   - VEX Statements: 2
-  - Reports: `alpine_curl-latest-1757409187-*`
+  - Reports: `alpine_curl-latest-1757410673-*`
 - **reg.nirmata.io/nirmata/background-controller:latest**
   - Vulnerabilities: 23
   - SBOM Components: 1023  
   - VEX Statements: 7
-  - Reports: `reg_nirmata_io_nirmata_background-controller-latest-1757409187-*`
+  - Reports: `reg_nirmata_io_nirmata_background-controller-latest-1757410673-*`
 - **reg.nirmata.io/nirmata/kyvernopre:latest**
   - Vulnerabilities: 23
   - SBOM Components: 1022  
   - VEX Statements: 7
-  - Reports: `reg_nirmata_io_nirmata_kyvernopre-latest-1757409187-*`
+  - Reports: `reg_nirmata_io_nirmata_kyvernopre-latest-1757410673-*`
 - **busybox:1.35**
   - Vulnerabilities: 5
   - SBOM Components: 3  
   - VEX Statements: 5
-  - Reports: `busybox-1_35-1757409187-*`
+  - Reports: `busybox-1_35-1757410673-*`
 - **reg.nirmata.io/nirmata/kyverno-cli:latest**
   - Vulnerabilities: 25
   - SBOM Components: 1061  
   - VEX Statements: 7
-  - Reports: `reg_nirmata_io_nirmata_kyverno-cli-latest-1757409187-*`
+  - Reports: `reg_nirmata_io_nirmata_kyverno-cli-latest-1757410673-*`
 - **reg.nirmata.io/nirmata/reports-controller:latest**
   - Vulnerabilities: 23
   - SBOM Components: 1023  
   - VEX Statements: 7
-  - Reports: `reg_nirmata_io_nirmata_reports-controller-latest-1757409187-*`
+  - Reports: `reg_nirmata_io_nirmata_reports-controller-latest-1757410673-*`
 - **ghcr.io/nirmata/etcd:v3.5.18-cve-free**
   - Vulnerabilities: 27
   - SBOM Components: 1570  
   - VEX Statements: 5
-  - Reports: `ghcr_io_nirmata_etcd-v3_5_18-cve-free-1757409187-*`
+  - Reports: `ghcr_io_nirmata_etcd-v3_5_18-cve-free-1757410673-*`
 - **mysql:8.0**
   - Vulnerabilities: 10
   - SBOM Components: 20589  
   - VEX Statements: 5
-  - Reports: `mysql-8_0-1757409187-*`
+  - Reports: `mysql-8_0-1757410673-*`
 
 ## 📁 Report Files Structure
 
@@ -164,4 +164,4 @@ This scan can be integrated into CI/CD pipelines:
 ```
 
 ---
-*Generated at: Tue Sep  9 09:19:16 UTC 2025*
+*Generated at: Tue Sep  9 09:43:20 UTC 2025*
