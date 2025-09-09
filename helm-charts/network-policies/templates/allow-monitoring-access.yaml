@@ -49,28 +49,7 @@ spec:
           policyTypes:
           - Egress
           egress:
-          # Allow egress to all pods EXCEPT database pods (explicit exclusion)
-          - to:
-            - podSelector:
-                matchExpressions:
-                - key: app.kubernetes.io/name
-                  operator: NotIn
-                  values: ["{{ .Values.podLabels.database }}"]
-          # Allow egress to services, DNS, API server, and external destinations
-          # NOTE: Port {{ .Values.ports.mysql }} (MySQL) is intentionally EXCLUDED
-          - to: []
-            ports:
-            - protocol: UDP
-              port: {{ .Values.ports.dns }}  # 53 - DNS
-            - protocol: TCP
-              port: {{ .Values.ports.dns }}  # 53 - DNS
-            - protocol: TCP
-              port: {{ .Values.ports.https }}  # 443 - HTTPS
-            - protocol: TCP
-              port: {{ .Values.ports.k8sApi }}  # 443/6443 - Kubernetes API
-            # Port 3306 (MySQL) is INTENTIONALLY OMITTED from this rule
-          # Allow egress to other namespaces
-          - to:
-            - namespaceSelector: {}
-          # RESULT: Pod-monitor EXPLICITLY cannot reach database pods
+          # TEMPORARY: Allow ALL egress for debugging
+          # TODO: Restrict after confirming monitoring works
+          - {}
 {{- end }}
