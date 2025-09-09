@@ -18,7 +18,7 @@
 
 ## 🎯 Overview
 
-This case study demonstrates a **production-grade microservices architecture** deployed on Kubernetes using modern DevOps practices. It showcases:
+This case study demonstrates a **comprehensive microservices architecture** deployed on Kubernetes using modern DevOps practices. It showcases:
 
 - **GitHub Actions CI/CD Pipeline** with automated build, security scan & deployment
 - **GitOps deployment** with ArgoCD and App-of-Apps pattern
@@ -456,7 +456,7 @@ flowchart TD
 
 ### ⚡ **GitHub Actions CI/CD Pipeline**
 
-**Modern automation replacing manual deployment scripts with enterprise-grade CI/CD:**
+**Modern automation replacing manual deployment scripts with comprehensive CI/CD:**
 
 #### **🔀 Workflow Triggers:**
 ```yaml

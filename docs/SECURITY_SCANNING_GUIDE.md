@@ -514,4 +514,4 @@ curl -s localhost:8080/metrics | grep security_scan
 
 **🛡️ Secure by Design - Security scanning integrated throughout the DevOps lifecycle** 
 
-This implementation provides enterprise-grade container security scanning with comprehensive reporting, attestation, and integration capabilities for modern Kubernetes environments.
+This implementation provides comprehensive container security scanning with detailed reporting, attestation, and integration capabilities for modern Kubernetes environments.
