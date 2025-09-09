@@ -12,11 +12,9 @@ on:
       - '.github/workflows/build-monitoring-agent.yaml'
   pull_request:
     branches:
-      - 'main'  # PR validation: Security Scan only
-    paths:
-      - 'monitoring-go-controller/**'
-      - 'helm-charts/**'
-      - '.github/workflows/build-monitoring-agent.yaml'
+      - 'main'  # Trigger on ALL PRs targeting main branch
+    # Remove path restrictions - scan all PRs targeting main for security
+    # This ensures comprehensive security validation regardless of changed files
 
 env:
   IMAGE_NAME: anuddeeph/pod-monitor
