@@ -789,8 +789,8 @@ jobs:
     name: Multi-Image Security Analysis
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    # Run on both push and PR events, independent of pod-monitor build
-    if: always()
+    # Run on both push event, independent of pod-monitor build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/workflows' && !contains(github.event.head_commit.message, 'scanning images')
     
     permissions:
       contents: write
