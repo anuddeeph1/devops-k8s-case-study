@@ -1,0 +1,331 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "grype",
+          "version": "0.99.1",
+          "informationUri": "https://github.com/anchore/grype",
+          "rules": [
+            {
+              "id": "CVE-2024-58251-busybox",
+              "name": "ApkMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2024-58251 low vulnerability for busybox package"
+              },
+              "fullDescription": {
+                "text": "In netstat in BusyBox through 1.37.0, local users can launch of network application with an argv[0] containing an ANSI terminal escape sequence, leading to a denial of service (terminal locked up) when netstat is used by a victim."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-58251\nSeverity: low\nPackage: busybox\nVersion: 1.36.1-r7\nFix Version: \nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: nvd:cpe\nLink: [CVE-2024-58251](https://nvd.nist.gov/vuln/detail/CVE-2024-58251)",
+                "markdown": "**Vulnerability CVE-2024-58251**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | busybox  | 1.36.1-r7  |   | apk  | /lib/apk/db/installed  | nvd:cpe  | [CVE-2024-58251](https://nvd.nist.gov/vuln/detail/CVE-2024-58251)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/busybox@1.36.1-r7?arch=x86_64\u0026distro=alpine-3.18.12"
+                ],
+                "security-severity": "2.5"
+              }
+            },
+            {
+              "id": "CVE-2024-58251-busybox-binsh",
+              "name": "ApkMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2024-58251 low vulnerability for busybox-binsh package"
+              },
+              "fullDescription": {
+                "text": "In netstat in BusyBox through 1.37.0, local users can launch of network application with an argv[0] containing an ANSI terminal escape sequence, leading to a denial of service (terminal locked up) when netstat is used by a victim."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-58251\nSeverity: low\nPackage: busybox-binsh\nVersion: 1.36.1-r7\nFix Version: \nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: nvd:cpe\nLink: [CVE-2024-58251](https://nvd.nist.gov/vuln/detail/CVE-2024-58251)",
+                "markdown": "**Vulnerability CVE-2024-58251**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | busybox-binsh  | 1.36.1-r7  |   | apk  | /lib/apk/db/installed  | nvd:cpe  | [CVE-2024-58251](https://nvd.nist.gov/vuln/detail/CVE-2024-58251)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/busybox-binsh@1.36.1-r7?arch=x86_64\u0026distro=alpine-3.18.12\u0026upstream=busybox"
+                ],
+                "security-severity": "2.5"
+              }
+            },
+            {
+              "id": "CVE-2024-58251-ssl_client",
+              "name": "ApkMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2024-58251 low vulnerability for ssl_client package"
+              },
+              "fullDescription": {
+                "text": "In netstat in BusyBox through 1.37.0, local users can launch of network application with an argv[0] containing an ANSI terminal escape sequence, leading to a denial of service (terminal locked up) when netstat is used by a victim."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-58251\nSeverity: low\nPackage: ssl_client\nVersion: 1.36.1-r7\nFix Version: \nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: nvd:cpe\nLink: [CVE-2024-58251](https://nvd.nist.gov/vuln/detail/CVE-2024-58251)",
+                "markdown": "**Vulnerability CVE-2024-58251**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | ssl_client  | 1.36.1-r7  |   | apk  | /lib/apk/db/installed  | nvd:cpe  | [CVE-2024-58251](https://nvd.nist.gov/vuln/detail/CVE-2024-58251)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/ssl_client@1.36.1-r7?arch=x86_64\u0026distro=alpine-3.18.12\u0026upstream=busybox"
+                ],
+                "security-severity": "2.5"
+              }
+            },
+            {
+              "id": "CVE-2025-46394-busybox",
+              "name": "ApkMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2025-46394 low vulnerability for busybox package"
+              },
+              "fullDescription": {
+                "text": "In tar in BusyBox through 1.37.0, a TAR archive can have filenames hidden from a listing through the use of terminal escape sequences."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-46394\nSeverity: low\nPackage: busybox\nVersion: 1.36.1-r7\nFix Version: \nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: nvd:cpe\nLink: [CVE-2025-46394](https://nvd.nist.gov/vuln/detail/CVE-2025-46394)",
+                "markdown": "**Vulnerability CVE-2025-46394**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | busybox  | 1.36.1-r7  |   | apk  | /lib/apk/db/installed  | nvd:cpe  | [CVE-2025-46394](https://nvd.nist.gov/vuln/detail/CVE-2025-46394)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/busybox@1.36.1-r7?arch=x86_64\u0026distro=alpine-3.18.12"
+                ],
+                "security-severity": "3.2"
+              }
+            },
+            {
+              "id": "CVE-2025-46394-busybox-binsh",
+              "name": "ApkMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2025-46394 low vulnerability for busybox-binsh package"
+              },
+              "fullDescription": {
+                "text": "In tar in BusyBox through 1.37.0, a TAR archive can have filenames hidden from a listing through the use of terminal escape sequences."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-46394\nSeverity: low\nPackage: busybox-binsh\nVersion: 1.36.1-r7\nFix Version: \nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: nvd:cpe\nLink: [CVE-2025-46394](https://nvd.nist.gov/vuln/detail/CVE-2025-46394)",
+                "markdown": "**Vulnerability CVE-2025-46394**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | busybox-binsh  | 1.36.1-r7  |   | apk  | /lib/apk/db/installed  | nvd:cpe  | [CVE-2025-46394](https://nvd.nist.gov/vuln/detail/CVE-2025-46394)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/busybox-binsh@1.36.1-r7?arch=x86_64\u0026distro=alpine-3.18.12\u0026upstream=busybox"
+                ],
+                "security-severity": "3.2"
+              }
+            },
+            {
+              "id": "CVE-2025-46394-ssl_client",
+              "name": "ApkMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2025-46394 low vulnerability for ssl_client package"
+              },
+              "fullDescription": {
+                "text": "In tar in BusyBox through 1.37.0, a TAR archive can have filenames hidden from a listing through the use of terminal escape sequences."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-46394\nSeverity: low\nPackage: ssl_client\nVersion: 1.36.1-r7\nFix Version: \nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: nvd:cpe\nLink: [CVE-2025-46394](https://nvd.nist.gov/vuln/detail/CVE-2025-46394)",
+                "markdown": "**Vulnerability CVE-2025-46394**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | ssl_client  | 1.36.1-r7  |   | apk  | /lib/apk/db/installed  | nvd:cpe  | [CVE-2025-46394](https://nvd.nist.gov/vuln/detail/CVE-2025-46394)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/ssl_client@1.36.1-r7?arch=x86_64\u0026distro=alpine-3.18.12\u0026upstream=busybox"
+                ],
+                "security-severity": "3.2"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "CVE-2024-58251-busybox",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in apk package: busybox, version 1.36.1-r7 was found in image alpine:3.18 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "alpine:3.18@sha256:f44f286046d9443b2aeb895c0e1f4e688698247427bca4d15112c8e3432a803e:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "64f9e5a196ccaa610561dac25a506a14916971ff09125b9caff934e0958789fb:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-58251-busybox-binsh",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in apk package: busybox-binsh, version 1.36.1-r7 was found in image alpine:3.18 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "alpine:3.18@sha256:f44f286046d9443b2aeb895c0e1f4e688698247427bca4d15112c8e3432a803e:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "7a79da47f8cde65bd70805e2523a2785c56eae72cd27e298b2a385ca8ff5b2b2:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-58251-ssl_client",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in apk package: ssl_client, version 1.36.1-r7 was found in image alpine:3.18 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "alpine:3.18@sha256:f44f286046d9443b2aeb895c0e1f4e688698247427bca4d15112c8e3432a803e:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "47c4eaf9a964b530db35333aa40470b7b53f4e7546d05a304f4d4ed160c69c89:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-46394-busybox",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in apk package: busybox, version 1.36.1-r7 was found in image alpine:3.18 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "alpine:3.18@sha256:f44f286046d9443b2aeb895c0e1f4e688698247427bca4d15112c8e3432a803e:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "64f9e5a196ccaa610561dac25a506a14916971ff09125b9caff934e0958789fb:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-46394-busybox-binsh",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in apk package: busybox-binsh, version 1.36.1-r7 was found in image alpine:3.18 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "alpine:3.18@sha256:f44f286046d9443b2aeb895c0e1f4e688698247427bca4d15112c8e3432a803e:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "7a79da47f8cde65bd70805e2523a2785c56eae72cd27e298b2a385ca8ff5b2b2:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-46394-ssl_client",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in apk package: ssl_client, version 1.36.1-r7 was found in image alpine:3.18 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "alpine//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "alpine:3.18@sha256:f44f286046d9443b2aeb895c0e1f4e688698247427bca4d15112c8e3432a803e:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "47c4eaf9a964b530db35333aa40470b7b53f4e7546d05a304f4d4ed160c69c89:1"
+          }
+        }
+      ]
+    }
+  ]
+}
