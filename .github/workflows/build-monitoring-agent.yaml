@@ -196,14 +196,84 @@ jobs:
           CHARTS=("web-server" "database" "monitoring" "load-testing")
           
           for chart in "${CHARTS[@]}"; do
-            echo "Generating manifests for $chart..."
+            echo "📦 Generating manifests for $chart..."
+            
+            # Check if chart exists
+            if [ ! -d "helm-charts/$chart/" ]; then
+              echo "❌ Chart directory helm-charts/$chart/ not found"
+              continue
+            fi
+            
+            # Generate templates with debug info
+            echo "  📋 Using values from: helm-charts/$chart/values.yaml"
+            echo "  📂 Output directory: security-scan/manifests"
+            
             helm template $chart helm-charts/$chart/ \
               --values helm-charts/$chart/values.yaml \
               --output-dir security-scan/manifests
+            
+            # Show what was generated
+            echo "  ✅ Generated templates:"
+            if [ -d "security-scan/manifests/$chart/templates/" ]; then
+              ls -la security-scan/manifests/$chart/templates/ | sed 's/^/    /'
+            else
+              echo "    ❌ No templates directory created"
+            fi
           done
           
           echo "Generated manifests:"
           find security-scan/manifests -name "*.yaml" -type f
+      
+      - name: Create Test Resource for Policy Validation
+        run: |
+          echo "🧪 Creating test resource to verify Kyverno policies work..."
+          
+          # Create a test pod that should definitely fail PSS policies
+          cat > security-scan/test-insecure-pod.yaml << EOF
+          apiVersion: v1
+          kind: Pod
+          metadata:
+            name: test-insecure-pod
+            namespace: default
+          spec:
+            containers:
+            - name: test
+              image: nginx
+              securityContext:
+                privileged: true
+                runAsUser: 0
+                allowPrivilegeEscalation: true
+                readOnlyRootFilesystem: false
+              ports:
+              - containerPort: 80
+                hostPort: 8080
+          EOF
+          
+          echo "📄 Test resource created. This should trigger PSS policy violations."
+      
+      - name: Test Kyverno Policies with Known Violating Resource
+        run: |
+          echo "🧪 Testing Kyverno policies with known violating resource..."
+          
+          # Test with the insecure pod that should definitely fail
+          echo "Testing policies against test-insecure-pod.yaml..."
+          result=$(kyverno apply \
+            security-scan/policies/pss-policies/templates/ \
+            --resource security-scan/test-insecure-pod.yaml 2>&1 || true)
+          
+          echo "=== KYVERNO TEST RESULT ==="
+          echo "$result"
+          echo "=== END TEST RESULT ==="
+          
+          # Count violations in test
+          test_violations=$(echo "$result" | grep -oE 'fail: [0-9]+' | cut -d' ' -f2 || echo "0")
+          echo "🔍 Test violations found: $test_violations"
+          
+          if [ "$test_violations" -gt 0 ]; then
+            echo "✅ Kyverno policies are working - found $test_violations violations in test resource"
+          else
+            echo "❌ Kyverno policies may not be working correctly - no violations found in obviously insecure resource"
+          fi
       
       - name: Run Kyverno Security Scan
         id: kyverno-scan
@@ -240,9 +310,30 @@ jobs:
             echo "  Scanning $chart with PSS policies..."
             
             CHART_VIOLATIONS=0
+            echo "    🔍 Files to scan in security-scan/manifests/$chart/templates/:"
+            ls -la security-scan/manifests/$chart/templates/ || echo "    ❌ Directory not found"
+            
             for yaml_file in security-scan/manifests/$chart/templates/*.yaml; do
               if [ -f "$yaml_file" ]; then
-                echo "    Scanning: $(basename $yaml_file)..."
+                echo "    📄 Scanning: $(basename $yaml_file)..."
+                
+                # Debug: Show what's in the file and what kind of resource it is
+                echo "    📝 File contents preview:"
+                head -10 "$yaml_file" | sed 's/^/      /'
+                
+                # Check what kind of Kubernetes resource this is
+                RESOURCE_KIND=$(grep -i "^kind:" "$yaml_file" | head -1 | cut -d: -f2 | tr -d ' ' || echo "Unknown")
+                echo "    🔍 Resource Kind: $RESOURCE_KIND"
+                
+                # Check if this is a resource that PSS policies should apply to
+                case "$RESOURCE_KIND" in
+                  "Pod"|"Deployment"|"ReplicaSet"|"StatefulSet"|"DaemonSet"|"Job"|"CronJob")
+                    echo "    ✅ This is a workload resource that PSS policies should evaluate"
+                    ;;
+                  *)
+                    echo "    ℹ️ This resource type ($RESOURCE_KIND) typically doesn't trigger PSS policies"
+                    ;;
+                esac
                 
                 # Run kyverno with full error output for debugging
                 result=$(kyverno apply \
@@ -276,6 +367,9 @@ jobs:
                     echo "      Method 2 (FAIL count): Found $violations violations"
                   fi
                 fi
+                
+                # Ensure violations is a clean number (remove any whitespace/newlines)
+                violations=$(echo "$violations" | tr -d '\n\r\t ' | grep -o '^[0-9]*$' || echo "0")
                 
                 # Method 3: Look for violation summary patterns
                 if [ "$violations" = "0" ]; then
