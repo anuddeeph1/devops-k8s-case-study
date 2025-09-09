@@ -1,4 +1,4 @@
-# 🚀 DevOps Case Study: Production-Grade Microservices on Kubernetes
+# 🚀 DevOps Case Study: Microservices on Kubernetes
 
 > **A comprehensive demonstration of modern DevOps practices featuring GitOps, Policy-as-Code, automated security, disaster recovery, and horizontal scaling.**
 
