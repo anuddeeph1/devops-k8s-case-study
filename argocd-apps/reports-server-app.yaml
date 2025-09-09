@@ -3,12 +3,14 @@ kind: Application
 metadata:
   name: reports-server
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"  # Deploy first - required by Kyverno
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
-    repoURL: https://github.com/anuddeeph1/musical-giggle.git
+    repoURL: https://github.com/anuddeeph1/devops-k8s-case-study.git
     targetRevision: main
     path: helm-charts/reports-server
     helm:
