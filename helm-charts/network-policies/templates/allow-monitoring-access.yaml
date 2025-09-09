@@ -55,8 +55,10 @@ spec:
               port: {{ .Values.ports.dns }}  # 53 - DNS
             - protocol: TCP
               port: {{ .Values.ports.dns }}  # 53 - DNS
-          # Allow access to Kubernetes API server (HTTPS on port 443)
+          # Allow access to Kubernetes API server (both service and direct API ports)
           - ports:
             - protocol: TCP
-              port: {{ .Values.ports.k8sApi }}  # 443 - Kubernetes API via HTTPS
+              port: {{ .Values.ports.k8sApi }}  # 443 - Kubernetes API service port
+            - protocol: TCP
+              port: 6443  # 6443 - Kubernetes API server port
 {{- end }}
