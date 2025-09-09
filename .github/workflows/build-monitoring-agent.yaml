@@ -1623,3 +1623,4 @@ jobs:
           echo "5. **Monitor Runtime Compliance:** \`kubectl get polr\` for cluster policy violations" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "> 💡 **Note**: For exact Kyverno violation counts when jobs fail, check the \`Fail if violations found\` step in the \`Kyverno Security Scan\` job above." >> $GITHUB_STEP_SUMMARY
+          
