@@ -5,7 +5,8 @@
 # with Grype vulnerability scanning, SBOM generation, and VEX document creation
 # Usage: ./multi-image-security-scan.sh [output-dir]
 
-set -e
+# Removed set -e to allow script to continue when individual image scans fail
+# Individual error handling is done per image scan
 
 # Colors for output
 RED='\033[0;31m'
@@ -207,12 +208,12 @@ scan_single_image() {
         TOTAL_COMPONENTS=$((TOTAL_COMPONENTS + image_components))
         TOTAL_VEX_STATEMENTS=$((TOTAL_VEX_STATEMENTS + image_vex_statements))
         log_success "Completed scan for $full_image_name"
+        return 0
     else
         ((FAILED_SCANS++))
         log_error "Scan failed for $full_image_name"
+        return 1
     fi
-    
-    echo ""
 }
 
 generate_vex_document() {
@@ -554,16 +555,37 @@ main() {
     install_security_tools
     
     # Check tools are available
-    check_tool grype
-    check_tool syft
+    if ! check_tool grype; then
+        log_error "Grype is not available, cannot continue"
+        exit 1
+    fi
+    if ! check_tool syft; then
+        log_error "Syft is not available, cannot continue"  
+        exit 1
+    fi
     
     # Scan all images
     log_info "Starting to scan ${#FULL_IMAGE_NAMES[@]} images..."
+    
+    # List all images that will be scanned
+    log_info "Images to scan:"
     for image_key in "${!FULL_IMAGE_NAMES[@]}"; do
-        log_info "Processing image $(($(echo "${!FULL_IMAGE_NAMES[@]}" | tr ' ' '\n' | grep -n "^$image_key$" | cut -d: -f1)))/${#FULL_IMAGE_NAMES[@]}: $image_key"
-        scan_single_image "$image_key"
+        log_info "  - $image_key -> ${FULL_IMAGE_NAMES[$image_key]}"
+    done
+    echo ""
+    
+    local current_count=0
+    for image_key in "${!FULL_IMAGE_NAMES[@]}"; do
+        ((current_count++))
+        log_info "Processing image $current_count/${#FULL_IMAGE_NAMES[@]}: $image_key -> ${FULL_IMAGE_NAMES[$image_key]}"
+        
+        # Wrap individual scan in error handling to ensure script continues
+        if ! scan_single_image "$image_key"; then
+            log_warning "scan_single_image returned error for $image_key, but continuing..."
+        fi
+        
         log_info "Completed processing $image_key. Current progress: $SCANNED_IMAGES successful, $FAILED_SCANS failed"
-        echo "----------------------------------------"
+        echo "========================================"
     done
     
     log_info "Completed all image scans. Final totals: $SCANNED_IMAGES successful, $FAILED_SCANS failed"
