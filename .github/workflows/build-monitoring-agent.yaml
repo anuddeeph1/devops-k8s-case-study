@@ -1496,17 +1496,25 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           
           echo "## 🛡️ Kyverno Policy Scan" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ needs.kyverno-security-scan.result }}" = "success" ]; then
-            KYVERNO_VIOLATIONS="${{ needs.kyverno-security-scan.outputs.total_violations }}"
-            echo "🔍 DEBUG: Kyverno violations in success branch: '${KYVERNO_VIOLATIONS}'"
-            if [ -z "$KYVERNO_VIOLATIONS" ] || [ "$KYVERNO_VIOLATIONS" = "0" ]; then
-              echo "✅ **Success** - All Kyverno policy scans passed (0 violations)" >> $GITHUB_STEP_SUMMARY
-            else
-              echo "⚠️ **Policy Violations** - $KYVERNO_VIOLATIONS Kyverno violations detected" >> $GITHUB_STEP_SUMMARY
-              echo "- Check artifacts for detailed violation report" >> $GITHUB_STEP_SUMMARY
-            fi
+          KYVERNO_VIOLATIONS="${{ needs.kyverno-security-scan.outputs.total_violations }}"
+          KYVERNO_RESULT="${{ needs.kyverno-security-scan.result }}"
+          echo "🔍 DEBUG: Kyverno job result: '$KYVERNO_RESULT', violations: '$KYVERNO_VIOLATIONS'"
+          
+          # Check if we have violation count (job can fail due to violations but still produce outputs)
+          if [ -n "$KYVERNO_VIOLATIONS" ] && [ "$KYVERNO_VIOLATIONS" != "0" ] && [ "$KYVERNO_VIOLATIONS" != "" ]; then
+            # Job failed due to violations (this is expected behavior)
+            echo "⚠️ **Policy Violations Detected** - $KYVERNO_VIOLATIONS Kyverno violations found" >> $GITHUB_STEP_SUMMARY
+            echo "- 🚨 **Status**: Job failed due to policy violations (expected security enforcement)" >> $GITHUB_STEP_SUMMARY
+            echo "- 📋 **Action Required**: Fix security issues before deployment" >> $GITHUB_STEP_SUMMARY
+            echo "- 📄 **Details**: Check artifacts for detailed violation report" >> $GITHUB_STEP_SUMMARY
+          elif [ "$KYVERNO_RESULT" = "success" ]; then
+            # Job succeeded and no violations
+            echo "✅ **Success** - All Kyverno policy scans passed (0 violations)" >> $GITHUB_STEP_SUMMARY
           else
-            echo "❌ **Failed** - Kyverno security scan failed to complete" >> $GITHUB_STEP_SUMMARY
+            # Job failed for technical reasons (not violations)
+            echo "❌ **Technical Failure** - Kyverno security scan failed to complete" >> $GITHUB_STEP_SUMMARY
+            echo "- 🔧 **Issue**: Technical problem with scan execution (not policy violations)" >> $GITHUB_STEP_SUMMARY
+            echo "- 📝 **Action**: Check workflow logs for technical errors" >> $GITHUB_STEP_SUMMARY
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
           
@@ -1522,10 +1530,16 @@ jobs:
           echo "- **Pod-Monitor:** Built, scanned, attested (dedicated pipeline)" >> $GITHUB_STEP_SUMMARY
           echo "- **Project Images:** ${{ needs.multi-image-security-scan.outputs.total-images-scanned }} images scanned comprehensively" >> $GITHUB_STEP_SUMMARY
           echo "- **Total Vulnerabilities:** Pod-Monitor: ${{ needs.container-security-scan.outputs.vulnerabilities-found }} + Multi-Image: ${{ needs.multi-image-security-scan.outputs.total-vulnerabilities }}" >> $GITHUB_STEP_SUMMARY
-          KYVERNO_VIOLATIONS="${{ needs.kyverno-security-scan.outputs.total_violations }}"
-          echo "🔍 DEBUG: Received Kyverno violations count: '${KYVERNO_VIOLATIONS}'"
+          KYVERNO_VIOLATIONS_SUMMARY="${{ needs.kyverno-security-scan.outputs.total_violations }}"
+          echo "🔍 DEBUG: Final violations count for summary: '${KYVERNO_VIOLATIONS_SUMMARY}'"
           echo "🔍 DEBUG: Kyverno scan job result: ${{ needs.kyverno-security-scan.result }}"
-          echo "- **Policy Compliance:** ${KYVERNO_VIOLATIONS:-0} Kyverno violations" >> $GITHUB_STEP_SUMMARY
+          
+          # Show violations count properly
+          if [ -n "$KYVERNO_VIOLATIONS_SUMMARY" ] && [ "$KYVERNO_VIOLATIONS_SUMMARY" != "0" ] && [ "$KYVERNO_VIOLATIONS_SUMMARY" != "" ]; then
+            echo "- **Policy Compliance:** 🚨 $KYVERNO_VIOLATIONS_SUMMARY Kyverno violations detected" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **Policy Compliance:** ✅ 0 Kyverno violations" >> $GITHUB_STEP_SUMMARY
+          fi
           echo "" >> $GITHUB_STEP_SUMMARY
           
           echo "## 🔒 Next Steps" >> $GITHUB_STEP_SUMMARY
