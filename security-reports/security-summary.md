@@ -1,8 +1,8 @@
 # 🛡️ Container Security Analysis Report
 
-**Image:** `anuddeeph/pod-monitor:latest-17576013507-54`  
-**Scan Date:** Tue Sep  9 08:06:46 UTC 2025  
-**Commit:** 61d66bcf43c1cabd95ec1c755b34ff0e98e83ee5  
+**Image:** `anuddeeph/pod-monitor:latest-17576368701-56`  
+**Scan Date:** Tue Sep  9 08:20:44 UTC 2025  
+**Commit:** f2a2b1c2d7eba1128d0b4629edbec73b6303a762  
 **Branch:** workflows  
 
 ## 📊 Vulnerability Summary
