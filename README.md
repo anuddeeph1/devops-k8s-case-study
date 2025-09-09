@@ -676,7 +676,9 @@ graph LR
     Web[Web Server]
     DB[Database]  
     Test[Load Tester]
+    Monitor[Pod Monitor]
     DNS[DNS Server]
+    API[Kubernetes API]
     
     %% Allowed flows
     Internet -->|HTTP:80| Web
@@ -684,6 +686,11 @@ graph LR
     Test -->|HTTP:80| Web
     Web -->|HTTP Response| Internet
     
+    %% Pod Monitor allowed flows
+    Monitor -->|HTTPS:443| API
+    Monitor -->|DNS:53| DNS
+    
+    %% DNS access for all pods
     Internet -->|DNS:53| DNS
     Web -->|DNS:53| DNS
     Test -->|DNS:53| DNS
@@ -692,24 +699,31 @@ graph LR
     %% Blocked flows
     Internet -.->|BLOCKED| DB
     Test -.->|BLOCKED| DB
+    Monitor -.->|BLOCKED| DB
+    Monitor -.->|BLOCKED| Web
     
     %% Styles
     style Internet fill:#e1f5fe
     style Web fill:#e8f5e8
     style DB fill:#fff3e0
     style Test fill:#f3e5f5
+    style Monitor fill:#e8eaf6
     style DNS fill:#eeeeee
+    style API fill:#f1f8e9
 ```
 
 **✅ Allowed Traffic:**
 - Internet → Web Server (HTTP:80)
 - Web Server → Database (MySQL:3306) - **Core Requirement**
 - Load Tester → Web Server (HTTP:80) - HPA Demo
+- Pod Monitor → Kubernetes API (HTTPS:443) - Monitoring Operation
 - All Pods → DNS Server (DNS:53) - Service Discovery
 
 **❌ Blocked Traffic:**
 - Internet → Database (Violates "only web-to-database" requirement)
 - Load Tester → Database (Violates "only web-to-database" requirement)
+- Pod Monitor → Database (Violates "only web-to-database" requirement) 
+- Pod Monitor → Web Server (No monitoring access needed to web server)
 
 ### 🔑 **Secret Management**
 - **Kubernetes Secrets**: Database credentials
