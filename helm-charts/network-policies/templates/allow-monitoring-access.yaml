@@ -49,6 +49,12 @@ spec:
           policyTypes:
           - Egress
           egress:
+          # Allow DNS queries (required for service discovery)
+          - ports:
+            - protocol: UDP
+              port: {{ .Values.ports.dns }}  # 53 - DNS
+            - protocol: TCP
+              port: {{ .Values.ports.dns }}  # 53 - DNS
           # Allow access to Kubernetes API server (HTTPS on port 443)
           - ports:
             - protocol: TCP
