@@ -41,9 +41,9 @@ spec:
               enabled: true
             allowWebServerEgress:
               enabled: true
-            # DISABLED: Monitoring uses Kubernetes APIs, not direct service connections
+            # ENABLED: Allow monitoring to access Kubernetes API only (not services)
             allowMonitoringAccess:
-              enabled: false
+              enabled: true
             allowMonitoringIngress:
               enabled: false
             allowLoadTestingAccess:

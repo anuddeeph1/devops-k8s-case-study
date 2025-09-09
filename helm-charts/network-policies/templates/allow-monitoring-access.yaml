@@ -49,25 +49,12 @@ spec:
           policyTypes:
           - Egress
           egress:
-          - to:
-            - podSelector:
-                matchLabels:
-                  app.kubernetes.io/name: {{ .Values.podLabels.webServer }}
-            ports:
-            - protocol: TCP
-              port: {{ .Values.ports.http }}
-            - protocol: TCP
-              port: {{ .Values.ports.httpAlt }}
-          - to:
-            - podSelector:
-                matchLabels:
-                  app.kubernetes.io/name: {{ .Values.podLabels.database }}
-            ports:
-            - protocol: TCP
-              port: {{ .Values.ports.mysql }}
+          # Allow access to Kubernetes API server only
           - ports:
             - protocol: TCP
-              port: {{ .Values.ports.https }}
+              port: {{ .Values.ports.k8sApi }}  # 6443 - Kubernetes API
+          # Allow HTTPS outbound (for API server communication)
+          - ports:
             - protocol: TCP
-              port: {{ .Values.ports.k8sApi }}
+              port: {{ .Values.ports.https }}  # 443 - HTTPS
 {{- end }}
