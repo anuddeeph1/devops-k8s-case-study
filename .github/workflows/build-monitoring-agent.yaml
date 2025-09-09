@@ -1142,8 +1142,14 @@ jobs:
           
           echo "## 🔍 Pod-Monitor Container Security Scan" >> $GITHUB_STEP_SUMMARY
           if [ "${{ needs.container-security-scan.result }}" = "success" ]; then
-            echo "✅ **Pod-Monitor Scan Completed**" >> $GITHUB_STEP_SUMMARY
-            echo "- 🔍 Vulnerabilities: ${{ needs.container-security-scan.outputs.vulnerabilities-found }}" >> $GITHUB_STEP_SUMMARY
+            echo "✅ **Pod-Monitor Scan Completed Successfully**" >> $GITHUB_STEP_SUMMARY
+            POD_VULN_COUNT="${{ needs.container-security-scan.outputs.vulnerabilities-found }}"
+            if [ "$POD_VULN_COUNT" -gt 0 ]; then
+              echo "- Pod-monitor image scanned successfully, $POD_VULN_COUNT vulnerabilities identified for review" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- Pod-monitor image scanned successfully, no vulnerabilities found" >> $GITHUB_STEP_SUMMARY
+            fi
+            echo "- 🔍 Vulnerabilities Found: ${{ needs.container-security-scan.outputs.vulnerabilities-found }}" >> $GITHUB_STEP_SUMMARY
             echo "- 📋 SBOM Generated: ${{ needs.container-security-scan.outputs.sbom-generated }}" >> $GITHUB_STEP_SUMMARY
             echo "- 📑 VEX Created: ${{ needs.container-security-scan.outputs.vex-created }}" >> $GITHUB_STEP_SUMMARY
             echo "- 🔏 Attestations: ✅ Signed with Cosign" >> $GITHUB_STEP_SUMMARY
