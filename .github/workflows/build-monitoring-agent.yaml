@@ -489,6 +489,18 @@ jobs:
           echo "Push to main: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}"  
           echo "PR to main: ${{ github.event_name == 'pull_request' && github.base_ref == 'main' }}"
           
+      - name: Save Violation Count for Summary (before failure)
+        if: |
+          (
+            (github.event_name == 'push' && (github.ref == 'refs/heads/workflows' || github.ref == 'refs/heads/main')) ||
+            (github.event_name == 'pull_request' && github.base_ref == 'main')
+          ) && steps.kyverno-scan.outputs.total_violations != '0'
+        run: |
+          echo "📝 Saving violation count for security summary..."
+          mkdir -p security-scan/summary
+          echo "${{ steps.kyverno-scan.outputs.total_violations }}" > security-scan/summary/violation-count.txt
+          echo "✅ Violation count saved: ${{ steps.kyverno-scan.outputs.total_violations }}"
+      
       - name: Fail if violations found (on important branches)
         if: |
           (
@@ -1420,6 +1432,31 @@ jobs:
     if: always()
     
     steps:
+      - name: Download Kyverno Scan Artifacts
+        uses: actions/download-artifact@v4
+        if: needs.kyverno-security-scan.result == 'failure'
+        with:
+          name: kyverno-security-scan-results
+          path: kyverno-artifacts/
+        continue-on-error: true
+      
+      - name: Extract Violation Count from Artifacts
+        id: extract-violations
+        run: |
+          EXTRACTED_VIOLATIONS=""
+          
+          # Try to extract violation count from artifact file
+          if [ -f "kyverno-artifacts/summary/violation-count.txt" ]; then
+            EXTRACTED_VIOLATIONS=$(cat kyverno-artifacts/summary/violation-count.txt | tr -d '\n\r\t ')
+            echo "✅ Found violation count in artifact: $EXTRACTED_VIOLATIONS"
+          else
+            echo "❌ Violation count file not found in artifacts"
+          fi
+          
+          # Set output for use in summary
+          echo "extracted_violations=$EXTRACTED_VIOLATIONS" >> $GITHUB_OUTPUT
+          echo "🔍 DEBUG: Extracted violations count: '$EXTRACTED_VIOLATIONS'"
+      
       - name: Generate Comprehensive Security Summary
         run: |
           echo "# 🚀 DevOps Pipeline Security Summary" >> $GITHUB_STEP_SUMMARY
@@ -1497,12 +1534,19 @@ jobs:
           
           echo "## 🛡️ Kyverno Policy Scan" >> $GITHUB_STEP_SUMMARY
           KYVERNO_VIOLATIONS="${{ needs.kyverno-security-scan.outputs.total_violations }}"
+          EXTRACTED_VIOLATIONS="${{ steps.extract-violations.outputs.extracted_violations }}"
           KYVERNO_RESULT="${{ needs.kyverno-security-scan.result }}"
           echo "🔍 DEBUG: Kyverno job result: '$KYVERNO_RESULT'"
-          echo "🔍 DEBUG: Raw violations value: '$KYVERNO_VIOLATIONS'"
-          echo "🔍 DEBUG: Violations is null: $([[ -z '$KYVERNO_VIOLATIONS' ]] && echo 'true' || echo 'false')"
-          echo "🔍 DEBUG: Violations is empty string: $([[ '$KYVERNO_VIOLATIONS' = '' ]] && echo 'true' || echo 'false')"
-          echo "🔍 DEBUG: Violations is zero: $([[ '$KYVERNO_VIOLATIONS' = '0' ]] && echo 'true' || echo 'false')"
+          echo "🔍 DEBUG: Job output violations: '$KYVERNO_VIOLATIONS'"
+          echo "🔍 DEBUG: Extracted violations: '$EXTRACTED_VIOLATIONS'"
+          
+          # Use extracted violations if job output is empty/null
+          if [ -z "$KYVERNO_VIOLATIONS" ] || [ "$KYVERNO_VIOLATIONS" = "" ]; then
+            if [ -n "$EXTRACTED_VIOLATIONS" ] && [ "$EXTRACTED_VIOLATIONS" != "" ]; then
+              KYVERNO_VIOLATIONS="$EXTRACTED_VIOLATIONS"
+              echo "🔄 Using extracted violations count: $KYVERNO_VIOLATIONS"
+            fi
+          fi
           
           # Check if we have violation count (job can fail due to violations but still produce outputs)
           if [ -n "$KYVERNO_VIOLATIONS" ] && [ "$KYVERNO_VIOLATIONS" != "0" ] && [ "$KYVERNO_VIOLATIONS" != "" ]; then
@@ -1514,12 +1558,11 @@ jobs:
           elif [ "$KYVERNO_RESULT" = "success" ]; then
             # Job succeeded and no violations
             echo "✅ **Success** - All Kyverno policy scans passed (0 violations)" >> $GITHUB_STEP_SUMMARY
-          elif [ "$KYVERNO_RESULT" = "failure" ] && ([ -z "$KYVERNO_VIOLATIONS" ] || [ "$KYVERNO_VIOLATIONS" = "" ]); then
-            # Job failed but no violation count - likely due to GitHub Actions output issue
-            # Since our "Fail if violations found" step only runs when violations > 0, this is likely a policy violation failure
-            echo "⚠️ **Policy Violations Detected** - Violations found (count unavailable due to job failure)" >> $GITHUB_STEP_SUMMARY
+          elif [ "$KYVERNO_RESULT" = "failure" ]; then
+            # Job failed but no violation count available (should be rare now with artifact extraction)
+            echo "⚠️ **Policy Violations Detected** - Violations found (count unavailable)" >> $GITHUB_STEP_SUMMARY
             echo "- 🚨 **Status**: Job failed due to policy violations (expected security enforcement)" >> $GITHUB_STEP_SUMMARY
-            echo "- ⚠️ **Note**: Exact violation count unavailable from failed job output" >> $GITHUB_STEP_SUMMARY
+            echo "- ⚠️ **Note**: Could not extract exact violation count" >> $GITHUB_STEP_SUMMARY
             echo "- 📋 **Action Required**: Fix security issues before deployment" >> $GITHUB_STEP_SUMMARY
             echo "- 📄 **Details**: Check workflow logs and artifacts for violation details" >> $GITHUB_STEP_SUMMARY
             # Set a placeholder for the summary
