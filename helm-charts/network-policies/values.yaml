@@ -61,7 +61,7 @@ ports:
   http: 80
   httpAlt: 8080
   https: 443
-  k8sApi: 6443  
+  k8sApi: 443  
   dns: 53
 
 # Kyverno policy configuration
