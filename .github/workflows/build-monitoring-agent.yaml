@@ -785,10 +785,192 @@ jobs:
             done
           fi
 
+  multi-image-security-scan:
+    name: Multi-Image Security Analysis
+    runs-on: ubuntu-latest
+    # Run on both push and PR events, independent of pod-monitor build
+    if: always()
+    
+    permissions:
+      contents: write
+      packages: read
+      id-token: write
+    
+    outputs:
+      total-images-scanned: ${{ steps.multi-scan.outputs.total_images_scanned }}
+      total-vulnerabilities: ${{ steps.multi-scan.outputs.total_vulnerabilities }}
+      total-components: ${{ steps.multi-scan.outputs.total_components }}
+      scan-timestamp: ${{ steps.multi-scan.outputs.scan_timestamp }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GIT_TOKEN || github.token }}
+      
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions Multi-Scanner"
+          git config --global user.email "security-scanner@github.com"
+      
+      - name: Install Security Tools
+        run: |
+          echo "🔧 Installing security analysis tools for multi-image scanning..."
+          
+          # Install Grype (vulnerability scanner)
+          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+          grype version
+          
+          # Install Syft (SBOM generator)
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+          syft version
+          
+          # Verify jq is available for JSON processing
+          jq --version
+          
+          echo "✅ Security tools installed successfully"
+      
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        continue-on-error: true
+      
+      - name: Run Multi-Image Security Scan
+        id: multi-scan
+        run: |
+          echo "🛡️ Running comprehensive multi-image security scan..."
+          echo "📝 Excluding pod-monitor (scanned separately in container-security-scan job)"
+          echo ""
+          
+          # Make script executable
+          chmod +x ./scripts/multi-image-security-scan.sh
+          
+          # Run the multi-image security scan
+          ./scripts/multi-image-security-scan.sh ./security-reports
+          
+          # Extract metrics for pipeline outputs
+          if [ -f "./security-reports/multi-image-security-summary.md" ]; then
+            # Parse the summary for key metrics
+            TOTAL_SCANNED=$(grep -E "Successfully Scanned.*[0-9]+" ./security-reports/multi-image-security-summary.md | grep -o '[0-9]*' | head -1 || echo "0")
+            TOTAL_VULNS=$(grep -E "Total Vulnerabilities.*[0-9]+" ./security-reports/multi-image-security-summary.md | grep -o '[0-9]*' | head -1 || echo "0")
+            TOTAL_COMPONENTS=$(grep -E "Total SBOM Components.*[0-9]+" ./security-reports/multi-image-security-summary.md | grep -o '[0-9]*' | head -1 || echo "0")
+            
+            echo "📊 Multi-Image Scan Results:"
+            echo "  Images Scanned: $TOTAL_SCANNED"
+            echo "  Total Vulnerabilities: $TOTAL_VULNS"
+            echo "  Total Components: $TOTAL_COMPONENTS"
+            
+            # Output for next steps
+            echo "total_images_scanned=$TOTAL_SCANNED" >> $GITHUB_OUTPUT
+            echo "total_vulnerabilities=$TOTAL_VULNS" >> $GITHUB_OUTPUT
+            echo "total_components=$TOTAL_COMPONENTS" >> $GITHUB_OUTPUT
+            echo "scan_timestamp=$(date +%s)" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Multi-image scan summary not found"
+            echo "total_images_scanned=0" >> $GITHUB_OUTPUT
+            echo "total_vulnerabilities=0" >> $GITHUB_OUTPUT
+            echo "total_components=0" >> $GITHUB_OUTPUT
+            echo "scan_timestamp=$(date +%s)" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Upload Multi-Image Security Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: multi-image-security-reports-${{ github.run_id }}
+          path: security-reports/
+          retention-days: 30
+      
+      - name: Commit Multi-Image Security Reports
+        run: |
+          echo "📝 Committing multi-image security reports to repository..."
+          
+          # Add the security-reports directory (organized by the script)
+          git add security-reports/
+          
+          if git diff --staged --quiet; then
+            echo "No multi-image security report changes to commit"
+          else
+            SCAN_TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+            
+            git commit -m "🔒 Add multi-image security analysis reports
+            
+            📊 Multi-Image Security Scan Summary:
+            - Scan Date: $SCAN_TIMESTAMP
+            - Images Scanned: ${{ steps.multi-scan.outputs.total_images_scanned }}
+            - Total Vulnerabilities: ${{ steps.multi-scan.outputs.total_vulnerabilities }}
+            - Total SBOM Components: ${{ steps.multi-scan.outputs.total_components }}
+            - Timestamp: ${{ steps.multi-scan.outputs.scan_timestamp }}
+            
+            📦 Images Analyzed (excluding pod-monitor):
+            - Web Server: nginx:1.25-alpine, alpine:3.18
+            - Database: mysql:8.0
+            - Load Testing: alpine/curl:latest
+            - Reports Server: nirmata/reports-server:latest, etcd, kubectl
+            - Kyverno: All Kyverno component images
+            
+            📁 Organized Report Structure:
+            - security-reports/grype/{image-key}-{timestamp}-vulnerabilities.*
+            - security-reports/sbom/{image-key}-{timestamp}-sbom.*
+            - security-reports/vex/{image-key}-{timestamp}-vex-document.json
+            - security-reports/multi-image-security-summary.md
+            
+            [skip ci]"
+            
+            # Push with retry mechanism
+            for i in {1..3}; do
+              if git push origin ${{ github.ref_name }}; then
+                echo "✅ Multi-image security reports committed successfully"
+                break
+              else
+                echo "Push attempt $i failed, retrying..."
+                git pull --rebase origin ${{ github.ref_name }}
+                sleep 2
+              fi
+            done
+          fi
+        if: github.event_name == 'push' && !contains(github.event.head_commit.message, '[skip ci]')
+      
+      - name: Comment PR with Multi-Image Scan Results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            
+            let summaryContent = "# 🛡️ Multi-Image Security Scan Results\n\n";
+            
+            if (fs.existsSync('security-reports/multi-image-security-summary.md')) {
+              const scanSummary = fs.readFileSync('security-reports/multi-image-security-summary.md', 'utf8');
+              summaryContent += scanSummary;
+            } else {
+              summaryContent += "❌ **Scan Failed** - Multi-image security scan did not complete successfully.\n";
+              summaryContent += "Please check the workflow logs for details.\n";
+            }
+            
+            summaryContent += "\n---\n\n";
+            summaryContent += `📊 **Quick Stats:**\n`;
+            summaryContent += `- 🖼️ Images Scanned: ${{ steps.multi-scan.outputs.total_images_scanned }}\n`;
+            summaryContent += `- 🚨 Total Vulnerabilities: ${{ steps.multi-scan.outputs.total_vulnerabilities }}\n`;
+            summaryContent += `- 📋 Total Components: ${{ steps.multi-scan.outputs.total_components }}\n`;
+            summaryContent += `- ⏰ Scan Timestamp: ${{ steps.multi-scan.outputs.scan_timestamp }}\n\n`;
+            summaryContent += `> **Note:** This scan excludes \`pod-monitor\` (scanned separately)\n`;
+            summaryContent += `> View detailed reports in the workflow artifacts.`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summaryContent
+            });
+
   security-summary:
     name: Security Summary
     runs-on: ubuntu-latest
-    needs: [build-and-push, update-helm-values, kyverno-security-scan, container-security-scan]
+    needs: [build-and-push, update-helm-values, kyverno-security-scan, container-security-scan, multi-image-security-scan]
     if: always()
     
     steps:
@@ -809,9 +991,9 @@ jobs:
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
           
-          echo "## 🔍 Container Security Scan" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔍 Pod-Monitor Container Security Scan" >> $GITHUB_STEP_SUMMARY
           if [ "${{ needs.container-security-scan.result }}" = "success" ]; then
-            echo "✅ **Security Scan Completed**" >> $GITHUB_STEP_SUMMARY
+            echo "✅ **Pod-Monitor Scan Completed**" >> $GITHUB_STEP_SUMMARY
             echo "- 🔍 Vulnerabilities: ${{ needs.container-security-scan.outputs.vulnerabilities-found }}" >> $GITHUB_STEP_SUMMARY
             echo "- 📋 SBOM Generated: ${{ needs.container-security-scan.outputs.sbom-generated }}" >> $GITHUB_STEP_SUMMARY
             echo "- 📑 VEX Created: ${{ needs.container-security-scan.outputs.vex-created }}" >> $GITHUB_STEP_SUMMARY
@@ -819,7 +1001,20 @@ jobs:
           elif [ "${{ needs.container-security-scan.result }}" = "skipped" ]; then
             echo "⏭️ **Skipped** - Not required for this event (PR validation only)" >> $GITHUB_STEP_SUMMARY
           else
-            echo "❌ **Failed** - Container security scan failed" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **Failed** - Pod-monitor container security scan failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "## 🖼️ Multi-Image Security Scan" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ needs.multi-image-security-scan.result }}" = "success" ]; then
+            echo "✅ **Multi-Image Scan Completed**" >> $GITHUB_STEP_SUMMARY
+            echo "- 🖼️ Images Scanned: ${{ needs.multi-image-security-scan.outputs.total-images-scanned }}" >> $GITHUB_STEP_SUMMARY
+            echo "- 🔍 Total Vulnerabilities: ${{ needs.multi-image-security-scan.outputs.total-vulnerabilities }}" >> $GITHUB_STEP_SUMMARY
+            echo "- 📋 Total Components: ${{ needs.multi-image-security-scan.outputs.total-components }}" >> $GITHUB_STEP_SUMMARY
+            echo "- ⏰ Scan Timestamp: ${{ needs.multi-image-security-scan.outputs.scan-timestamp }}" >> $GITHUB_STEP_SUMMARY
+            echo "- 📦 **Coverage:** nginx, mysql, alpine, kyverno components, reports-server" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Failed** - Multi-image security scan failed" >> $GITHUB_STEP_SUMMARY
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
           
@@ -834,25 +1029,38 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           
           echo "## 🛡️ Kyverno Policy Scan" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ needs.kyverno-security-scan.result }}" = "success" ] && [ "${{ needs.kyverno-security-scan.outputs.total_violations }}" = "0" ]; then
-            echo "✅ **Success** - All Kyverno policy scans passed (0 violations)" >> $GITHUB_STEP_SUMMARY
-          elif [ "${{ needs.kyverno-security-scan.result }}" = "success" ] && [ "${{ needs.kyverno-security-scan.outputs.total_violations }}" != "0" ]; then
-            echo "⚠️ **Policy Violations** - ${{ needs.kyverno-security-scan.outputs.total_violations }} Kyverno violations detected" >> $GITHUB_STEP_SUMMARY
-            echo "- Check artifacts for detailed violation report" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ needs.kyverno-security-scan.result }}" = "success" ]; then
+            KYVERNO_VIOLATIONS="${{ needs.kyverno-security-scan.outputs.total_violations }}"
+            if [ -z "$KYVERNO_VIOLATIONS" ] || [ "$KYVERNO_VIOLATIONS" = "0" ]; then
+              echo "✅ **Success** - All Kyverno policy scans passed (0 violations)" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "⚠️ **Policy Violations** - $KYVERNO_VIOLATIONS Kyverno violations detected" >> $GITHUB_STEP_SUMMARY
+              echo "- Check artifacts for detailed violation report" >> $GITHUB_STEP_SUMMARY
+            fi
           else
             echo "❌ **Failed** - Kyverno security scan failed to complete" >> $GITHUB_STEP_SUMMARY
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
           
           echo "## 🎯 Security Artifacts Generated" >> $GITHUB_STEP_SUMMARY
-          echo "1. **Container Security Reports** - Grype, Syft SBOM, VEX documents" >> $GITHUB_STEP_SUMMARY
-          echo "2. **Kyverno Policy Reports** - Helm template validation results" >> $GITHUB_STEP_SUMMARY
-          echo "3. **Cosign Attestations** - Signed SBOM and VEX attached to image" >> $GITHUB_STEP_SUMMARY
+          echo "1. **Pod-Monitor Security Reports** - Grype, Syft SBOM, VEX documents with Cosign attestations" >> $GITHUB_STEP_SUMMARY
+          echo "2. **Multi-Image Security Reports** - Comprehensive scanning of all project images" >> $GITHUB_STEP_SUMMARY
+          echo "3. **Kyverno Policy Reports** - Helm template validation results" >> $GITHUB_STEP_SUMMARY
           echo "4. **SARIF Reports** - For GitHub Advanced Security integration" >> $GITHUB_STEP_SUMMARY
+          echo "5. **Timestamped Reports** - Organized by image-timestamp format" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "## 📊 Security Coverage Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Pod-Monitor:** Built, scanned, attested (dedicated pipeline)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Project Images:** ${{ needs.multi-image-security-scan.outputs.total-images-scanned }} images scanned comprehensively" >> $GITHUB_STEP_SUMMARY
+          echo "- **Total Vulnerabilities:** Pod-Monitor: ${{ needs.container-security-scan.outputs.vulnerabilities-found }} + Multi-Image: ${{ needs.multi-image-security-scan.outputs.total-vulnerabilities }}" >> $GITHUB_STEP_SUMMARY
+          KYVERNO_VIOLATIONS="${{ needs.kyverno-security-scan.outputs.total_violations }}"
+          echo "- **Policy Compliance:** ${KYVERNO_VIOLATIONS:-0} Kyverno violations" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
           echo "## 🔒 Next Steps" >> $GITHUB_STEP_SUMMARY
-          echo "1. Review security scan results in workflow artifacts" >> $GITHUB_STEP_SUMMARY
-          echo "2. Verify attestations: \`cosign verify-attestation <image>\`" >> $GITHUB_STEP_SUMMARY
-          echo "3. Deploy updated helm charts with security-scanned image" >> $GITHUB_STEP_SUMMARY
-          echo "4. Monitor policy compliance in cluster" >> $GITHUB_STEP_SUMMARY
+          echo "1. **Review Security Reports:** Download artifacts for detailed analysis" >> $GITHUB_STEP_SUMMARY
+          echo "2. **Verify Pod-Monitor Attestations:** \`cosign verify-attestation <pod-monitor-image>\`" >> $GITHUB_STEP_SUMMARY
+          echo "3. **Check Multi-Image Reports:** Review timestamped reports in security-reports/ directory" >> $GITHUB_STEP_SUMMARY
+          echo "4. **Deploy Security-Compliant Images:** Use scanned and validated images" >> $GITHUB_STEP_SUMMARY
+          echo "5. **Monitor Runtime Compliance:** \`kubectl get polr\` for cluster policy violations" >> $GITHUB_STEP_SUMMARY
