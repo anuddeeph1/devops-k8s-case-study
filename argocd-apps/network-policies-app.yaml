@@ -61,6 +61,10 @@ spec:
           webServer: "web-server"
           monitoring: "monitoring"
           loadTesting: "load-testing"
+        
+        # Ports configuration (override for correct API port)
+        ports:
+          k8sApi: 443  # Kubernetes API runs on 443 in this cluster
   
   destination:
     server: https://kubernetes.default.svc
