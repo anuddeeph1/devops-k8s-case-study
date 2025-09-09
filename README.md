@@ -1,4 +1,4 @@
-# 🚀 DevOps Case Study: Production-Grade Microservices on Kubernetes
+# 🚀 DevOps Case Study: Microservices on Kubernetes
 
 > **A comprehensive demonstration of modern DevOps practices featuring GitOps, Policy-as-Code, automated security, disaster recovery, and horizontal scaling.**
 
@@ -18,7 +18,7 @@
 
 ## 🎯 Overview
 
-This case study demonstrates a **production-grade microservices architecture** deployed on Kubernetes using modern DevOps practices. It showcases:
+This case study demonstrates a **comprehensive microservices architecture** deployed on Kubernetes using modern DevOps practices. It showcases:
 
 - **GitHub Actions CI/CD Pipeline** with automated build, security scan & deployment
 - **GitOps deployment** with ArgoCD and App-of-Apps pattern
@@ -456,7 +456,7 @@ flowchart TD
 
 ### ⚡ **GitHub Actions CI/CD Pipeline**
 
-**Modern automation replacing manual deployment scripts with enterprise-grade CI/CD:**
+**Modern automation replacing manual deployment scripts with comprehensive CI/CD:**
 
 #### **🔀 Workflow Triggers:**
 ```yaml
@@ -668,6 +668,66 @@ Mode: Audit (configurable to Enforce)
 - **Principle of Least Privilege**: Only required connections allowed
 - **Automatic Generation**: Policies created based on pod labels
 - **Zero-Trust Architecture**: Every connection explicitly authorized
+
+#### **Network Policy Flow Diagram**
+```mermaid
+graph LR
+    Internet[Internet Traffic]
+    Web[Web Server]
+    DB[Database]  
+    Test[Load Tester]
+    Monitor[Pod Monitor]
+    DNS[DNS Server]
+    API[Kubernetes API]
+    
+    %% Allowed flows
+    Internet -->|HTTP:80| Web
+    Web -->|MySQL:3306| DB
+    Test -->|HTTP:80| Web
+    Web -->|HTTP Response| Internet
+    
+    %% Pod Monitor allowed flows (full egress access)
+    Monitor -->|HTTPS:443| API
+    Monitor -->|HTTP:80| Web
+    Monitor -->|HTTP:80| Test
+    Monitor -->|DNS:53| DNS
+    Monitor -->|All Traffic| Internet
+    
+    %% DNS access for all pods
+    Internet -->|DNS:53| DNS
+    Web -->|DNS:53| DNS
+    Test -->|DNS:53| DNS
+    DB -->|DNS:53| DNS
+    
+    %% Blocked flows (enforced by database ingress policy)
+    Internet -.->|BLOCKED| DB
+    Test -.->|BLOCKED| DB
+    Monitor -.->|BLOCKED MySQL:3306| DB
+    
+    %% Styles
+    style Internet fill:#e1f5fe
+    style Web fill:#e8f5e8
+    style DB fill:#fff3e0
+    style Test fill:#f3e5f5
+    style Monitor fill:#e8eaf6
+    style DNS fill:#eeeeee
+    style API fill:#f1f8e9
+```
+
+**✅ Allowed Traffic:**
+- Internet → Web Server (HTTP:80)
+- Web Server → Database (MySQL:3306) - **Core Requirement**
+- Load Tester → Web Server (HTTP:80) - HPA Demo
+- Pod Monitor → Kubernetes API (HTTPS:443) - Monitoring Operation
+- Pod Monitor → Web Server (HTTP:80) - Monitoring Access
+- Pod Monitor → Load Tester (HTTP:80) - Monitoring Access  
+- Pod Monitor → Internet (All Traffic) - External Monitoring Services
+- All Pods → DNS Server (DNS:53) - Service Discovery
+
+**❌ Blocked Traffic:**
+- Internet → Database (Violates "only web-to-database" requirement)
+- Load Tester → Database (Violates "only web-to-database" requirement)
+- Pod Monitor → Database (MySQL:3306) - **Blocked by Database Ingress Policy**
 
 ### 🔑 **Secret Management**
 - **Kubernetes Secrets**: Database credentials

@@ -29,12 +29,12 @@ networkPolicies:
       description: "Allow web-server egress traffic"
       
     allowMonitoringAccess:
-      enabled: true
-      description: "Allow monitoring to access other services"
+      enabled: false
+      description: "Allow monitoring to access other services (DISABLED - monitoring uses Kubernetes APIs)"
       
     allowMonitoringIngress:
-      enabled: true
-      description: "Allow monitoring to access web-server"
+      enabled: false
+      description: "Allow monitoring to access web-server (DISABLED - monitoring uses Kubernetes APIs)"
       
     allowLoadTestingAccess:
       enabled: true
@@ -45,8 +45,8 @@ networkPolicies:
       description: "Allow web-server to receive load-testing traffic"
       
     allowDatabaseMonitoring:
-      enabled: true
-      description: "Allow monitoring to access database"
+      enabled: false
+      description: "Allow monitoring to access database (DISABLED - monitoring uses Kubernetes APIs, not direct DB access)"
 
 # Pod labels configuration
 podLabels:
@@ -61,7 +61,7 @@ ports:
   http: 80
   httpAlt: 8080
   https: 443
-  k8sApi: 6443
+  k8sApi: 443  
   dns: 53
 
 # Kyverno policy configuration

@@ -6,8 +6,12 @@ monitoring:
   podMonitor:
     image:
       repository: anuddeeph/pod-monitor
-      tag: "latest-17515760629-47"
+      tag: "latest-17592201115-98"
       pullPolicy: Always
+    
+    # Health check configuration
+    healthCheck:
+      enabled: true  # Temporarily disabled to test network connectivity
     
     resources:
       requests:

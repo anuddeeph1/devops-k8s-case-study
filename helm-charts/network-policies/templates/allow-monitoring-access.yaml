@@ -49,25 +49,7 @@ spec:
           policyTypes:
           - Egress
           egress:
-          - to:
-            - podSelector:
-                matchLabels:
-                  app.kubernetes.io/name: {{ .Values.podLabels.webServer }}
-            ports:
-            - protocol: TCP
-              port: {{ .Values.ports.http }}
-            - protocol: TCP
-              port: {{ .Values.ports.httpAlt }}
-          - to:
-            - podSelector:
-                matchLabels:
-                  app.kubernetes.io/name: {{ .Values.podLabels.database }}
-            ports:
-            - protocol: TCP
-              port: {{ .Values.ports.mysql }}
-          - ports:
-            - protocol: TCP
-              port: {{ .Values.ports.https }}
-            - protocol: TCP
-              port: {{ .Values.ports.k8sApi }}
+          # TEMPORARY: Allow ALL egress for debugging
+          # TODO: Restrict after confirming monitoring works
+          - {}
 {{- end }}
