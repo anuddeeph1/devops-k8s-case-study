@@ -1,0 +1,551 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "grype",
+          "version": "0.99.1",
+          "informationUri": "https://github.com/anchore/grype",
+          "rules": [
+            {
+              "id": "ELSA-2024-12364-gnutls",
+              "name": "RpmMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "ELSA-2024-12364 medium vulnerability for gnutls package"
+              },
+              "fullDescription": {
+                "text": "[3.8.3-4_fips]\n- Add FIPS package change: add fips suffix to Release and\n  set Epoch to 10 [Orabug: 35925409]\n- Update FIPS module name for Oracle Linux [Orabug: 35925409]\n\n[3.8.3-4]\n- Bump release to ensure el9 package is greater than el9_* packages\n\n[3.8.3-3]\n- Bump release to ensure el9 package is greater than el9_* packages\n\n[3.8.3-2]\n- Fix timing side-channel in deterministic ECDSA (RHEL-28959)\n- Fix potential crash during chain building/verification (RHEL-28954)\n\n[3.8.3-1]\n- Update to gnutls 3.8.3 (RHEL-14891)\n\n[3.8.2-3]\n- Skip KTLS test exercising ChaCha20-Poly1305 in TLS 1.3 as well (RHEL-18498)\n\n[3.8.2-2]\n- Bump nettle dependency to 3.9.1\n- Skip KTLS test exercising ChaCha20-Poly1305 in TLS 1.2 (RHEL-18498)\n\n[3.8.2-1]\n- Update to gnutls 3.8.2 (RHEL-14891)"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability ELSA-2024-12364\nSeverity: medium\nPackage: gnutls\nVersion: 3.8.3-6.el9\nFix Version: 10:3.8.3-4.el9_4_fips\nType: rpm\nLocation: /var/lib/rpm/rpmdb.sqlite\nData Namespace: oracle:distro:oraclelinux:9\nLink: [ELSA-2024-12364](https://linux.oracle.com/errata/ELSA-2024-12364.html)",
+                "markdown": "**Vulnerability ELSA-2024-12364**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | gnutls  | 3.8.3-6.el9  | 10:3.8.3-4.el9_4_fips  | rpm  | /var/lib/rpm/rpmdb.sqlite  | oracle:distro:oraclelinux:9  | [ELSA-2024-12364](https://linux.oracle.com/errata/ELSA-2024-12364.html)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:rpm/ol/gnutls@3.8.3-6.el9?arch=x86_64\u0026distro=ol-9.6\u0026upstream=gnutls-3.8.3-6.el9.src.rpm"
+                ],
+                "security-severity": "5.3"
+              }
+            },
+            {
+              "id": "ELSA-2024-12336-gnutls",
+              "name": "RpmMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "ELSA-2024-12336 medium vulnerability for gnutls package"
+              },
+              "fullDescription": {
+                "text": "[3.7.6-23.4_fips]\n- Add FIPS package change: add fips suffix to Release and\n  set Epoch to 10 [Orabug: 35925409]\n- Update FIPS module name for Oracle Linux [Orabug: 35925409]\n- Verify salt length and iteration count for PBKDF [Orabug: 35925409]\n\n[3.7.6-23.4]\n- Fix timing side-channel in deterministic ECDSA (RHEL-28958)\n- Fix potential crash during chain building/verification (RHEL-28953)\n\n[3.7.6-23.3]\n- x509: detect loop in certificate chain (RHEL-21759)\n- fips: Zeroize temporary values in integrity check (RHEL-21870)\n\n[3.7.6-23.2]\n- auth/rsa_psk: minimize branching after decryption\n\n[3.7.6-23.1]\n- auth/rsa_psk: side-step potential side-channel (RHEL-16755)\n\n[3.7.6-23]\n- Mark SHA-1 signature verification non-approved in FIPS (#2102751)\n\n[3.7.6-22]\n- Skip KTLS test on old kernel if host and target arches are different"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability ELSA-2024-12336\nSeverity: medium\nPackage: gnutls\nVersion: 3.8.3-6.el9\nFix Version: 10:3.7.6-23.el9_3.4_fips\nType: rpm\nLocation: /var/lib/rpm/rpmdb.sqlite\nData Namespace: oracle:distro:oraclelinux:9\nLink: [ELSA-2024-12336](https://linux.oracle.com/errata/ELSA-2024-12336.html)",
+                "markdown": "**Vulnerability ELSA-2024-12336**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | gnutls  | 3.8.3-6.el9  | 10:3.7.6-23.el9_3.4_fips  | rpm  | /var/lib/rpm/rpmdb.sqlite  | oracle:distro:oraclelinux:9  | [ELSA-2024-12336](https://linux.oracle.com/errata/ELSA-2024-12336.html)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:rpm/ol/gnutls@3.8.3-6.el9?arch=x86_64\u0026distro=ol-9.6\u0026upstream=gnutls-3.8.3-6.el9.src.rpm"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "ELSA-2024-12675-openssl",
+              "name": "RpmMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "ELSA-2024-12675 medium vulnerability for openssl package"
+              },
+              "fullDescription": {
+                "text": "[3.0.7-28.0.1_fips]\n- Replace upstream references in fips man pages [Orabug: 35824276]\n- Add FIPS package change: add fips suffix to Release and\n  set Epoch to 10 [Orabug: 35824276]\n- Update FIPS module name and remove upstream references from\n  fips_module_indicators manpage [Orabug: 35824276]\n\n[3.0.7-28.0.1]\n- Drop OpenELA branding, apply Oracle branding patches\n- Enable openssl-fips-provider dependency [Orabug: 36504822]\n- Temporary disable openssl-fips-provider dependency [Orabug: 36504822]\n- Replace upstream references [Orabug: 34340177]\n\n[1:3.0.7-28]\n- Patch for CVE-2024-6119\n  Resolves: RHEL-55340"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability ELSA-2024-12675\nSeverity: medium\nPackage: openssl\nVersion: 1:3.2.2-6.0.1.el9_5.1\nFix Version: 10:3.0.7-28.0.1.el9_4_fips\nType: rpm\nLocation: /var/lib/rpm/rpmdb.sqlite\nData Namespace: oracle:distro:oraclelinux:9\nLink: [ELSA-2024-12675](https://linux.oracle.com/errata/ELSA-2024-12675.html)",
+                "markdown": "**Vulnerability ELSA-2024-12675**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | openssl  | 1:3.2.2-6.0.1.el9_5.1  | 10:3.0.7-28.0.1.el9_4_fips  | rpm  | /var/lib/rpm/rpmdb.sqlite  | oracle:distro:oraclelinux:9  | [ELSA-2024-12675](https://linux.oracle.com/errata/ELSA-2024-12675.html)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:rpm/ol/openssl@3.2.2-6.0.1.el9_5.1?arch=x86_64\u0026distro=ol-9.6\u0026epoch=1\u0026upstream=openssl-3.2.2-6.0.1.el9_5.1.src.rpm"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "ELSA-2024-12675-openssl-libs",
+              "name": "RpmMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "ELSA-2024-12675 medium vulnerability for openssl-libs package"
+              },
+              "fullDescription": {
+                "text": "[3.0.7-28.0.1_fips]\n- Replace upstream references in fips man pages [Orabug: 35824276]\n- Add FIPS package change: add fips suffix to Release and\n  set Epoch to 10 [Orabug: 35824276]\n- Update FIPS module name and remove upstream references from\n  fips_module_indicators manpage [Orabug: 35824276]\n\n[3.0.7-28.0.1]\n- Drop OpenELA branding, apply Oracle branding patches\n- Enable openssl-fips-provider dependency [Orabug: 36504822]\n- Temporary disable openssl-fips-provider dependency [Orabug: 36504822]\n- Replace upstream references [Orabug: 34340177]\n\n[1:3.0.7-28]\n- Patch for CVE-2024-6119\n  Resolves: RHEL-55340"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability ELSA-2024-12675\nSeverity: medium\nPackage: openssl-libs\nVersion: 1:3.2.2-6.0.1.el9_5.1\nFix Version: 10:3.0.7-28.0.1.el9_4_fips\nType: rpm\nLocation: /var/lib/rpm/rpmdb.sqlite\nData Namespace: oracle:distro:oraclelinux:9\nLink: [ELSA-2024-12675](https://linux.oracle.com/errata/ELSA-2024-12675.html)",
+                "markdown": "**Vulnerability ELSA-2024-12675**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | openssl-libs  | 1:3.2.2-6.0.1.el9_5.1  | 10:3.0.7-28.0.1.el9_4_fips  | rpm  | /var/lib/rpm/rpmdb.sqlite  | oracle:distro:oraclelinux:9  | [ELSA-2024-12675](https://linux.oracle.com/errata/ELSA-2024-12675.html)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:rpm/ol/openssl-libs@3.2.2-6.0.1.el9_5.1?arch=x86_64\u0026distro=ol-9.6\u0026epoch=1\u0026upstream=openssl-3.2.2-6.0.1.el9_5.1.src.rpm"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "GHSA-5rjg-fvgr-3xxf-setuptools",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-5rjg-fvgr-3xxf high vulnerability for setuptools package"
+              },
+              "fullDescription": {
+                "text": "setuptools has a path traversal vulnerability in PackageIndex.download that leads to Arbitrary File Write"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability GHSA-5rjg-fvgr-3xxf\nSeverity: high\nPackage: setuptools\nVersion: 73.0.1\nFix Version: 78.1.1\nType: python\nLocation: /usr/lib/mysqlsh/lib/python3.13/site-packages/setuptools-73.0.1.dist-info/METADATA\nData Namespace: github:language:python\nLink: [GHSA-5rjg-fvgr-3xxf](https://github.com/advisories/GHSA-5rjg-fvgr-3xxf)",
+                "markdown": "**Vulnerability GHSA-5rjg-fvgr-3xxf**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | setuptools  | 73.0.1  | 78.1.1  | python  | /usr/lib/mysqlsh/lib/python3.13/site-packages/setuptools-73.0.1.dist-info/METADATA  | github:language:python  | [GHSA-5rjg-fvgr-3xxf](https://github.com/advisories/GHSA-5rjg-fvgr-3xxf)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/setuptools@73.0.1"
+                ],
+                "security-severity": "8.8"
+              }
+            },
+            {
+              "id": "CVE-2025-47907-stdlib",
+              "name": "GoModuleMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2025-47907 high vulnerability for stdlib package"
+              },
+              "fullDescription": {
+                "text": "Cancelling a query (e.g. by cancelling the context passed to one of the query methods) during a call to the Scan method of the returned Rows can result in unexpected results if other queries are being made in parallel. This can result in a race condition that may overwrite the expected results with those of another query, causing the call to Scan to return either unexpected results from the other query or an error."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-47907\nSeverity: high\nPackage: stdlib\nVersion: go1.24.0\nFix Version: 1.23.12,1.24.6\nType: go-module\nLocation: /usr/local/bin/gosu\nData Namespace: nvd:cpe\nLink: [CVE-2025-47907](https://nvd.nist.gov/vuln/detail/CVE-2025-47907)",
+                "markdown": "**Vulnerability CVE-2025-47907**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | stdlib  | go1.24.0  | 1.23.12,1.24.6  | go-module  | /usr/local/bin/gosu  | nvd:cpe  | [CVE-2025-47907](https://nvd.nist.gov/vuln/detail/CVE-2025-47907)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:golang/stdlib@1.24.0"
+                ],
+                "security-severity": "7.0"
+              }
+            },
+            {
+              "id": "CVE-2025-22871-stdlib",
+              "name": "GoModuleMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2025-22871 critical vulnerability for stdlib package"
+              },
+              "fullDescription": {
+                "text": "The net/http package improperly accepts a bare LF as a line terminator in chunked data chunk-size lines. This can permit request smuggling if a net/http server is used in conjunction with a server that incorrectly accepts a bare LF as part of a chunk-ext."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-22871\nSeverity: critical\nPackage: stdlib\nVersion: go1.24.0\nFix Version: 1.23.8,1.24.2\nType: go-module\nLocation: /usr/local/bin/gosu\nData Namespace: nvd:cpe\nLink: [CVE-2025-22871](https://nvd.nist.gov/vuln/detail/CVE-2025-22871)",
+                "markdown": "**Vulnerability CVE-2025-22871**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| critical  | stdlib  | go1.24.0  | 1.23.8,1.24.2  | go-module  | /usr/local/bin/gosu  | nvd:cpe  | [CVE-2025-22871](https://nvd.nist.gov/vuln/detail/CVE-2025-22871)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:golang/stdlib@1.24.0"
+                ],
+                "security-severity": "9.1"
+              }
+            },
+            {
+              "id": "CVE-2025-4673-stdlib",
+              "name": "GoModuleMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2025-4673 medium vulnerability for stdlib package"
+              },
+              "fullDescription": {
+                "text": "Proxy-Authorization and Proxy-Authenticate headers persisted on cross-origin redirects potentially leaking sensitive information."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-4673\nSeverity: medium\nPackage: stdlib\nVersion: go1.24.0\nFix Version: 1.23.10,1.24.4\nType: go-module\nLocation: /usr/local/bin/gosu\nData Namespace: nvd:cpe\nLink: [CVE-2025-4673](https://nvd.nist.gov/vuln/detail/CVE-2025-4673)",
+                "markdown": "**Vulnerability CVE-2025-4673**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | stdlib  | go1.24.0  | 1.23.10,1.24.4  | go-module  | /usr/local/bin/gosu  | nvd:cpe  | [CVE-2025-4673](https://nvd.nist.gov/vuln/detail/CVE-2025-4673)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:golang/stdlib@1.24.0"
+                ],
+                "security-severity": "6.8"
+              }
+            },
+            {
+              "id": "CVE-2025-22874-stdlib",
+              "name": "GoModuleMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2025-22874 high vulnerability for stdlib package"
+              },
+              "fullDescription": {
+                "text": "Calling Verify with a VerifyOptions.KeyUsages that contains ExtKeyUsageAny unintentionally disabledpolicy validation. This only affected certificate chains which contain policy graphs, which are rather uncommon."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-22874\nSeverity: high\nPackage: stdlib\nVersion: go1.24.0\nFix Version: 1.24.4\nType: go-module\nLocation: /usr/local/bin/gosu\nData Namespace: nvd:cpe\nLink: [CVE-2025-22874](https://nvd.nist.gov/vuln/detail/CVE-2025-22874)",
+                "markdown": "**Vulnerability CVE-2025-22874**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | stdlib  | go1.24.0  | 1.24.4  | go-module  | /usr/local/bin/gosu  | nvd:cpe  | [CVE-2025-22874](https://nvd.nist.gov/vuln/detail/CVE-2025-22874)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:golang/stdlib@1.24.0"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "CVE-2025-4674-stdlib",
+              "name": "GoModuleMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2025-4674 high vulnerability for stdlib package"
+              },
+              "fullDescription": {
+                "text": "The go command may execute unexpected commands when operating in untrusted VCS repositories. This occurs when possibly dangerous VCS configuration is present in repositories. This can happen when a repository was fetched via one VCS (e.g. Git), but contains metadata for another VCS (e.g. Mercurial). Modules which are retrieved using the go command line, i.e. via \"go get\", are not affected."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-4674\nSeverity: high\nPackage: stdlib\nVersion: go1.24.0\nFix Version: 1.23.11,1.24.5\nType: go-module\nLocation: /usr/local/bin/gosu\nData Namespace: nvd:cpe\nLink: [CVE-2025-4674](https://nvd.nist.gov/vuln/detail/CVE-2025-4674)",
+                "markdown": "**Vulnerability CVE-2025-4674**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | stdlib  | go1.24.0  | 1.23.11,1.24.5  | go-module  | /usr/local/bin/gosu  | nvd:cpe  | [CVE-2025-4674](https://nvd.nist.gov/vuln/detail/CVE-2025-4674)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:golang/stdlib@1.24.0"
+                ],
+                "security-severity": "8.6"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "ELSA-2024-12364-gnutls",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in rpm package: gnutls, version 3.8.3-6.el9 was found in image mysql:8.0 at: /var/lib/rpm/rpmdb.sqlite"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "mysql//var/lib/rpm/rpmdb.sqlite"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/var/lib/rpm/rpmdb.sqlite",
+                  "fullyQualifiedName": "mysql:8.0@sha256:8743878f693004fcc7c1bae86e3e8637d7cb4011988580737ab8f8b70081a090:/var/lib/rpm/rpmdb.sqlite"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e4f0e81b5cfb62bb16c50ae55b40358f4649a75133d63a1428e2f74dac22bd8b:1"
+          }
+        },
+        {
+          "ruleId": "ELSA-2024-12336-gnutls",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in rpm package: gnutls, version 3.8.3-6.el9 was found in image mysql:8.0 at: /var/lib/rpm/rpmdb.sqlite"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "mysql//var/lib/rpm/rpmdb.sqlite"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/var/lib/rpm/rpmdb.sqlite",
+                  "fullyQualifiedName": "mysql:8.0@sha256:8743878f693004fcc7c1bae86e3e8637d7cb4011988580737ab8f8b70081a090:/var/lib/rpm/rpmdb.sqlite"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e4f0e81b5cfb62bb16c50ae55b40358f4649a75133d63a1428e2f74dac22bd8b:1"
+          }
+        },
+        {
+          "ruleId": "ELSA-2024-12675-openssl",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in rpm package: openssl, version 1:3.2.2-6.0.1.el9_5.1 was found in image mysql:8.0 at: /var/lib/rpm/rpmdb.sqlite"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "mysql//var/lib/rpm/rpmdb.sqlite"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/var/lib/rpm/rpmdb.sqlite",
+                  "fullyQualifiedName": "mysql:8.0@sha256:8743878f693004fcc7c1bae86e3e8637d7cb4011988580737ab8f8b70081a090:/var/lib/rpm/rpmdb.sqlite"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "58a233a3c82d602a20ee4ab59db9246674748b4f5e424828295615fac4b82242:1"
+          }
+        },
+        {
+          "ruleId": "ELSA-2024-12675-openssl-libs",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in rpm package: openssl-libs, version 1:3.2.2-6.0.1.el9_5.1 was found in image mysql:8.0 at: /var/lib/rpm/rpmdb.sqlite"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "mysql//var/lib/rpm/rpmdb.sqlite"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/var/lib/rpm/rpmdb.sqlite",
+                  "fullyQualifiedName": "mysql:8.0@sha256:8743878f693004fcc7c1bae86e3e8637d7cb4011988580737ab8f8b70081a090:/var/lib/rpm/rpmdb.sqlite"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "132f1a52c4104a6dd024bf122ed114ff7b41ab0bdaf2da2a82d01ef66ebe2e36:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-5rjg-fvgr-3xxf-setuptools",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in python package: setuptools, version 73.0.1 was found in image mysql:8.0 at: /usr/lib/mysqlsh/lib/python3.13/site-packages/setuptools-73.0.1.dist-info/METADATA"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "mysql//usr/lib/mysqlsh/lib/python3.13/site-packages/setuptools-73.0.1.dist-info/METADATA"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/lib/mysqlsh/lib/python3.13/site-packages/setuptools-73.0.1.dist-info/METADATA",
+                  "fullyQualifiedName": "mysql:8.0@sha256:8743878f693004fcc7c1bae86e3e8637d7cb4011988580737ab8f8b70081a090:/usr/lib/mysqlsh/lib/python3.13/site-packages/setuptools-73.0.1.dist-info/METADATA"
+                },
+                {
+                  "name": "/usr/lib/mysqlsh/lib/python3.13/site-packages/setuptools-73.0.1.dist-info/RECORD",
+                  "fullyQualifiedName": "mysql:8.0@sha256:8743878f693004fcc7c1bae86e3e8637d7cb4011988580737ab8f8b70081a090:/usr/lib/mysqlsh/lib/python3.13/site-packages/setuptools-73.0.1.dist-info/RECORD"
+                },
+                {
+                  "name": "/usr/lib/mysqlsh/lib/python3.13/site-packages/setuptools-73.0.1.dist-info/direct_url.json",
+                  "fullyQualifiedName": "mysql:8.0@sha256:8743878f693004fcc7c1bae86e3e8637d7cb4011988580737ab8f8b70081a090:/usr/lib/mysqlsh/lib/python3.13/site-packages/setuptools-73.0.1.dist-info/direct_url.json"
+                },
+                {
+                  "name": "/usr/lib/mysqlsh/lib/python3.13/site-packages/setuptools-73.0.1.dist-info/top_level.txt",
+                  "fullyQualifiedName": "mysql:8.0@sha256:8743878f693004fcc7c1bae86e3e8637d7cb4011988580737ab8f8b70081a090:/usr/lib/mysqlsh/lib/python3.13/site-packages/setuptools-73.0.1.dist-info/top_level.txt"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "39d5f90a1328385a033ea5b558a7331ecc7570d958c865a0bda611ab29cfd7ad:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-47907-stdlib",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in go-module package: stdlib, version go1.24.0 was found in image mysql:8.0 at: /usr/local/bin/gosu"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "mysql//usr/local/bin/gosu"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/local/bin/gosu",
+                  "fullyQualifiedName": "mysql:8.0@sha256:2ede2823f3a187bc1835b08de560f9e73ef14d8f0fdf8d3e8ac410acdf4d5c8a:/usr/local/bin/gosu"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e7dccba056bcfa77382d3133e725db0365417bb2d81ef51b559c4a3e672ea193:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-22871-stdlib",
+          "level": "error",
+          "message": {
+            "text": "A critical vulnerability in go-module package: stdlib, version go1.24.0 was found in image mysql:8.0 at: /usr/local/bin/gosu"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "mysql//usr/local/bin/gosu"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/local/bin/gosu",
+                  "fullyQualifiedName": "mysql:8.0@sha256:2ede2823f3a187bc1835b08de560f9e73ef14d8f0fdf8d3e8ac410acdf4d5c8a:/usr/local/bin/gosu"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e7dccba056bcfa77382d3133e725db0365417bb2d81ef51b559c4a3e672ea193:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-4673-stdlib",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in go-module package: stdlib, version go1.24.0 was found in image mysql:8.0 at: /usr/local/bin/gosu"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "mysql//usr/local/bin/gosu"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/local/bin/gosu",
+                  "fullyQualifiedName": "mysql:8.0@sha256:2ede2823f3a187bc1835b08de560f9e73ef14d8f0fdf8d3e8ac410acdf4d5c8a:/usr/local/bin/gosu"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e7dccba056bcfa77382d3133e725db0365417bb2d81ef51b559c4a3e672ea193:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-22874-stdlib",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in go-module package: stdlib, version go1.24.0 was found in image mysql:8.0 at: /usr/local/bin/gosu"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "mysql//usr/local/bin/gosu"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/local/bin/gosu",
+                  "fullyQualifiedName": "mysql:8.0@sha256:2ede2823f3a187bc1835b08de560f9e73ef14d8f0fdf8d3e8ac410acdf4d5c8a:/usr/local/bin/gosu"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e7dccba056bcfa77382d3133e725db0365417bb2d81ef51b559c4a3e672ea193:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-4674-stdlib",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in go-module package: stdlib, version go1.24.0 was found in image mysql:8.0 at: /usr/local/bin/gosu"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "mysql//usr/local/bin/gosu"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/local/bin/gosu",
+                  "fullyQualifiedName": "mysql:8.0@sha256:2ede2823f3a187bc1835b08de560f9e73ef14d8f0fdf8d3e8ac410acdf4d5c8a:/usr/local/bin/gosu"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "e7dccba056bcfa77382d3133e725db0365417bb2d81ef51b559c4a3e672ea193:1"
+          }
+        }
+      ]
+    }
+  ]
+}
