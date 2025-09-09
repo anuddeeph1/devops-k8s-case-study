@@ -77,6 +77,7 @@ spec:
           {{- toYaml . | nindent 10 }}
           {{- end }}
         {{- end }}
+        {{- if .Values.monitoring.podMonitor.healthCheck.enabled }}
         livenessProbe:
           exec:
             command:
@@ -95,6 +96,7 @@ spec:
           periodSeconds: 15
           timeoutSeconds: 12
           failureThreshold: 5
+        {{- end }}
       restartPolicy: Always
       {{- if .Values.security.enabled }}
       volumes:
