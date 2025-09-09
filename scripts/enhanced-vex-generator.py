@@ -106,8 +106,8 @@ def query_nvd_api(cve_id):
                     print(f"    ✅ NVD data found for {cve_id}", file=sys.stderr)
                     return {
                         "description": cve_data.get("descriptions", [{}])[0].get("value", ""),
-                        "cvss_v3": cve_data.get("metrics", {}).get("cvssMetricV31", [{}]),
-                        "cvss_v2": cve_data.get("metrics", {}).get("cvssMetricV2", [{}]),
+                        "cvss_v3": cve_data.get("metrics", {}).get("cvssMetricV31", []),
+                        "cvss_v2": cve_data.get("metrics", {}).get("cvssMetricV2", []),
                         "references": cve_data.get("references", []),
                         "published": cve_data.get("published", ""),
                         "modified": cve_data.get("lastModified", "")
@@ -165,6 +165,15 @@ def determine_intelligent_vex_status(cve_id, vulnerability, artifact_name, cisa_
     if gh_advisory:
         severity_gh = gh_advisory.get("severity", "").upper()
         cvss_score = gh_advisory.get("cvss", {}).get("score", 0)
+        # Ensure cvss_score is a valid number
+        if cvss_score is None or not isinstance(cvss_score, (int, float)):
+            cvss_score = 0
+        
+        # Convert to float for comparison
+        try:
+            cvss_score = float(cvss_score)
+        except (ValueError, TypeError):
+            cvss_score = 0.0
         
         if severity_gh == "CRITICAL" or cvss_score >= 9.0:
             return {
@@ -186,10 +195,20 @@ def determine_intelligent_vex_status(cve_id, vulnerability, artifact_name, cisa_
     # 🏛️ NVD CVSS-based Assessment
     if nvd_data:
         cvss_v3_metrics = nvd_data.get("cvss_v3", [])
-        if cvss_v3_metrics:
-            cvss_data = cvss_v3_metrics[0].get("cvssData", {})
-            base_score = cvss_data.get("baseScore", 0)
-            vector_string = cvss_data.get("vectorString", "")
+        if cvss_v3_metrics and len(cvss_v3_metrics) > 0:
+            cvss_data = cvss_v3_metrics[0].get("cvssData", {}) if isinstance(cvss_v3_metrics[0], dict) else {}
+            base_score = cvss_data.get("baseScore", 0) if cvss_data else 0
+            vector_string = cvss_data.get("vectorString", "") if cvss_data else ""
+            
+            # Ensure base_score is a valid number
+            if base_score is None or not isinstance(base_score, (int, float)):
+                base_score = 0
+            
+            # Convert to float for comparison
+            try:
+                base_score = float(base_score)
+            except (ValueError, TypeError):
+                base_score = 0.0
             
             if base_score >= 9.0:
                 return {
