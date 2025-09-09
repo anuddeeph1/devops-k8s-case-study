@@ -824,6 +824,8 @@ jobs:
       total-vulnerabilities: ${{ steps.multi-scan.outputs.total_vulnerabilities || '0' }}
       total-critical: ${{ steps.multi-scan.outputs.total_critical || '0' }}
       total-high: ${{ steps.multi-scan.outputs.total_high || '0' }}
+      total-medium: ${{ steps.multi-scan.outputs.total_medium || '0' }}
+      total-low: ${{ steps.multi-scan.outputs.total_low || '0' }}
       total-components: ${{ steps.multi-scan.outputs.total_components || '0' }}
       scan-timestamp: ${{ steps.multi-scan.outputs.scan_timestamp || '0' }}
       scan-success: ${{ steps.multi-scan.outputs.scan_success || 'false' }}
@@ -972,21 +974,42 @@ jobs:
             fi
           fi
           
-          # Extract severity breakdown from individual Grype JSON files
+          # Extract all vulnerability metrics from individual Grype JSON files for consistency
           TOTAL_CRITICAL=0
           TOTAL_HIGH=0
+          TOTAL_MEDIUM=0
+          TOTAL_LOW=0
+          TOTAL_VULNS_CALCULATED=0
+          
           if [ -d "./security-reports/grype" ]; then
-            echo "🔍 Aggregating vulnerability severity across all scanned images..."
+            echo "🔍 Aggregating vulnerability data from individual scan results..."
             for json_file in ./security-reports/grype/*-vulnerabilities.json; do
               if [ -f "$json_file" ]; then
                 CRITICAL_IN_FILE=$(jq '[.matches[] | select(.vulnerability.severity == "Critical")] | length' "$json_file" 2>/dev/null || echo "0")
                 HIGH_IN_FILE=$(jq '[.matches[] | select(.vulnerability.severity == "High")] | length' "$json_file" 2>/dev/null || echo "0")
+                MEDIUM_IN_FILE=$(jq '[.matches[] | select(.vulnerability.severity == "Medium")] | length' "$json_file" 2>/dev/null || echo "0")
+                LOW_IN_FILE=$(jq '[.matches[] | select(.vulnerability.severity == "Low")] | length' "$json_file" 2>/dev/null || echo "0")
+                VULNS_IN_FILE=$(jq '.matches | length' "$json_file" 2>/dev/null || echo "0")
+                
                 TOTAL_CRITICAL=$((TOTAL_CRITICAL + CRITICAL_IN_FILE))
                 TOTAL_HIGH=$((TOTAL_HIGH + HIGH_IN_FILE))
-                echo "  $(basename "$json_file"): Critical: $CRITICAL_IN_FILE, High: $HIGH_IN_FILE"
+                TOTAL_MEDIUM=$((TOTAL_MEDIUM + MEDIUM_IN_FILE))
+                TOTAL_LOW=$((TOTAL_LOW + LOW_IN_FILE))
+                TOTAL_VULNS_CALCULATED=$((TOTAL_VULNS_CALCULATED + VULNS_IN_FILE))
+                
+                echo "  $(basename "$json_file"): Total: $VULNS_IN_FILE (Critical: $CRITICAL_IN_FILE, High: $HIGH_IN_FILE, Medium: $MEDIUM_IN_FILE, Low: $LOW_IN_FILE)"
               fi
             done
-            echo "📊 Multi-Image Severity Summary: Critical: $TOTAL_CRITICAL, High: $TOTAL_HIGH"
+            
+            echo "📊 Multi-Image Vulnerability Summary:"
+            echo "  🔴 Critical: $TOTAL_CRITICAL"
+            echo "  🟠 High: $TOTAL_HIGH"  
+            echo "  🟡 Medium: $TOTAL_MEDIUM"
+            echo "  🟢 Low: $TOTAL_LOW"
+            echo "  📊 Total Calculated: $TOTAL_VULNS_CALCULATED"
+            
+            # Use calculated totals for consistency
+            TOTAL_VULNS=$TOTAL_VULNS_CALCULATED
           fi
           
           # Output for next steps - always provide values
@@ -996,6 +1019,8 @@ jobs:
           echo "total_components=$TOTAL_COMPONENTS" >> $GITHUB_OUTPUT
           echo "total_critical=$TOTAL_CRITICAL" >> $GITHUB_OUTPUT
           echo "total_high=$TOTAL_HIGH" >> $GITHUB_OUTPUT
+          echo "total_medium=$TOTAL_MEDIUM" >> $GITHUB_OUTPUT
+          echo "total_low=$TOTAL_LOW" >> $GITHUB_OUTPUT
           echo "scan_timestamp=$(date +%s)" >> $GITHUB_OUTPUT
           echo "exit_code=$SCAN_EXIT_CODE" >> $GITHUB_OUTPUT
           
@@ -1029,6 +1054,116 @@ jobs:
             ./multi-image-scan-*.log
           retention-days: 7
         continue-on-error: true
+      
+      - name: Create Multi-Image Security Analysis Report
+        run: |
+          echo "📊 Creating comprehensive multi-image security analysis report..."
+          
+          # Create comprehensive security report
+          cat > security-reports/multi-image-security-analysis.md << EOF
+          # 🛡️ Multi-Image Container Security Analysis Report
+          
+          **Images Scanned:** ${{ steps.multi-scan.outputs.total_images_scanned }}  
+          **Scan Date:** $(date)  
+          **Commit:** ${{ github.sha }}  
+          **Branch:** ${{ github.ref_name }}  
+          
+          ## 📊 Vulnerability Summary
+          
+          | Severity | Count |
+          |----------|-------|
+          | 🔴 Critical | ${{ steps.multi-scan.outputs.total_critical }} |
+          | 🟠 High | ${{ steps.multi-scan.outputs.total_high }} |
+          | 🟡 Medium | ${{ steps.multi-scan.outputs.total_medium }} |
+          | 🟢 Low | ${{ steps.multi-scan.outputs.total_low }} |
+          | **Total** | **${{ steps.multi-scan.outputs.total_vulnerabilities }}** |
+          
+          ## 📋 SBOM Information
+          
+          - **Total Components Identified:** ${{ steps.multi-scan.outputs.total_components }}
+          - **SBOM Formats:** CycloneDX, SPDX, Table
+          - **Images Successfully Scanned:** ${{ steps.multi-scan.outputs.total_images_scanned }}
+          
+          ## 📑 VEX Documents
+          
+          - **VEX Documents Generated:** ✅ Yes (one per scanned image)
+          - **Compliance:** OpenVEX v0.2.0
+          - **Vulnerability Exploitability:** Assessed per image
+          
+          ## 🖼️ Images Scanned
+          
+          This scan covers all project container images except pod-monitor:
+          
+          - **Web Server:** nginx:1.25-alpine, alpine:3.18
+          - **Database:** mysql:8.0  
+          - **Load Testing:** alpine/curl:latest
+          - **Reports Server:** reg.nirmata.io/nirmata/reports-server:latest, ghcr.io/nirmata/etcd:v3.5.18-cve-free, ghcr.io/nirmata/kubectl:1.30.2
+          - **Kyverno:** reg.nirmata.io/nirmata/kyverno:latest, reg.nirmata.io/nirmata/background-controller:latest, reg.nirmata.io/nirmata/cleanup-controller:latest, reg.nirmata.io/nirmata/reports-controller:latest
+          - **Utilities:** busybox:1.35, reg.nirmata.io/nirmata/kubectl variants
+          
+          ## 🔍 Analysis Results
+          
+          ### Security Assessment
+          EOF
+          
+          # Add vulnerability-specific details
+          if [ "${{ steps.multi-scan.outputs.total_vulnerabilities }}" != "0" ]; then
+            cat >> security-reports/multi-image-security-analysis.md << EOF
+          
+          ⚠️ **${{ steps.multi-scan.outputs.total_vulnerabilities }} vulnerabilities detected across ${{ steps.multi-scan.outputs.total_images_scanned }} container images**
+          
+          **Priority Actions:**
+          - 🔴 **Critical vulnerabilities (${{ steps.multi-scan.outputs.total_critical }})**: Immediate patching required
+          - 🟠 **High vulnerabilities (${{ steps.multi-scan.outputs.total_high }})**: Schedule updates within 7 days  
+          - 🟡 **Medium vulnerabilities (${{ steps.multi-scan.outputs.total_medium }})**: Plan updates in next maintenance cycle
+          - 🟢 **Low vulnerabilities (${{ steps.multi-scan.outputs.total_low }})**: Monitor and update when convenient
+          
+          **Recommended Actions:**
+          1. Review individual vulnerability reports for each image
+          2. Check VEX documents for exploitability assessments  
+          3. Prioritize updates for images with Critical/High vulnerabilities
+          4. Consider using more recent base image versions
+          5. Review SBOM for outdated or unnecessary dependencies
+          EOF
+          else
+            cat >> security-reports/multi-image-security-analysis.md << EOF
+          
+          ✅ **No vulnerabilities found across all ${{ steps.multi-scan.outputs.total_images_scanned }} scanned images**
+          
+          **Status:** All container images pass security scanning with clean bill of health
+          
+          **Recommended Actions:**
+          1. Continue regular security scanning to maintain this status
+          2. Monitor for new vulnerabilities in base images and dependencies
+          3. Keep base images and dependencies up to date
+          EOF
+          fi
+          
+          cat >> security-reports/multi-image-security-analysis.md << EOF
+          
+          ## 📁 Report Files
+          
+          Individual scan results for each image:
+          
+          - **Vulnerability Reports:** \`grype/{image-name-tag}-{timestamp}-vulnerabilities.{json,txt,sarif}\`
+          - **SBOM Reports:** \`sbom/{image-name-tag}-{timestamp}-sbom.{cyclonedx.json,spdx.json,txt}\`  
+          - **VEX Documents:** \`vex/{image-name-tag}-{timestamp}-vex-document.json\`
+          
+          ## 🔒 Security Validation
+          
+          - **Scan Status:** ${{ steps.multi-scan.outputs.scan_success }}
+          - **Scan Timestamp:** ${{ steps.multi-scan.outputs.scan_timestamp }}
+          - **Exit Code:** ${{ steps.multi-scan.outputs.exit_code }}
+          - **Components Analyzed:** ${{ steps.multi-scan.outputs.total_components }} across ${{ steps.multi-scan.outputs.total_images_scanned }} images
+          
+          ---
+          
+          *Report generated by GitHub Actions Multi-Image Security Scanner*  
+          *Scan excludes pod-monitor image (scanned separately with dedicated pipeline)*
+          EOF
+          
+          echo "✅ Multi-image security analysis report created"
+          cat security-reports/multi-image-security-analysis.md
       
       - name: Commit Multi-Image Security Reports
         run: |
@@ -1064,6 +1199,7 @@ jobs:
             - security-reports/sbom/{image-name-tag}-{timestamp}-sbom.*
             - security-reports/vex/{image-name-tag}-{timestamp}-vex-document.json
             - security-reports/multi-image-security-summary.md
+            - security-reports/multi-image-security-analysis.md (comprehensive report)
             
             📝 Example Filenames:
             - mysql-8_0-1703123456-vulnerabilities.json
