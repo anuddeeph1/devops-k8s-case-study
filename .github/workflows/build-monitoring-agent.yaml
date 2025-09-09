@@ -910,11 +910,15 @@ jobs:
             if [ $SCAN_EXIT_CODE -eq 2 ]; then
               SCAN_SUCCESS="false"
               echo "❌ Critical scan failure - no images were scanned"
-            else
+            elif [ $SCAN_EXIT_CODE -eq 1 ]; then
               SCAN_SUCCESS="partial"
-              echo "⚠️ Partial scan failure - some images may have been scanned"
+              echo "⚠️ Some images failed to scan - partial results available"
+            else
+              SCAN_SUCCESS="true"
+              echo "✅ Multi-image scan completed successfully (vulnerabilities may have been found)"
             fi
           else
+            SCAN_SUCCESS="true"
             echo "✅ Multi-image scan completed successfully"
           fi
           
@@ -954,9 +958,13 @@ jobs:
           
           # Don't fail the step for partial failures - let the workflow continue
           if [ "$SCAN_SUCCESS" = "false" ]; then
-            echo "::warning::Multi-image security scan failed completely"
+            echo "::warning::Multi-image security scan failed completely - no images could be scanned"
           elif [ "$SCAN_SUCCESS" = "partial" ]; then
-            echo "::warning::Multi-image security scan completed with some failures"
+            echo "::warning::Multi-image security scan had some scan failures - $TOTAL_SCANNED images scanned successfully"
+          elif [ "$TOTAL_VULNS" -gt 0 ]; then
+            echo "::notice::Multi-image security scan completed successfully - $TOTAL_VULNS vulnerabilities found across $TOTAL_SCANNED images"
+          else
+            echo "::notice::Multi-image security scan completed successfully - no vulnerabilities found"
           fi
         continue-on-error: true
       
@@ -1057,7 +1065,7 @@ jobs:
               summaryContent += "## ✅ Scan Status: **SUCCESS**\n\n";
             } else if (scanSuccess === "partial") {
               summaryContent += "## ⚠️ Scan Status: **PARTIAL SUCCESS**\n\n";
-              summaryContent += "⚠️ Some images failed to scan, but partial results are available.\n\n";
+              summaryContent += "⚠️ Some images could not be scanned due to technical issues (registry access, network, etc.).\n\n";
             } else {
               summaryContent += "## ❌ Scan Status: **FAILED**\n\n";
               summaryContent += "❌ Multi-image security scan failed to complete successfully.\n";
@@ -1152,16 +1160,22 @@ jobs:
           
           if [ "$MULTI_SCAN_RESULT" = "success" ] && [ "$MULTI_SCAN_SUCCESS" = "true" ]; then
             echo "✅ **Multi-Image Scan Completed Successfully**" >> $GITHUB_STEP_SUMMARY
+            VULN_COUNT="${{ needs.multi-image-security-scan.outputs.total-vulnerabilities }}"
+            if [ "$VULN_COUNT" -gt 0 ]; then
+              echo "- All images scanned successfully, $VULN_COUNT vulnerabilities identified for review" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- All images scanned successfully, no vulnerabilities found" >> $GITHUB_STEP_SUMMARY
+            fi
           elif [ "$MULTI_SCAN_RESULT" = "success" ] && [ "$MULTI_SCAN_SUCCESS" = "partial" ]; then
             echo "⚠️ **Multi-Image Scan Partially Completed**" >> $GITHUB_STEP_SUMMARY
-            echo "- Some images failed to scan, but partial results are available" >> $GITHUB_STEP_SUMMARY
+            echo "- Some images could not be scanned due to technical issues (registry access, network, etc.)" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ **Multi-Image Scan Failed**" >> $GITHUB_STEP_SUMMARY
             echo "- Step result: $MULTI_SCAN_RESULT" >> $GITHUB_STEP_SUMMARY
           fi
           
-          echo "- 🖼️ Images Scanned: ${{ needs.multi-image-security-scan.outputs.total-images-scanned }}" >> $GITHUB_STEP_SUMMARY
-          echo "- 🔍 Total Vulnerabilities: ${{ needs.multi-image-security-scan.outputs.total-vulnerabilities }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🖼️ Images Successfully Scanned: ${{ needs.multi-image-security-scan.outputs.total-images-scanned }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔍 Vulnerabilities Found: ${{ needs.multi-image-security-scan.outputs.total-vulnerabilities }}" >> $GITHUB_STEP_SUMMARY
           echo "- 📋 Total Components: ${{ needs.multi-image-security-scan.outputs.total-components }}" >> $GITHUB_STEP_SUMMARY
           echo "- ⏰ Scan Timestamp: ${{ needs.multi-image-security-scan.outputs.scan-timestamp }}" >> $GITHUB_STEP_SUMMARY
           echo "- 🔄 Status: $MULTI_SCAN_SUCCESS" >> $GITHUB_STEP_SUMMARY

@@ -605,14 +605,21 @@ main() {
     elif [ $FAILED_SCANS -gt $SCANNED_IMAGES ]; then
         log_warning "More scans failed ($FAILED_SCANS) than succeeded ($SCANNED_IMAGES)"
         exit 1  # Mostly failed
-    elif [ $TOTAL_VULNERABILITIES -gt 100 ]; then
-        log_warning "High number of vulnerabilities found: $TOTAL_VULNERABILITIES"
-        exit 1  # High vulnerability count
     else
+        # Report vulnerability findings (this is success, not failure!)
+        if [ $TOTAL_VULNERABILITIES -gt 0 ]; then
+            log_warning "Total of $TOTAL_VULNERABILITIES vulnerabilities found across all images"
+        else
+            log_info "No vulnerabilities found across all scanned images"
+        fi
+        
         if [ $FAILED_SCANS -gt 0 ]; then
             log_warning "Some scans failed ($FAILED_SCANS), but majority succeeded ($SCANNED_IMAGES)"
+            exit 1  # Partial success
+        else
+            log_info "All image scans completed successfully"
+            exit 0  # Complete success
         fi
-        exit 0  # Success (at least some images scanned successfully)
     fi
 }
 
