@@ -1,0 +1,21 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://github.com/devops-k8s-case-study/vex/reg_nirmata_io_nirmata_reports-server-latest-1757446172",
+  "author": "Multi-Image Enhanced Security Scanner",
+  "timestamp": "2025-09-09T19:31:03.284956Z",
+  "version": 1,
+  "metadata": {
+    "intelligence_sources": [
+      "CISA_KEV",
+      "OSV_Database",
+      "GitHub_Security_Advisories",
+      "NVD_API",
+      "Grype_Scanner"
+    ],
+    "scan_date": "2025-09-09T19:31:03.284976Z",
+    "image_analyzed": "reg.nirmata.io/nirmata/reports-server:latest",
+    "total_cves_checked": 0,
+    "intelligence_gathered": 0
+  },
+  "statements": []
+}

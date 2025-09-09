@@ -1,0 +1,312 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://github.com/devops-k8s-case-study/vex/reg_nirmata_io_nirmata_kubectl-1_32_1-1757446172",
+  "author": "Multi-Image Enhanced Security Scanner",
+  "timestamp": "2025-09-09T19:30:11.010812Z",
+  "version": 1,
+  "metadata": {
+    "intelligence_sources": [
+      "CISA_KEV",
+      "OSV_Database",
+      "GitHub_Security_Advisories",
+      "NVD_API",
+      "Grype_Scanner"
+    ],
+    "scan_date": "2025-09-09T19:30:11.010831Z",
+    "image_analyzed": "reg.nirmata.io/nirmata/kubectl:1.32.1",
+    "total_cves_checked": 10,
+    "intelligence_gathered": 10
+  },
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-47907",
+        "description": "Cancelling a query (e.g. by cancelling the context passed to one of the query methods) during a call to the Scan method of the returned Rows can result in unexpected results if other queries are being made in parallel. This can result in a race condition that may overwrite the expected results with those of another query, causing the call to Scan to return either unexpected results from the other query or an error."
+      },
+      "products": [
+        {
+          "@id": "reg.nirmata.io/nirmata/kubectl:1.32.1",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.23.4?package-id=77405cbba1ff2931",
+              "name": "stdlib",
+              "version": "go1.23.4",
+              "purl": "pkg:golang/stdlib@1.23.4"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "\ud83d\udc19 GitHub Advisory: High severity (CVSS: 7.0). Cancelling a query (e.g. by cancelling the context passed to one of the query methods) during a...",
+      "action_statement": "\u26a1 High-priority GitHub advisory for stdlib. Schedule update within 7 days.",
+      "metadata": {
+        "intelligence_source": "GITHUB_ADVISORY_HIGH",
+        "component_found_in_sbom": true,
+        "original_severity": "High",
+        "analysis_date": "2025-09-09T19:30:12.408891Z"
+      }
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-45336",
+        "description": "The HTTP client drops sensitive headers after following a cross-domain redirect. For example, a request to a.com/ containing an Authorization header which is redirected to b.com/ will not send that header to b.com. In the event that the client received a subsequent same-domain redirect, however, the sensitive headers would be restored. For example, a chain of redirects from a.com/, to b.com/1, and finally to b.com/2 would incorrectly send the Authorization header to b.com/2."
+      },
+      "products": [
+        {
+          "@id": "reg.nirmata.io/nirmata/kubectl:1.32.1",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.23.4?package-id=77405cbba1ff2931",
+              "name": "stdlib",
+              "version": "go1.23.4",
+              "purl": "pkg:golang/stdlib@1.23.4"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "\ud83d\udcca Grype: Medium severity - likely limited impact. The HTTP client drops sensitive headers after following a cross-domain redirect. For example, a request to a.com/ containing an Authorization header which is redirected to b.com/ will not send that header to b.com. In the event that the client received a subsequent same-domain redirect, however, the sensitive headers would be restored. For example, a chain of redirects from a.com/, to b.com/1, and finally to b.com/2 would incorrectly send the Authorization header to b.com/2.",
+      "action_statement": "\ud83d\udccb Medium severity vulnerability in stdlib. Include in next maintenance cycle.",
+      "metadata": {
+        "intelligence_source": "GRYPE_MEDIUM",
+        "component_found_in_sbom": true,
+        "original_severity": "Medium",
+        "analysis_date": "2025-09-09T19:30:13.563600Z"
+      }
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-45341",
+        "description": "A certificate with a URI which has a IPv6 address with a zone ID may incorrectly satisfy a URI name constraint that applies to the certificate chain. Certificates containing URIs are not permitted in the web PKI, so this only affects users of private PKIs which make use of URIs."
+      },
+      "products": [
+        {
+          "@id": "reg.nirmata.io/nirmata/kubectl:1.32.1",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.23.4?package-id=77405cbba1ff2931",
+              "name": "stdlib",
+              "version": "go1.23.4",
+              "purl": "pkg:golang/stdlib@1.23.4"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "\ud83d\udcca Grype: Medium severity - likely limited impact. A certificate with a URI which has a IPv6 address with a zone ID may incorrectly satisfy a URI name constraint that applies to the certificate chain. Certificates containing URIs are not permitted in the web PKI, so this only affects users of private PKIs which make use of URIs.",
+      "action_statement": "\ud83d\udccb Medium severity vulnerability in stdlib. Include in next maintenance cycle.",
+      "metadata": {
+        "intelligence_source": "GRYPE_MEDIUM",
+        "component_found_in_sbom": true,
+        "original_severity": "Medium",
+        "analysis_date": "2025-09-09T19:30:14.695654Z"
+      }
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-4575",
+        "description": "Vulnerability CVE-2025-4575"
+      },
+      "products": [
+        {
+          "@id": "reg.nirmata.io/nirmata/kubectl:1.32.1",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/libcrypto3@3.5.0-r0?arch=x86_64&distro=alpine-3.22.0&package-id=89dc4ec4fea2c234&upstream=openssl",
+              "name": "libcrypto3",
+              "version": "3.5.0-r0",
+              "purl": "pkg:apk/alpine/libcrypto3@3.5.0-r0?arch=x86_64&distro=alpine-3.22.0&upstream=openssl"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "\ud83d\udcca Grype: Medium severity - likely limited impact. Standard vulnerability assessment.",
+      "action_statement": "\ud83d\udccb Medium severity vulnerability in libcrypto3. Include in next maintenance cycle.",
+      "metadata": {
+        "intelligence_source": "GRYPE_MEDIUM",
+        "component_found_in_sbom": true,
+        "original_severity": "Medium",
+        "analysis_date": "2025-09-09T19:30:15.776962Z"
+      }
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-22871",
+        "description": "The net/http package improperly accepts a bare LF as a line terminator in chunked data chunk-size lines. This can permit request smuggling if a net/http server is used in conjunction with a server that incorrectly accepts a bare LF as part of a chunk-ext."
+      },
+      "products": [
+        {
+          "@id": "reg.nirmata.io/nirmata/kubectl:1.32.1",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.23.4?package-id=77405cbba1ff2931",
+              "name": "stdlib",
+              "version": "go1.23.4",
+              "purl": "pkg:golang/stdlib@1.23.4"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "code_not_reachable",
+      "impact_statement": "\ud83d\udc19 GitHub Advisory: Critical severity (CVSS: 9.1). The net/http package improperly accepts a bare LF as a line terminator in chunked data chunk-size...",
+      "action_statement": "\ud83d\udd25 Critical GitHub advisory for stdlib. Review https://github.com/advisories/GHSA-g9pc-8g42-g6vq and plan immediate update.",
+      "metadata": {
+        "intelligence_source": "GITHUB_ADVISORY_CRITICAL",
+        "component_found_in_sbom": true,
+        "original_severity": "Critical",
+        "analysis_date": "2025-09-09T19:30:16.803020Z"
+      }
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-4673",
+        "description": "Proxy-Authorization and Proxy-Authenticate headers persisted on cross-origin redirects potentially leaking sensitive information."
+      },
+      "products": [
+        {
+          "@id": "reg.nirmata.io/nirmata/kubectl:1.32.1",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.23.4?package-id=77405cbba1ff2931",
+              "name": "stdlib",
+              "version": "go1.23.4",
+              "purl": "pkg:golang/stdlib@1.23.4"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "\ud83d\udcca Grype: Medium severity - likely limited impact. Proxy-Authorization and Proxy-Authenticate headers persisted on cross-origin redirects potentially leaking sensitive information.",
+      "action_statement": "\ud83d\udccb Medium severity vulnerability in stdlib. Include in next maintenance cycle.",
+      "metadata": {
+        "intelligence_source": "GRYPE_MEDIUM",
+        "component_found_in_sbom": true,
+        "original_severity": "Medium",
+        "analysis_date": "2025-09-09T19:30:17.854837Z"
+      }
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-58251",
+        "description": "In netstat in BusyBox through 1.37.0, local users can launch of network application with an argv[0] containing an ANSI terminal escape sequence, leading to a denial of service (terminal locked up) when netstat is used by a victim."
+      },
+      "products": [
+        {
+          "@id": "reg.nirmata.io/nirmata/kubectl:1.32.1",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/busybox@1.37.0-r18?arch=x86_64&distro=alpine-3.22.0&package-id=8e85feb4dea97659",
+              "name": "busybox",
+              "version": "1.37.0-r18",
+              "purl": "pkg:apk/alpine/busybox@1.37.0-r18?arch=x86_64&distro=alpine-3.22.0"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "\ud83c\udfaf OSV: busybox is affected but no specific functions identified. Impact assessment needed.",
+      "action_statement": "\ud83d\udd0d Component busybox is listed as affected in OSV. Review usage patterns and update priority.",
+      "metadata": {
+        "intelligence_source": "OSV_AFFECTED",
+        "component_found_in_sbom": true,
+        "original_severity": "Low",
+        "analysis_date": "2025-09-09T19:30:18.946001Z"
+      }
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-46394",
+        "description": "In tar in BusyBox through 1.37.0, a TAR archive can have filenames hidden from a listing through the use of terminal escape sequences."
+      },
+      "products": [
+        {
+          "@id": "reg.nirmata.io/nirmata/kubectl:1.32.1",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/busybox@1.37.0-r18?arch=x86_64&distro=alpine-3.22.0&package-id=8e85feb4dea97659",
+              "name": "busybox",
+              "version": "1.37.0-r18",
+              "purl": "pkg:apk/alpine/busybox@1.37.0-r18?arch=x86_64&distro=alpine-3.22.0"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "\ud83c\udfaf OSV: busybox is affected but no specific functions identified. Impact assessment needed.",
+      "action_statement": "\ud83d\udd0d Component busybox is listed as affected in OSV. Review usage patterns and update priority.",
+      "metadata": {
+        "intelligence_source": "OSV_AFFECTED",
+        "component_found_in_sbom": true,
+        "original_severity": "Low",
+        "analysis_date": "2025-09-09T19:30:19.974245Z"
+      }
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-22866",
+        "description": "Due to the usage of a variable time instruction in the assembly implementation of an internal function, a small number of bits of secret scalars are leaked on the ppc64le architecture. Due to the way this function is used, we do not believe this leakage is enough to allow recovery of the private key when P-256 is used in any well known protocols."
+      },
+      "products": [
+        {
+          "@id": "reg.nirmata.io/nirmata/kubectl:1.32.1",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.23.4?package-id=77405cbba1ff2931",
+              "name": "stdlib",
+              "version": "go1.23.4",
+              "purl": "pkg:golang/stdlib@1.23.4"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "\ud83d\udc19 GitHub Advisory: High severity (CVSS: 8.4). Due to the usage of a variable time instruction in the assembly implementation of an internal...",
+      "action_statement": "\u26a1 High-priority GitHub advisory for stdlib. Schedule update within 7 days.",
+      "metadata": {
+        "intelligence_source": "GITHUB_ADVISORY_HIGH",
+        "component_found_in_sbom": true,
+        "original_severity": "Medium",
+        "analysis_date": "2025-09-09T19:30:21.168216Z"
+      }
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-4674",
+        "description": "The go command may execute unexpected commands when operating in untrusted VCS repositories. This occurs when possibly dangerous VCS configuration is present in repositories. This can happen when a repository was fetched via one VCS (e.g. Git), but contains metadata for another VCS (e.g. Mercurial). Modules which are retrieved using the go command line, i.e. via \"go get\", are not affected."
+      },
+      "products": [
+        {
+          "@id": "reg.nirmata.io/nirmata/kubectl:1.32.1",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.23.4?package-id=77405cbba1ff2931",
+              "name": "stdlib",
+              "version": "go1.23.4",
+              "purl": "pkg:golang/stdlib@1.23.4"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "\ud83d\udc19 GitHub Advisory: High severity (CVSS: 8.6). The go command may execute unexpected commands when operating in untrusted VCS repositories. This...",
+      "action_statement": "\u26a1 High-priority GitHub advisory for stdlib. Schedule update within 7 days.",
+      "metadata": {
+        "intelligence_source": "GITHUB_ADVISORY_HIGH",
+        "component_found_in_sbom": true,
+        "original_severity": "High",
+        "analysis_date": "2025-09-09T19:30:22.178580Z"
+      }
+    }
+  ]
+}

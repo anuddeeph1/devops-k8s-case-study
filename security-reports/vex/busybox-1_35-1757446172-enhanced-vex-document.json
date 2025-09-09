@@ -1,0 +1,162 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://github.com/devops-k8s-case-study/vex/busybox-1_35-1757446172",
+  "author": "Multi-Image Enhanced Security Scanner",
+  "timestamp": "2025-09-09T19:34:24.483928Z",
+  "version": 1,
+  "metadata": {
+    "intelligence_sources": [
+      "CISA_KEV",
+      "OSV_Database",
+      "GitHub_Security_Advisories",
+      "NVD_API",
+      "Grype_Scanner"
+    ],
+    "scan_date": "2025-09-09T19:34:24.483954Z",
+    "image_analyzed": "busybox:1.35",
+    "total_cves_checked": 5,
+    "intelligence_gathered": 5
+  },
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2022-28391",
+        "description": "BusyBox through 1.35.0 allows remote attackers to execute arbitrary code if netstat is used to print a DNS PTR record's value to a VT compatible terminal. Alternatively, the attacker could choose to change the terminal's colors."
+      },
+      "products": [
+        {
+          "@id": "busybox:1.35",
+          "subcomponents": [
+            {
+              "@id": "os:busybox@1.35.0",
+              "name": "busybox",
+              "version": "1.35.0"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "\ud83c\udfaf OSV: busybox is affected but no specific functions identified. Impact assessment needed.",
+      "action_statement": "\ud83d\udd0d Component busybox is listed as affected in OSV. Review usage patterns and update priority.",
+      "metadata": {
+        "intelligence_source": "OSV_AFFECTED",
+        "component_found_in_sbom": true,
+        "original_severity": "High",
+        "analysis_date": "2025-09-09T19:34:25.482404Z"
+      }
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-30065",
+        "description": "A use-after-free in Busybox 1.35-x's awk applet leads to denial of service and possibly code execution when processing a crafted awk pattern in the copyvar function."
+      },
+      "products": [
+        {
+          "@id": "busybox:1.35",
+          "subcomponents": [
+            {
+              "@id": "os:busybox@1.35.0",
+              "name": "busybox",
+              "version": "1.35.0"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "\ud83c\udfaf OSV: busybox is affected but no specific functions identified. Impact assessment needed.",
+      "action_statement": "\ud83d\udd0d Component busybox is listed as affected in OSV. Review usage patterns and update priority.",
+      "metadata": {
+        "intelligence_source": "OSV_AFFECTED",
+        "component_found_in_sbom": true,
+        "original_severity": "High",
+        "analysis_date": "2025-09-09T19:34:26.488598Z"
+      }
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-48174",
+        "description": "There is a stack overflow vulnerability in ash.c:6030 in busybox before 1.35. In the environment of Internet of Vehicles, this vulnerability can be executed from command to arbitrary code execution."
+      },
+      "products": [
+        {
+          "@id": "busybox:1.35",
+          "subcomponents": [
+            {
+              "@id": "os:busybox@1.35.0",
+              "name": "busybox",
+              "version": "1.35.0"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "\ud83c\udfaf OSV: busybox is affected but no specific functions identified. Impact assessment needed.",
+      "action_statement": "\ud83d\udd0d Component busybox is listed as affected in OSV. Review usage patterns and update priority.",
+      "metadata": {
+        "intelligence_source": "OSV_AFFECTED",
+        "component_found_in_sbom": true,
+        "original_severity": "Critical",
+        "analysis_date": "2025-09-09T19:34:27.905973Z"
+      }
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-58251",
+        "description": "In netstat in BusyBox through 1.37.0, local users can launch of network application with an argv[0] containing an ANSI terminal escape sequence, leading to a denial of service (terminal locked up) when netstat is used by a victim."
+      },
+      "products": [
+        {
+          "@id": "busybox:1.35",
+          "subcomponents": [
+            {
+              "@id": "os:busybox@1.35.0",
+              "name": "busybox",
+              "version": "1.35.0"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "\ud83c\udfaf OSV: busybox is affected but no specific functions identified. Impact assessment needed.",
+      "action_statement": "\ud83d\udd0d Component busybox is listed as affected in OSV. Review usage patterns and update priority.",
+      "metadata": {
+        "intelligence_source": "OSV_AFFECTED",
+        "component_found_in_sbom": true,
+        "original_severity": "Low",
+        "analysis_date": "2025-09-09T19:34:28.995417Z"
+      }
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-46394",
+        "description": "In tar in BusyBox through 1.37.0, a TAR archive can have filenames hidden from a listing through the use of terminal escape sequences."
+      },
+      "products": [
+        {
+          "@id": "busybox:1.35",
+          "subcomponents": [
+            {
+              "@id": "os:busybox@1.35.0",
+              "name": "busybox",
+              "version": "1.35.0"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "\ud83c\udfaf OSV: busybox is affected but no specific functions identified. Impact assessment needed.",
+      "action_statement": "\ud83d\udd0d Component busybox is listed as affected in OSV. Review usage patterns and update priority.",
+      "metadata": {
+        "intelligence_source": "OSV_AFFECTED",
+        "component_found_in_sbom": true,
+        "original_severity": "Low",
+        "analysis_date": "2025-09-09T19:34:29.835942Z"
+      }
+    }
+  ]
+}
