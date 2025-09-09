@@ -669,6 +669,48 @@ Mode: Audit (configurable to Enforce)
 - **Automatic Generation**: Policies created based on pod labels
 - **Zero-Trust Architecture**: Every connection explicitly authorized
 
+#### **Network Policy Flow Diagram**
+```mermaid
+graph LR
+    Internet[Internet Traffic]
+    Web[Web Server]
+    DB[Database]  
+    Test[Load Tester]
+    DNS[DNS Server]
+    
+    %% Allowed flows
+    Internet -->|HTTP:80| Web
+    Web -->|MySQL:3306| DB
+    Test -->|HTTP:80| Web
+    Web -->|HTTP Response| Internet
+    
+    Internet -->|DNS:53| DNS
+    Web -->|DNS:53| DNS
+    Test -->|DNS:53| DNS
+    DB -->|DNS:53| DNS
+    
+    %% Blocked flows
+    Internet -.->|BLOCKED| DB
+    Test -.->|BLOCKED| DB
+    
+    %% Styles
+    style Internet fill:#e1f5fe
+    style Web fill:#e8f5e8
+    style DB fill:#fff3e0
+    style Test fill:#f3e5f5
+    style DNS fill:#eeeeee
+```
+
+**✅ Allowed Traffic:**
+- Internet → Web Server (HTTP:80)
+- Web Server → Database (MySQL:3306) - **Core Requirement**
+- Load Tester → Web Server (HTTP:80) - HPA Demo
+- All Pods → DNS Server (DNS:53) - Service Discovery
+
+**❌ Blocked Traffic:**
+- Internet → Database (Violates "only web-to-database" requirement)
+- Load Tester → Database (Violates "only web-to-database" requirement)
+
 ### 🔑 **Secret Management**
 - **Kubernetes Secrets**: Database credentials
 - **Helm Integration**: Template-driven secret generation
