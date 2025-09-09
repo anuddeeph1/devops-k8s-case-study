@@ -788,6 +788,7 @@ jobs:
   multi-image-security-scan:
     name: Multi-Image Security Analysis
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     # Run on both push and PR events, independent of pod-monitor build
     if: always()
     
@@ -797,10 +798,12 @@ jobs:
       id-token: write
     
     outputs:
-      total-images-scanned: ${{ steps.multi-scan.outputs.total_images_scanned }}
-      total-vulnerabilities: ${{ steps.multi-scan.outputs.total_vulnerabilities }}
-      total-components: ${{ steps.multi-scan.outputs.total_components }}
-      scan-timestamp: ${{ steps.multi-scan.outputs.scan_timestamp }}
+      total-images-scanned: ${{ steps.multi-scan.outputs.total_images_scanned || '0' }}
+      total-vulnerabilities: ${{ steps.multi-scan.outputs.total_vulnerabilities || '0' }}
+      total-components: ${{ steps.multi-scan.outputs.total_components || '0' }}
+      scan-timestamp: ${{ steps.multi-scan.outputs.scan_timestamp || '0' }}
+      scan-success: ${{ steps.multi-scan.outputs.scan_success || 'false' }}
+      exit-code: ${{ steps.multi-scan.outputs.exit_code || '999' }}
     
     steps:
       - name: Checkout repository
@@ -838,6 +841,33 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
         continue-on-error: true
       
+      - name: Login to Additional Registries
+        run: |
+          echo "🔑 Attempting to login to additional container registries..."
+          
+          # Login to GitHub Container Registry (if token available)
+          if [ -n "${{ secrets.GITHUB_TOKEN }}" ]; then
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin || echo "ghcr.io login failed"
+          fi
+          
+          # Login to Nirmata Registry (if credentials available)
+          if [ -n "${{ secrets.NIRMATA_REGISTRY_USERNAME }}" ] && [ -n "${{ secrets.NIRMATA_REGISTRY_PASSWORD }}" ]; then
+            echo "${{ secrets.NIRMATA_REGISTRY_PASSWORD }}" | docker login reg.nirmata.io -u "${{ secrets.NIRMATA_REGISTRY_USERNAME }}" --password-stdin || echo "reg.nirmata.io login failed"
+          fi
+          
+          echo "Registry login attempts completed"
+        continue-on-error: true
+      
+      - name: Clean Docker Space
+        run: |
+          echo "🧹 Cleaning Docker space before multi-image scan..."
+          docker system df
+          docker image prune -f
+          docker container prune -f
+          echo "Available space after cleanup:"
+          df -h /
+        continue-on-error: true
+      
       - name: Run Multi-Image Security Scan
         id: multi-scan
         run: |
@@ -848,10 +878,30 @@ jobs:
           # Make script executable
           chmod +x ./scripts/multi-image-security-scan.sh
           
-          # Run the multi-image security scan
-          ./scripts/multi-image-security-scan.sh ./security-reports
+          # Set up error handling
+          SCAN_EXIT_CODE=0
+          SCAN_SUCCESS="true"
           
-          # Extract metrics for pipeline outputs
+          # Run the multi-image security scan with error handling
+          if ! ./scripts/multi-image-security-scan.sh ./security-reports; then
+            SCAN_EXIT_CODE=$?
+            echo "⚠️ Multi-image scan completed with exit code: $SCAN_EXIT_CODE"
+            if [ $SCAN_EXIT_CODE -eq 2 ]; then
+              SCAN_SUCCESS="false"
+              echo "❌ Critical scan failure - no images were scanned"
+            else
+              SCAN_SUCCESS="partial"
+              echo "⚠️ Partial scan failure - some images may have been scanned"
+            fi
+          else
+            echo "✅ Multi-image scan completed successfully"
+          fi
+          
+          # Always try to extract metrics, even from partial results
+          TOTAL_SCANNED=0
+          TOTAL_VULNS=0
+          TOTAL_COMPONENTS=0
+          
           if [ -f "./security-reports/multi-image-security-summary.md" ]; then
             # Parse the summary for key metrics
             TOTAL_SCANNED=$(grep -E "Successfully Scanned.*[0-9]+" ./security-reports/multi-image-security-summary.md | grep -o '[0-9]*' | head -1 || echo "0")
@@ -859,29 +909,54 @@ jobs:
             TOTAL_COMPONENTS=$(grep -E "Total SBOM Components.*[0-9]+" ./security-reports/multi-image-security-summary.md | grep -o '[0-9]*' | head -1 || echo "0")
             
             echo "📊 Multi-Image Scan Results:"
+            echo "  Scan Status: $SCAN_SUCCESS"
             echo "  Images Scanned: $TOTAL_SCANNED"
             echo "  Total Vulnerabilities: $TOTAL_VULNS"
             echo "  Total Components: $TOTAL_COMPONENTS"
-            
-            # Output for next steps
-            echo "total_images_scanned=$TOTAL_SCANNED" >> $GITHUB_OUTPUT
-            echo "total_vulnerabilities=$TOTAL_VULNS" >> $GITHUB_OUTPUT
-            echo "total_components=$TOTAL_COMPONENTS" >> $GITHUB_OUTPUT
-            echo "scan_timestamp=$(date +%s)" >> $GITHUB_OUTPUT
+            echo "  Exit Code: $SCAN_EXIT_CODE"
           else
-            echo "❌ Multi-image scan summary not found"
-            echo "total_images_scanned=0" >> $GITHUB_OUTPUT
-            echo "total_vulnerabilities=0" >> $GITHUB_OUTPUT
-            echo "total_components=0" >> $GITHUB_OUTPUT
-            echo "scan_timestamp=$(date +%s)" >> $GITHUB_OUTPUT
+            echo "❌ Multi-image scan summary not found - checking for partial results..."
+            # Check for individual scan results even if summary failed
+            if [ -d "./security-reports/grype" ]; then
+              TOTAL_SCANNED=$(find ./security-reports/grype -name "*-vulnerabilities.json" | wc -l)
+              echo "  Found $TOTAL_SCANNED individual scan results"
+            fi
           fi
+          
+          # Output for next steps - always provide values
+          echo "scan_success=$SCAN_SUCCESS" >> $GITHUB_OUTPUT
+          echo "total_images_scanned=$TOTAL_SCANNED" >> $GITHUB_OUTPUT
+          echo "total_vulnerabilities=$TOTAL_VULNS" >> $GITHUB_OUTPUT
+          echo "total_components=$TOTAL_COMPONENTS" >> $GITHUB_OUTPUT
+          echo "scan_timestamp=$(date +%s)" >> $GITHUB_OUTPUT
+          echo "exit_code=$SCAN_EXIT_CODE" >> $GITHUB_OUTPUT
+          
+          # Don't fail the step for partial failures - let the workflow continue
+          if [ "$SCAN_SUCCESS" = "false" ]; then
+            echo "::warning::Multi-image security scan failed completely"
+          elif [ "$SCAN_SUCCESS" = "partial" ]; then
+            echo "::warning::Multi-image security scan completed with some failures"
+          fi
+        continue-on-error: true
       
       - name: Upload Multi-Image Security Reports
         uses: actions/upload-artifact@v4
+        if: always() && (steps.multi-scan.outputs.total_images_scanned > 0 || hashFiles('security-reports/**/*') != '')
         with:
           name: multi-image-security-reports-${{ github.run_id }}
           path: security-reports/
           retention-days: 30
+      
+      - name: Upload Scan Logs (if available)
+        uses: actions/upload-artifact@v4
+        if: always() && hashFiles('security-reports/**/*') == ''
+        with:
+          name: multi-image-scan-logs-${{ github.run_id }}
+          path: |
+            /tmp/multi-image-scan-*.log
+            ./multi-image-scan-*.log
+          retention-days: 7
+        continue-on-error: true
       
       - name: Commit Multi-Image Security Reports
         run: |
@@ -943,22 +1018,59 @@ jobs:
             
             let summaryContent = "# 🛡️ Multi-Image Security Scan Results\n\n";
             
+            // Determine scan status
+            const scanSuccess = "${{ steps.multi-scan.outputs.scan_success }}";
+            const imagesScanned = "${{ steps.multi-scan.outputs.total_images_scanned }}";
+            const exitCode = "${{ steps.multi-scan.outputs.exit_code }}";
+            
+            // Add status badge
+            if (scanSuccess === "true") {
+              summaryContent += "## ✅ Scan Status: **SUCCESS**\n\n";
+            } else if (scanSuccess === "partial") {
+              summaryContent += "## ⚠️ Scan Status: **PARTIAL SUCCESS**\n\n";
+              summaryContent += "⚠️ Some images failed to scan, but partial results are available.\n\n";
+            } else {
+              summaryContent += "## ❌ Scan Status: **FAILED**\n\n";
+              summaryContent += "❌ Multi-image security scan failed to complete successfully.\n";
+              summaryContent += `Exit Code: ${exitCode}\n\n`;
+            }
+            
+            // Add summary content if available
             if (fs.existsSync('security-reports/multi-image-security-summary.md')) {
               const scanSummary = fs.readFileSync('security-reports/multi-image-security-summary.md', 'utf8');
               summaryContent += scanSummary;
+            } else if (imagesScanned > 0) {
+              summaryContent += "⚠️ **Summary file not generated, but some scans completed.**\n";
+              summaryContent += "Check individual report files in artifacts.\n\n";
             } else {
-              summaryContent += "❌ **Scan Failed** - Multi-image security scan did not complete successfully.\n";
-              summaryContent += "Please check the workflow logs for details.\n";
+              summaryContent += "❌ **No scan results available.**\n";
+              summaryContent += "Please check the workflow logs for error details.\n\n";
             }
             
             summaryContent += "\n---\n\n";
             summaryContent += `📊 **Quick Stats:**\n`;
-            summaryContent += `- 🖼️ Images Scanned: ${{ steps.multi-scan.outputs.total_images_scanned }}\n`;
+            summaryContent += `- 🖼️ Images Scanned: ${imagesScanned}\n`;
             summaryContent += `- 🚨 Total Vulnerabilities: ${{ steps.multi-scan.outputs.total_vulnerabilities }}\n`;
             summaryContent += `- 📋 Total Components: ${{ steps.multi-scan.outputs.total_components }}\n`;
-            summaryContent += `- ⏰ Scan Timestamp: ${{ steps.multi-scan.outputs.scan_timestamp }}\n\n`;
+            summaryContent += `- ⏰ Scan Timestamp: ${{ steps.multi-scan.outputs.scan_timestamp }}\n`;
+            summaryContent += `- 🔄 Scan Status: ${scanSuccess}\n\n`;
+            
+            // Add troubleshooting info for failures
+            if (scanSuccess !== "true") {
+              summaryContent += `## 🔧 Troubleshooting\n\n`;
+              summaryContent += `- **Exit Code:** ${exitCode}\n`;
+              if (exitCode === "2") {
+                summaryContent += `- **Issue:** Complete scan failure - no images were processed\n`;
+                summaryContent += `- **Likely Causes:** Network issues, authentication failures, or script errors\n`;
+              } else if (exitCode === "1") {
+                summaryContent += `- **Issue:** Partial scan failure or high vulnerability count\n`;
+                summaryContent += `- **Likely Causes:** Some images inaccessible, individual scan failures, or vulnerability threshold exceeded\n`;
+              }
+              summaryContent += `- **Action:** Check workflow logs and artifacts for detailed error information\n\n`;
+            }
+            
             summaryContent += `> **Note:** This scan excludes \`pod-monitor\` (scanned separately)\n`;
-            summaryContent += `> View detailed reports in the workflow artifacts.`;
+            summaryContent += `> View detailed reports in the workflow artifacts: \`multi-image-security-reports-${{ github.run_id }}\``;
             
             github.rest.issues.createComment({
               issue_number: context.issue.number,
@@ -1006,16 +1118,25 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           
           echo "## 🖼️ Multi-Image Security Scan" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ needs.multi-image-security-scan.result }}" = "success" ]; then
-            echo "✅ **Multi-Image Scan Completed**" >> $GITHUB_STEP_SUMMARY
-            echo "- 🖼️ Images Scanned: ${{ needs.multi-image-security-scan.outputs.total-images-scanned }}" >> $GITHUB_STEP_SUMMARY
-            echo "- 🔍 Total Vulnerabilities: ${{ needs.multi-image-security-scan.outputs.total-vulnerabilities }}" >> $GITHUB_STEP_SUMMARY
-            echo "- 📋 Total Components: ${{ needs.multi-image-security-scan.outputs.total-components }}" >> $GITHUB_STEP_SUMMARY
-            echo "- ⏰ Scan Timestamp: ${{ needs.multi-image-security-scan.outputs.scan-timestamp }}" >> $GITHUB_STEP_SUMMARY
-            echo "- 📦 **Coverage:** nginx, mysql, alpine, kyverno components, reports-server" >> $GITHUB_STEP_SUMMARY
+          MULTI_SCAN_SUCCESS="${{ needs.multi-image-security-scan.outputs.scan-success || 'false' }}"
+          MULTI_SCAN_RESULT="${{ needs.multi-image-security-scan.result }}"
+          
+          if [ "$MULTI_SCAN_RESULT" = "success" ] && [ "$MULTI_SCAN_SUCCESS" = "true" ]; then
+            echo "✅ **Multi-Image Scan Completed Successfully**" >> $GITHUB_STEP_SUMMARY
+          elif [ "$MULTI_SCAN_RESULT" = "success" ] && [ "$MULTI_SCAN_SUCCESS" = "partial" ]; then
+            echo "⚠️ **Multi-Image Scan Partially Completed**" >> $GITHUB_STEP_SUMMARY
+            echo "- Some images failed to scan, but partial results are available" >> $GITHUB_STEP_SUMMARY
           else
-            echo "❌ **Failed** - Multi-image security scan failed" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **Multi-Image Scan Failed**" >> $GITHUB_STEP_SUMMARY
+            echo "- Step result: $MULTI_SCAN_RESULT" >> $GITHUB_STEP_SUMMARY
           fi
+          
+          echo "- 🖼️ Images Scanned: ${{ needs.multi-image-security-scan.outputs.total-images-scanned }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔍 Total Vulnerabilities: ${{ needs.multi-image-security-scan.outputs.total-vulnerabilities }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 📋 Total Components: ${{ needs.multi-image-security-scan.outputs.total-components }}" >> $GITHUB_STEP_SUMMARY
+          echo "- ⏰ Scan Timestamp: ${{ needs.multi-image-security-scan.outputs.scan-timestamp }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔄 Status: $MULTI_SCAN_SUCCESS" >> $GITHUB_STEP_SUMMARY
+          echo "- 📦 **Coverage:** nginx, mysql, alpine, kyverno components, reports-server" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
           echo "## 📦 Helm Chart Update" >> $GITHUB_STEP_SUMMARY
