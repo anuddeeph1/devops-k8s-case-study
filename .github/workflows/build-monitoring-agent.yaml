@@ -847,13 +847,34 @@ jobs:
           
           # Login to GitHub Container Registry (if token available)
           if [ -n "${{ secrets.GITHUB_TOKEN }}" ]; then
-            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin || echo "ghcr.io login failed"
+            echo "Attempting ghcr.io login..."
+            if echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin; then
+              echo "✅ ghcr.io login successful"
+            else
+              echo "❌ ghcr.io login failed"
+            fi
+          else
+            echo "⚠️ GITHUB_TOKEN not available for ghcr.io login"
           fi
           
           # Login to Nirmata Registry (if credentials available)
+          echo "Checking Nirmata registry credentials..."
           if [ -n "${{ secrets.NIRMATA_REGISTRY_USERNAME }}" ] && [ -n "${{ secrets.NIRMATA_REGISTRY_PASSWORD }}" ]; then
-            echo "${{ secrets.NIRMATA_REGISTRY_PASSWORD }}" | docker login reg.nirmata.io -u "${{ secrets.NIRMATA_REGISTRY_USERNAME }}" --password-stdin || echo "reg.nirmata.io login failed"
+            echo "✅ Nirmata registry credentials found, attempting login..."
+            if echo "${{ secrets.NIRMATA_REGISTRY_PASSWORD }}" | docker login reg.nirmata.io -u "${{ secrets.NIRMATA_REGISTRY_USERNAME }}" --password-stdin; then
+              echo "✅ reg.nirmata.io login successful"
+            else
+              echo "❌ reg.nirmata.io login failed"
+            fi
+          else
+            echo "⚠️ NIRMATA_REGISTRY_USERNAME or NIRMATA_REGISTRY_PASSWORD not available"
+            echo "💡 Set NIRMATA_REGISTRY_USERNAME and NIRMATA_REGISTRY_PASSWORD secrets to scan reg.nirmata.io images"
           fi
+          
+          # Test connectivity to registries
+          echo "🔍 Testing registry connectivity..."
+          curl -s --connect-timeout 5 https://reg.nirmata.io/v2/ > /dev/null && echo "✅ reg.nirmata.io reachable" || echo "❌ reg.nirmata.io unreachable"
+          curl -s --connect-timeout 5 https://ghcr.io/v2/ > /dev/null && echo "✅ ghcr.io reachable" || echo "❌ ghcr.io unreachable"
           
           echo "Registry login attempts completed"
         continue-on-error: true
@@ -983,8 +1004,9 @@ jobs:
             - Web Server: nginx:1.25-alpine, alpine:3.18
             - Database: mysql:8.0
             - Load Testing: alpine/curl:latest
-            - Reports Server: nirmata/reports-server:latest, etcd, kubectl
-            - Kyverno: All Kyverno component images
+            - Reports Server: reg.nirmata.io/nirmata/reports-server, ghcr.io/nirmata/etcd, ghcr.io/nirmata/kubectl
+            - Kyverno: reg.nirmata.io/nirmata/* (kyverno, background-controller, cleanup-controller, etc.)
+            - Utilities: busybox:1.35
             
             📁 Organized Report Structure:
             - security-reports/grype/{image-name-tag}-{timestamp}-vulnerabilities.*
@@ -995,7 +1017,9 @@ jobs:
             📝 Example Filenames:
             - mysql-8_0-1703123456-vulnerabilities.json
             - nginx-1_25-alpine-1703123456-sbom.cyclonedx.json
-            - nirmata_kyverno-latest-1703123456-vex-document.json
+            - reg_nirmata_io_nirmata_kyverno-latest-1703123456-vex-document.json
+            - reg_nirmata_io_nirmata_background-controller-latest-1703123456-vulnerabilities.json
+            - alpine_curl-latest-1703123456-sbom.spdx.json
             
             [skip ci]"
             
@@ -1141,7 +1165,7 @@ jobs:
           echo "- 📋 Total Components: ${{ needs.multi-image-security-scan.outputs.total-components }}" >> $GITHUB_STEP_SUMMARY
           echo "- ⏰ Scan Timestamp: ${{ needs.multi-image-security-scan.outputs.scan-timestamp }}" >> $GITHUB_STEP_SUMMARY
           echo "- 🔄 Status: $MULTI_SCAN_SUCCESS" >> $GITHUB_STEP_SUMMARY
-          echo "- 📦 **Coverage:** nginx, mysql, alpine, kyverno components, reports-server" >> $GITHUB_STEP_SUMMARY
+          echo "- 📦 **Coverage:** nginx, mysql, alpine/curl, reg.nirmata.io/nirmata/*, ghcr.io/nirmata/*, busybox" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
           echo "## 📦 Helm Chart Update" >> $GITHUB_STEP_SUMMARY

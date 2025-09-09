@@ -58,15 +58,15 @@ declare -A FULL_IMAGE_NAMES=(
     ["reports-server"]="reg.nirmata.io/nirmata/reports-server:latest"
     ["etcd"]="ghcr.io/nirmata/etcd:v3.5.18-cve-free"
     ["kubectl-reports"]="ghcr.io/nirmata/kubectl:1.30.2"
-    ["kyverno-cli"]="nirmata/kyverno-cli:latest"
+    ["kyverno-cli"]="reg.nirmata.io/nirmata/kyverno-cli:latest"
     ["busybox"]="busybox:1.35"
     ["kubectl-kyverno"]="reg.nirmata.io/nirmata/kubectl:1.32.1"
-    ["kubectl-nirmata"]="nirmata/kubectl:1.31.1"
-    ["kyvernopre"]="nirmata/kyvernopre:latest"
-    ["kyverno"]="nirmata/kyverno:latest"
-    ["background-controller"]="nirmata/background-controller:latest"
-    ["cleanup-controller"]="nirmata/cleanup-controller:latest"
-    ["reports-controller"]="nirmata/reports-controller:latest"
+    ["kubectl-nirmata"]="reg.nirmata.io/nirmata/kubectl:1.31.1"
+    ["kyvernopre"]="reg.nirmata.io/nirmata/kyvernopre:latest"
+    ["kyverno"]="reg.nirmata.io/nirmata/kyverno:latest"
+    ["background-controller"]="reg.nirmata.io/nirmata/background-controller:latest"
+    ["cleanup-controller"]="reg.nirmata.io/nirmata/cleanup-controller:latest"
+    ["reports-controller"]="reg.nirmata.io/nirmata/reports-controller:latest"
 )
 
 # Tracking variables
