@@ -6,7 +6,7 @@ monitoring:
   podMonitor:
     image:
       repository: anuddeeph/pod-monitor
-      tag: "latest-17586655307-82"
+      tag: "latest-17586940273-84"
       pullPolicy: Always
     
     # Health check configuration
