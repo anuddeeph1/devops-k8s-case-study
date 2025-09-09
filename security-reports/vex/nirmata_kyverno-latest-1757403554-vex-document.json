@@ -1,0 +1,2240 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://github.com/devops-k8s-case-study/vex/nirmata_kyverno-latest-1757403554",
+  "author": "Multi-Image Security Scanner",
+  "timestamp": "2025-09-09T07:40:57.771790Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2023-44487",
+        "description": "The HTTP/2 protocol allows a denial of service (server resource consumption) because request cancellation can reset many streams quickly, as exploited in the wild in August through October 2023."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - The HTTP/2 protocol allows a denial of service (server resource consumption) because request cancellation can reset many streams quickly, as exploited in the wild in August through October 2023.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-45288",
+        "description": "An attacker may cause an HTTP/2 endpoint to read arbitrary amounts of header data by sending an excessive number of CONTINUATION frames. Maintaining HPACK state requires parsing and processing all HEADERS and CONTINUATION frames on a connection. When a request's headers exceed MaxHeaderBytes, no memory is allocated to store the excess headers, but they are still parsed. This permits an attacker to cause an HTTP/2 endpoint to read arbitrary amounts of header data, all associated with a request which is going to be rejected. These headers can include Huffman-encoded data which is significantly more expensive for the receiver to decode than for an attacker to send. The fix sets a limit on the amount of excess header frames we will process before closing a connection."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - An attacker may cause an HTTP/2 endpoint to read arbitrary amounts of header data by sending an excessive number of CONTINUATION frames. Maintaining HPACK state requires parsing and processing all HEADERS and CONTINUATION frames on a connection. When a request's headers exceed MaxHeaderBytes, no memory is allocated to store the excess headers, but they are still parsed. This permits an attacker to cause an HTTP/2 endpoint to read arbitrary amounts of header data, all associated with a request which is going to be rejected. These headers can include Huffman-encoded data which is significantly more expensive for the receiver to decode than for an attacker to send. The fix sets a limit on the amount of excess header frames we will process before closing a connection.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2021-38297",
+        "description": "Go before 1.16.9 and 1.17.x before 1.17.2 has a Buffer Overflow via large arguments in a function invocation from a WASM module, when GOARCH=wasm GOOS=js is used."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: CRITICAL - Go before 1.16.9 and 1.17.x before 1.17.2 has a Buffer Overflow via large arguments in a function invocation from a WASM module, when GOARCH=wasm GOOS=js is used.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-24784",
+        "description": "The ParseAddressList function incorrectly handles comments (text within parentheses) within display names. Since this is a misalignment with conforming address parsers, it can result in different trust decisions being made by programs using different parsers."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - The ParseAddressList function incorrectly handles comments (text within parentheses) within display names. Since this is a misalignment with conforming address parsers, it can result in different trust decisions being made by programs using different parsers.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-24787",
+        "description": "On Darwin, building a Go module which contains CGO can trigger arbitrary code execution when using the Apple version of ld, due to usage of the -lto_library flag in a \"#cgo LDFLAGS\" directive."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - On Darwin, building a Go module which contains CGO can trigger arbitrary code execution when using the Apple version of ld, due to usage of the -lto_library flag in a \"#cgo LDFLAGS\" directive.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2021-34558",
+        "description": "The crypto/tls package of Go through 1.16.5 does not properly assert that the type of public key in an X.509 certificate matches the expected type when doing a RSA based key exchange, allowing a malicious TLS server to cause a TLS client to panic."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - The crypto/tls package of Go through 1.16.5 does not properly assert that the type of public key in an X.509 certificate matches the expected type when doing a RSA based key exchange, allowing a malicious TLS server to cause a TLS client to panic.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-24538",
+        "description": "Templates do not properly consider backticks (`) as Javascript string delimiters, and do not escape them as expected. Backticks are used, since ES6, for JS template literals. If a template contains a Go template action within a Javascript template literal, the contents of the action can be used to terminate the literal, injecting arbitrary Javascript code into the Go template. As ES6 template literals are rather complex, and themselves can do string interpolation, the decision was made to simply disallow Go template actions from being used inside of them (e.g. \"var a = {{.}}\"), since there is no obviously safe way to allow this behavior. This takes the same approach as github.com/google/safehtml. With fix, Template.Parse returns an Error when it encounters templates like this, with an ErrorCode of value 12. This ErrorCode is currently unexported, but will be exported in the release of Go 1.21. Users who rely on the previous behavior can re-enable it using the GODEBUG flag jstmpllitinterp=1, with the caveat that backticks will now be escaped. This should be used with caution."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: CRITICAL - Templates do not properly consider backticks (`) as Javascript string delimiters, and do not escape them as expected. Backticks are used, since ES6, for JS template literals. If a template contains a Go template action within a Javascript template literal, the contents of the action can be used to terminate the literal, injecting arbitrary Javascript code into the Go template. As ES6 template literals are rather complex, and themselves can do string interpolation, the decision was made to simply disallow Go template actions from being used inside of them (e.g. \"var a = {{.}}\"), since there is no obviously safe way to allow this behavior. This takes the same approach as github.com/google/safehtml. With fix, Template.Parse returns an Error when it encounters templates like this, with an ErrorCode of value 12. This ErrorCode is currently unexported, but will be exported in the release of Go 1.21. Users who rely on the previous behavior can re-enable it using the GODEBUG flag jstmpllitinterp=1, with the caveat that backticks will now be escaped. This should be used with caution.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-24791",
+        "description": "The net/http HTTP/1.1 client mishandled the case where a server responds to a request with an \"Expect: 100-continue\" header with a non-informational (200 or higher) status. This mishandling could leave a client connection in an invalid state, where the next request sent on the connection will fail. An attacker sending a request to a net/http/httputil.ReverseProxy proxy can exploit this mishandling to cause a denial of service by sending \"Expect: 100-continue\" requests which elicit a non-informational response from the backend. Each such request leaves the proxy with an invalid connection, and causes one subsequent request using that connection to fail."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - The net/http HTTP/1.1 client mishandled the case where a server responds to a request with an \"Expect: 100-continue\" header with a non-informational (200 or higher) status. This mishandling could leave a client connection in an invalid state, where the next request sent on the connection will fail. An attacker sending a request to a net/http/httputil.ReverseProxy proxy can exploit this mishandling to cause a denial of service by sending \"Expect: 100-continue\" requests which elicit a non-informational response from the backend. Each such request leaves the proxy with an invalid connection, and causes one subsequent request using that connection to fail.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-24531",
+        "description": "Command go env is documented as outputting a shell script containing the Go environment. However, go env doesn't sanitize values, so executing its output as a shell script can cause various bad bahaviors, including executing arbitrary commands or inserting new environment variables. This issue is relatively minor because, in general, if an attacker can set arbitrary environment variables on a system, they have better attack vectors than making \"go env\" print them out."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: CRITICAL - Command go env is documented as outputting a shell script containing the Go environment. However, go env doesn't sanitize values, so executing its output as a shell script can cause various bad bahaviors, including executing arbitrary commands or inserting new environment variables. This issue is relatively minor because, in general, if an attacker can set arbitrary environment variables on a system, they have better attack vectors than making \"go env\" print them out.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-29405",
+        "description": "The go command may execute arbitrary code at build time when using cgo. This may occur when running \"go get\" on a malicious module, or when running any other command which builds untrusted code. This is can by triggered by linker flags, specified via a \"#cgo LDFLAGS\" directive. Flags containing embedded spaces are mishandled, allowing disallowed flags to be smuggled through the LDFLAGS sanitization by including them in the argument of another flag. This only affects usage of the gccgo compiler."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: CRITICAL - The go command may execute arbitrary code at build time when using cgo. This may occur when running \"go get\" on a malicious module, or when running any other command which builds untrusted code. This is can by triggered by linker flags, specified via a \"#cgo LDFLAGS\" directive. Flags containing embedded spaces are mishandled, allowing disallowed flags to be smuggled through the LDFLAGS sanitization by including them in the argument of another flag. This only affects usage of the gccgo compiler.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2021-44717",
+        "description": "Go before 1.16.12 and 1.17.x before 1.17.5 on UNIX allows write operations to an unintended file or unintended network connection as a consequence of erroneous closing of file descriptor 0 after file-descriptor exhaustion."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - Go before 1.16.12 and 1.17.x before 1.17.5 on UNIX allows write operations to an unintended file or unintended network connection as a consequence of erroneous closing of file descriptor 0 after file-descriptor exhaustion.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2021-41771",
+        "description": "ImportedSymbols in debug/macho (for Open or OpenFat) in Go before 1.16.10 and 1.17.x before 1.17.3 Accesses a Memory Location After the End of a Buffer, aka an out-of-bounds slice situation."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - ImportedSymbols in debug/macho (for Open or OpenFat) in Go before 1.16.10 and 1.17.x before 1.17.3 Accesses a Memory Location After the End of a Buffer, aka an out-of-bounds slice situation.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-24783",
+        "description": "Verifying a certificate chain which contains a certificate with an unknown public key algorithm will cause Certificate.Verify to panic. This affects all crypto/tls clients, and servers that set Config.ClientAuth to VerifyClientCertIfGiven or RequireAndVerifyClientCert. The default behavior is for TLS servers to not verify client certificates."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - Verifying a certificate chain which contains a certificate with an unknown public key algorithm will cause Certificate.Verify to panic. This affects all crypto/tls clients, and servers that set Config.ClientAuth to VerifyClientCertIfGiven or RequireAndVerifyClientCert. The default behavior is for TLS servers to not verify client certificates.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-24540",
+        "description": "Not all valid JavaScript whitespace characters are considered to be whitespace. Templates containing whitespace characters outside of the character set \"\\t\\n\\f\\r\\u0020\\u2028\\u2029\" in JavaScript contexts that also contain actions may not be properly sanitized during execution."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: CRITICAL - Not all valid JavaScript whitespace characters are considered to be whitespace. Templates containing whitespace characters outside of the character set \"\\t\\n\\f\\r\\u0020\\u2028\\u2029\" in JavaScript contexts that also contain actions may not be properly sanitized during execution.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-41717",
+        "description": "An attacker can cause excessive memory growth in a Go server accepting HTTP/2 requests. HTTP/2 server connections contain a cache of HTTP header keys sent by the client. While the total number of entries in this cache is capped, an attacker sending very large keys can cause the server to allocate approximately 64 MiB per open connection."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - An attacker can cause excessive memory growth in a Go server accepting HTTP/2 requests. HTTP/2 server connections contain a cache of HTTP header keys sent by the client. While the total number of entries in this cache is capped, an attacker sending very large keys can cause the server to allocate approximately 64 MiB per open connection.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-45290",
+        "description": "When parsing a multipart form (either explicitly with Request.ParseMultipartForm or implicitly with Request.FormValue, Request.PostFormValue, or Request.FormFile), limits on the total size of the parsed form were not applied to the memory consumed while reading a single form line. This permits a maliciously crafted input containing very long lines to cause allocation of arbitrarily large amounts of memory, potentially leading to memory exhaustion. With fix, the ParseMultipartForm function now correctly limits the maximum size of form lines."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - When parsing a multipart form (either explicitly with Request.ParseMultipartForm or implicitly with Request.FormValue, Request.PostFormValue, or Request.FormFile), limits on the total size of the parsed form were not applied to the memory consumed while reading a single form line. This permits a maliciously crafted input containing very long lines to cause allocation of arbitrarily large amounts of memory, potentially leading to memory exhaustion. With fix, the ParseMultipartForm function now correctly limits the maximum size of form lines.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-45289",
+        "description": "When following an HTTP redirect to a domain which is not a subdomain match or exact match of the initial domain, an http.Client does not forward sensitive headers such as \"Authorization\" or \"Cookie\". For example, a redirect from foo.com to www.foo.com will forward the Authorization header, but a redirect to bar.com will not. A maliciously crafted HTTP redirect could cause sensitive headers to be unexpectedly forwarded."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - When following an HTTP redirect to a domain which is not a subdomain match or exact match of the initial domain, an http.Client does not forward sensitive headers such as \"Authorization\" or \"Cookie\". For example, a redirect from foo.com to www.foo.com will forward the Authorization header, but a redirect to bar.com will not. A maliciously crafted HTTP redirect could cause sensitive headers to be unexpectedly forwarded.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-41723",
+        "description": "A maliciously crafted HTTP/2 stream could cause excessive CPU consumption in the HPACK decoder, sufficient to cause a denial of service from a small number of small requests."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - A maliciously crafted HTTP/2 stream could cause excessive CPU consumption in the HPACK decoder, sufficient to cause a denial of service from a small number of small requests.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-45287",
+        "description": "Before Go 1.20, the RSA based TLS key exchanges used the math/big library, which is not constant time. RSA blinding was applied to prevent timing attacks, but analysis shows this may not have been fully effective. In particular it appears as if the removal of PKCS#1 padding may leak timing information, which in turn could be used to recover session key bits. In Go 1.20, the crypto/tls library switched to a fully constant time RSA implementation, which we do not believe exhibits any timing side channels."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Before Go 1.20, the RSA based TLS key exchanges used the math/big library, which is not constant time. RSA blinding was applied to prevent timing attacks, but analysis shows this may not have been fully effective. In particular it appears as if the removal of PKCS#1 padding may leak timing information, which in turn could be used to recover session key bits. In Go 1.20, the crypto/tls library switched to a fully constant time RSA implementation, which we do not believe exhibits any timing side channels.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-34156",
+        "description": "Calling Decoder.Decode on a message which contains deeply nested structures can cause a panic due to stack exhaustion. This is a follow-up to CVE-2022-30635."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Calling Decoder.Decode on a message which contains deeply nested structures can cause a panic due to stack exhaustion. This is a follow-up to CVE-2022-30635.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-24785",
+        "description": "If errors returned from MarshalJSON methods contain user controlled data, they may be used to break the contextual auto-escaping behavior of the html/template package, allowing for subsequent actions to inject unexpected content into templates."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - If errors returned from MarshalJSON methods contain user controlled data, they may be used to break the contextual auto-escaping behavior of the html/template package, allowing for subsequent actions to inject unexpected content into templates.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-29402",
+        "description": "The go command may generate unexpected code at build time when using cgo. This may result in unexpected behavior when running a go program which uses cgo. This may occur when running an untrusted module which contains directories with newline characters in their names. Modules which are retrieved using the go command, i.e. via \"go get\", are not affected (modules retrieved using GOPATH-mode, i.e. GO111MODULE=off, may be affected)."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: CRITICAL - The go command may generate unexpected code at build time when using cgo. This may result in unexpected behavior when running a go program which uses cgo. This may occur when running an untrusted module which contains directories with newline characters in their names. Modules which are retrieved using the go command, i.e. via \"go get\", are not affected (modules retrieved using GOPATH-mode, i.e. GO111MODULE=off, may be affected).",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-30635",
+        "description": "Uncontrolled recursion in Decoder.Decode in encoding/gob before Go 1.17.12 and Go 1.18.4 allows an attacker to cause a panic due to stack exhaustion via a message which contains deeply nested structures."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Uncontrolled recursion in Decoder.Decode in encoding/gob before Go 1.17.12 and Go 1.18.4 allows an attacker to cause a panic due to stack exhaustion via a message which contains deeply nested structures.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2020-29509",
+        "description": "The encoding/xml package in Go (all versions) does not correctly preserve the semantics of attribute namespace prefixes during tokenization round-trips, which allows an attacker to craft inputs that behave in conflicting ways during different stages of processing in affected downstream applications."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - The encoding/xml package in Go (all versions) does not correctly preserve the semantics of attribute namespace prefixes during tokenization round-trips, which allows an attacker to craft inputs that behave in conflicting ways during different stages of processing in affected downstream applications.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2020-29511",
+        "description": "The encoding/xml package in Go (all versions) does not correctly preserve the semantics of element namespace prefixes during tokenization round-trips, which allows an attacker to craft inputs that behave in conflicting ways during different stages of processing in affected downstream applications."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - The encoding/xml package in Go (all versions) does not correctly preserve the semantics of element namespace prefixes during tokenization round-trips, which allows an attacker to craft inputs that behave in conflicting ways during different stages of processing in affected downstream applications.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-24675",
+        "description": "encoding/pem in Go before 1.17.9 and 1.18.x before 1.18.1 has a Decode stack overflow via a large amount of PEM data."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - encoding/pem in Go before 1.17.9 and 1.18.x before 1.18.1 has a Decode stack overflow via a large amount of PEM data.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2021-3115",
+        "description": "Go before 1.14.14 and 1.15.x before 1.15.7 on Windows is vulnerable to Command Injection and remote code execution when using the \"go get\" command to fetch modules that make use of cgo (for example, cgo can execute a gcc program from an untrusted download)."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Go before 1.14.14 and 1.15.x before 1.15.7 on Windows is vulnerable to Command Injection and remote code execution when using the \"go get\" command to fetch modules that make use of cgo (for example, cgo can execute a gcc program from an untrusted download).",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-29406",
+        "description": "The HTTP/1 client does not fully validate the contents of the Host header. A maliciously crafted Host header can inject additional headers or entire requests. With fix, the HTTP/1 client now refuses to send requests containing an invalid Request.Host or Request.URL.Host value."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - The HTTP/1 client does not fully validate the contents of the Host header. A maliciously crafted Host header can inject additional headers or entire requests. With fix, the HTTP/1 client now refuses to send requests containing an invalid Request.Host or Request.URL.Host value.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-28327",
+        "description": "The generic P-256 feature in crypto/elliptic in Go before 1.17.9 and 1.18.x before 1.18.1 allows a panic via long scalar input."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - The generic P-256 feature in crypto/elliptic in Go before 1.17.9 and 1.18.x before 1.18.1 allows a panic via long scalar input.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-29526",
+        "description": "Go before 1.17.10 and 1.18.x before 1.18.2 has Incorrect Privilege Assignment. When called with a non-zero flags parameter, the Faccessat function could incorrectly report that a file is accessible."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - Go before 1.17.10 and 1.18.x before 1.18.2 has Incorrect Privilege Assignment. When called with a non-zero flags parameter, the Faccessat function could incorrectly report that a file is accessible.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2021-36221",
+        "description": "Go before 1.15.15 and 1.16.x before 1.16.7 has a race condition that can lead to a net/http/httputil ReverseProxy panic upon an ErrAbortHandler abort."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - Go before 1.15.15 and 1.16.x before 1.16.7 has a race condition that can lead to a net/http/httputil ReverseProxy panic upon an ErrAbortHandler abort.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-27664",
+        "description": "In net/http in Go before 1.18.6 and 1.19.x before 1.19.1, attackers can cause a denial of service because an HTTP/2 connection can hang during closing if shutdown were preempted by a fatal error."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - In net/http in Go before 1.18.6 and 1.19.x before 1.19.1, attackers can cause a denial of service because an HTTP/2 connection can hang during closing if shutdown were preempted by a fatal error.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-24790",
+        "description": "The various Is methods (IsPrivate, IsLoopback, etc) did not work as expected for IPv4-mapped IPv6 addresses, returning false for addresses which would return true in their traditional IPv4 forms."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: CRITICAL - The various Is methods (IsPrivate, IsLoopback, etc) did not work as expected for IPv4-mapped IPv6 addresses, returning false for addresses which would return true in their traditional IPv4 forms.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2021-29923",
+        "description": "Go before 1.17 does not properly consider extraneous zero characters at the beginning of an IP address octet, which (in some situations) allows attackers to bypass access control that is based on IP addresses, because of unexpected octal interpretation. This affects net.ParseIP and net.ParseCIDR."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Go before 1.17 does not properly consider extraneous zero characters at the beginning of an IP address octet, which (in some situations) allows attackers to bypass access control that is based on IP addresses, because of unexpected octal interpretation. This affects net.ParseIP and net.ParseCIDR.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-29404",
+        "description": "The go command may execute arbitrary code at build time when using cgo. This may occur when running \"go get\" on a malicious module, or when running any other command which builds untrusted code. This is can by triggered by linker flags, specified via a \"#cgo LDFLAGS\" directive. The arguments for a number of flags which are non-optional are incorrectly considered optional, allowing disallowed flags to be smuggled through the LDFLAGS sanitization. This affects usage of both the gc and gccgo compilers."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: CRITICAL - The go command may execute arbitrary code at build time when using cgo. This may occur when running \"go get\" on a malicious module, or when running any other command which builds untrusted code. This is can by triggered by linker flags, specified via a \"#cgo LDFLAGS\" directive. The arguments for a number of flags which are non-optional are incorrectly considered optional, allowing disallowed flags to be smuggled through the LDFLAGS sanitization. This affects usage of both the gc and gccgo compilers.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2020-29510",
+        "description": "The encoding/xml package in Go versions 1.15 and earlier does not correctly preserve the semantics of directives during tokenization round-trips, which allows an attacker to craft inputs that behave in conflicting ways during different stages of processing in affected downstream applications."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - The encoding/xml package in Go versions 1.15 and earlier does not correctly preserve the semantics of directives during tokenization round-trips, which allows an attacker to craft inputs that behave in conflicting ways during different stages of processing in affected downstream applications.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-32189",
+        "description": "A too-short encoded message can cause a panic in Float.GobDecode and Rat GobDecode in math/big in Go before 1.17.13 and 1.18.5, potentially allowing a denial of service."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - A too-short encoded message can cause a panic in Float.GobDecode and Rat GobDecode in math/big in Go before 1.17.13 and 1.18.5, potentially allowing a denial of service.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-29804",
+        "description": "Incorrect conversion of certain invalid paths to valid, absolute paths in Clean in path/filepath before Go 1.17.11 and Go 1.18.3 on Windows allows potential directory traversal attack."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Incorrect conversion of certain invalid paths to valid, absolute paths in Clean in path/filepath before Go 1.17.11 and Go 1.18.3 on Windows allows potential directory traversal attack.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-30632",
+        "description": "Uncontrolled recursion in Glob in path/filepath before Go 1.17.12 and Go 1.18.4 allows an attacker to cause a panic due to stack exhaustion via a path containing a large number of path separators."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Uncontrolled recursion in Glob in path/filepath before Go 1.17.12 and Go 1.18.4 allows an attacker to cause a panic due to stack exhaustion via a path containing a large number of path separators.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-30633",
+        "description": "Uncontrolled recursion in Unmarshal in encoding/xml before Go 1.17.12 and Go 1.18.4 allows an attacker to cause a panic due to stack exhaustion via unmarshalling an XML document into a Go struct which has a nested field that uses the 'any' field tag."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Uncontrolled recursion in Unmarshal in encoding/xml before Go 1.17.12 and Go 1.18.4 allows an attacker to cause a panic due to stack exhaustion via unmarshalling an XML document into a Go struct which has a nested field that uses the 'any' field tag.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-41722",
+        "description": "A path traversal vulnerability exists in filepath.Clean on Windows. On Windows, the filepath.Clean function could transform an invalid path such as \"a/../c:/b\" into the valid path \"c:\\b\". This transformation of a relative (if invalid) path into an absolute path could enable a directory traversal attack. After fix, the filepath.Clean function transforms this path into the relative (but still invalid) path \".\\c:\\b\"."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - A path traversal vulnerability exists in filepath.Clean on Windows. On Windows, the filepath.Clean function could transform an invalid path such as \"a/../c:/b\" into the valid path \"c:\\b\". This transformation of a relative (if invalid) path into an absolute path could enable a directory traversal attack. After fix, the filepath.Clean function transforms this path into the relative (but still invalid) path \".\\c:\\b\".",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-34158",
+        "description": "Calling Parse on a \"// +build\" build tag line with deeply nested expressions can cause a panic due to stack exhaustion."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Calling Parse on a \"// +build\" build tag line with deeply nested expressions can cause a panic due to stack exhaustion.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-29409",
+        "description": "Extremely large RSA keys in certificate chains can cause a client/server to expend significant CPU time verifying signatures. With fix, the size of RSA keys transmitted during handshakes is restricted to <= 8192 bits. Based on a survey of publicly trusted RSA keys, there are currently only three certificates in circulation with keys larger than this, and all three appear to be test certificates that are not actively deployed. It is possible there are larger keys in use in private PKIs, but we target the web PKI, so causing breakage here in the interests of increasing the default safety of users of crypto/tls seems reasonable."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - Extremely large RSA keys in certificate chains can cause a client/server to expend significant CPU time verifying signatures. With fix, the size of RSA keys transmitted during handshakes is restricted to <= 8192 bits. Based on a survey of publicly trusted RSA keys, there are currently only three certificates in circulation with keys larger than this, and all three appear to be test certificates that are not actively deployed. It is possible there are larger keys in use in private PKIs, but we target the web PKI, so causing breakage here in the interests of increasing the default safety of users of crypto/tls seems reasonable.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2021-44716",
+        "description": "net/http in Go before 1.16.12 and 1.17.x before 1.17.5 allows uncontrolled memory consumption in the header canonicalization cache via HTTP/2 requests."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - net/http in Go before 1.16.12 and 1.17.x before 1.17.5 allows uncontrolled memory consumption in the header canonicalization cache via HTTP/2 requests.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-34155",
+        "description": "Calling any of the Parse functions on Go source code which contains deeply nested literals can cause a panic due to stack exhaustion."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - Calling any of the Parse functions on Go source code which contains deeply nested literals can cause a panic due to stack exhaustion.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-41720",
+        "description": "On Windows, restricted files can be accessed via os.DirFS and http.Dir. The os.DirFS function and http.Dir type provide access to a tree of files rooted at a given directory. These functions permit access to Windows device files under that root. For example, os.DirFS(\"C:/tmp\").Open(\"COM1\") opens the COM1 device. Both os.DirFS and http.Dir only provide read-only filesystem access. In addition, on Windows, an os.DirFS for the directory (the root of the current drive) can permit a maliciously crafted path to escape from the drive and access any path on the system. With fix applied, the behavior of os.DirFS(\"\") has changed. Previously, an empty root was treated equivalently to \"/\", so os.DirFS(\"\").Open(\"tmp\") would open the path \"/tmp\". This now returns an error."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - On Windows, restricted files can be accessed via os.DirFS and http.Dir. The os.DirFS function and http.Dir type provide access to a tree of files rooted at a given directory. These functions permit access to Windows device files under that root. For example, os.DirFS(\"C:/tmp\").Open(\"COM1\") opens the COM1 device. Both os.DirFS and http.Dir only provide read-only filesystem access. In addition, on Windows, an os.DirFS for the directory (the root of the current drive) can permit a maliciously crafted path to escape from the drive and access any path on the system. With fix applied, the behavior of os.DirFS(\"\") has changed. Previously, an empty root was treated equivalently to \"/\", so os.DirFS(\"\").Open(\"tmp\") would open the path \"/tmp\". This now returns an error.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-24536",
+        "description": "Multipart form parsing can consume large amounts of CPU and memory when processing form inputs containing very large numbers of parts. This stems from several causes: 1. mime/multipart.Reader.ReadForm limits the total memory a parsed multipart form can consume. ReadForm can undercount the amount of memory consumed, leading it to accept larger inputs than intended. 2. Limiting total memory does not account for increased pressure on the garbage collector from large numbers of small allocations in forms with many parts. 3. ReadForm can allocate a large number of short-lived buffers, further increasing pressure on the garbage collector. The combination of these factors can permit an attacker to cause an program that parses multipart forms to consume large amounts of CPU and memory, potentially resulting in a denial of service. This affects programs that use mime/multipart.Reader.ReadForm, as well as form parsing in the net/http package with the Request methods FormFile, FormValue, ParseMultipartForm, and PostFormValue. With fix, ReadForm now does a better job of estimating the memory consumption of parsed forms, and performs many fewer short-lived allocations. In addition, the fixed mime/multipart.Reader imposes the following limits on the size of parsed forms: 1. Forms parsed with ReadForm may contain no more than 1000 parts. This limit may be adjusted with the environment variable GODEBUG=multipartmaxparts=. 2. Form parts parsed with NextPart and NextRawPart may contain no more than 10,000 header fields. In addition, forms parsed with ReadForm may contain no more than 10,000 header fields across all parts. This limit may be adjusted with the environment variable GODEBUG=multipartmaxheaders=."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Multipart form parsing can consume large amounts of CPU and memory when processing form inputs containing very large numbers of parts. This stems from several causes: 1. mime/multipart.Reader.ReadForm limits the total memory a parsed multipart form can consume. ReadForm can undercount the amount of memory consumed, leading it to accept larger inputs than intended. 2. Limiting total memory does not account for increased pressure on the garbage collector from large numbers of small allocations in forms with many parts. 3. ReadForm can allocate a large number of short-lived buffers, further increasing pressure on the garbage collector. The combination of these factors can permit an attacker to cause an program that parses multipart forms to consume large amounts of CPU and memory, potentially resulting in a denial of service. This affects programs that use mime/multipart.Reader.ReadForm, as well as form parsing in the net/http package with the Request methods FormFile, FormValue, ParseMultipartForm, and PostFormValue. With fix, ReadForm now does a better job of estimating the memory consumption of parsed forms, and performs many fewer short-lived allocations. In addition, the fixed mime/multipart.Reader imposes the following limits on the size of parsed forms: 1. Forms parsed with ReadForm may contain no more than 1000 parts. This limit may be adjusted with the environment variable GODEBUG=multipartmaxparts=. 2. Form parts parsed with NextPart and NextRawPart may contain no more than 10,000 header fields. In addition, forms parsed with ReadForm may contain no more than 10,000 header fields across all parts. This limit may be adjusted with the environment variable GODEBUG=multipartmaxheaders=.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-24539",
+        "description": "Angle brackets (<>) are not considered dangerous characters when inserted into CSS contexts. Templates containing multiple actions separated by a '/' character can result in unexpectedly closing the CSS context and allowing for injection of unexpected HTML, if executed with untrusted input."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Angle brackets (<>) are not considered dangerous characters when inserted into CSS contexts. Templates containing multiple actions separated by a '/' character can result in unexpectedly closing the CSS context and allowing for injection of unexpected HTML, if executed with untrusted input.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-45283",
+        "description": "The filepath package does not recognize paths with a \\??\\ prefix as special. On Windows, a path beginning with \\??\\ is a Root Local Device path equivalent to a path beginning with \\\\?\\. Paths with a \\??\\ prefix may be used to access arbitrary locations on the system. For example, the path \\??\\c:\\x is equivalent to the more common path c:\\x. Before fix, Clean could convert a rooted path such as \\a\\..\\??\\b into the root local device path \\??\\b. Clean will now convert this to .\\??\\b. Similarly, Join(\\, ??, b) could convert a seemingly innocent sequence of path elements into the root local device path \\??\\b. Join will now convert this to \\.\\??\\b. In addition, with fix, IsAbs now correctly reports paths beginning with \\??\\ as absolute, and VolumeName correctly reports the \\??\\ prefix as a volume name. UPDATE: Go 1.20.11 and Go 1.21.4 inadvertently changed the definition of the volume name in Windows paths starting with \\?, resulting in filepath.Clean(\\?\\c:) returning \\?\\c: rather than \\?\\c:\\ (among other effects). The previous behavior has been restored."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - The filepath package does not recognize paths with a \\??\\ prefix as special. On Windows, a path beginning with \\??\\ is a Root Local Device path equivalent to a path beginning with \\\\?\\. Paths with a \\??\\ prefix may be used to access arbitrary locations on the system. For example, the path \\??\\c:\\x is equivalent to the more common path c:\\x. Before fix, Clean could convert a rooted path such as \\a\\..\\??\\b into the root local device path \\??\\b. Clean will now convert this to .\\??\\b. Similarly, Join(\\, ??, b) could convert a seemingly innocent sequence of path elements into the root local device path \\??\\b. Join will now convert this to \\.\\??\\b. In addition, with fix, IsAbs now correctly reports paths beginning with \\??\\ as absolute, and VolumeName correctly reports the \\??\\ prefix as a volume name. UPDATE: Go 1.20.11 and Go 1.21.4 inadvertently changed the definition of the volume name in Windows paths starting with \\?, resulting in filepath.Clean(\\?\\c:) returning \\?\\c: rather than \\?\\c:\\ (among other effects). The previous behavior has been restored.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-39323",
+        "description": "Line directives (\"//line\") can be used to bypass the restrictions on \"//go:cgo_\" directives, allowing blocked linker and compiler flags to be passed during compilation. This can result in unexpected execution of arbitrary code when running \"go build\". The line directive requires the absolute path of the file in which the directive lives, which makes exploiting this issue significantly more complex."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Line directives (\"//line\") can be used to bypass the restrictions on \"//go:cgo_\" directives, allowing blocked linker and compiler flags to be passed during compilation. This can result in unexpected execution of arbitrary code when running \"go build\". The line directive requires the absolute path of the file in which the directive lives, which makes exploiting this issue significantly more complex.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-47907",
+        "description": "Cancelling a query (e.g. by cancelling the context passed to one of the query methods) during a call to the Scan method of the returned Rows can result in unexpected results if other queries are being made in parallel. This can result in a race condition that may overwrite the expected results with those of another query, causing the call to Scan to return either unexpected results from the other query or an error."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Cancelling a query (e.g. by cancelling the context passed to one of the query methods) during a call to the Scan method of the returned Rows can result in unexpected results if other queries are being made in parallel. This can result in a race condition that may overwrite the expected results with those of another query, causing the call to Scan to return either unexpected results from the other query or an error.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2021-41772",
+        "description": "Go before 1.16.10 and 1.17.x before 1.17.3 allows an archive/zip Reader.Open panic via a crafted ZIP archive containing an invalid name or an empty filename field."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Go before 1.16.10 and 1.17.x before 1.17.3 allows an archive/zip Reader.Open panic via a crafted ZIP archive containing an invalid name or an empty filename field.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-23773",
+        "description": "cmd/go in Go before 1.16.14 and 1.17.x before 1.17.7 can misinterpret branch names that falsely appear to be version tags. This can lead to incorrect access control if an actor is supposed to be able to create branches but not tags."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - cmd/go in Go before 1.16.14 and 1.17.x before 1.17.7 can misinterpret branch names that falsely appear to be version tags. This can lead to incorrect access control if an actor is supposed to be able to create branches but not tags.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-45285",
+        "description": "Using go get to fetch a module with the \".git\" suffix may unexpectedly fallback to the insecure \"git://\" protocol if the module is unavailable via the secure \"https://\" and \"git+ssh://\" protocols, even if GOINSECURE is not set for said module. This only affects users who are not using the module proxy and are fetching modules directly (i.e. GOPROXY=off)."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Using go get to fetch a module with the \".git\" suffix may unexpectedly fallback to the insecure \"git://\" protocol if the module is unavailable via the secure \"https://\" and \"git+ssh://\" protocols, even if GOINSECURE is not set for said module. This only affects users who are not using the module proxy and are fetching modules directly (i.e. GOPROXY=off).",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-41725",
+        "description": "A denial of service is possible from excessive resource consumption in net/http and mime/multipart. Multipart form parsing with mime/multipart.Reader.ReadForm can consume largely unlimited amounts of memory and disk files. This also affects form parsing in the net/http package with the Request methods FormFile, FormValue, ParseMultipartForm, and PostFormValue. ReadForm takes a maxMemory parameter, and is documented as storing \"up to maxMemory bytes +10MB (reserved for non-file parts) in memory\". File parts which cannot be stored in memory are stored on disk in temporary files. The unconfigurable 10MB reserved for non-file parts is excessively large and can potentially open a denial of service vector on its own. However, ReadForm did not properly account for all memory consumed by a parsed form, such as map entry overhead, part names, and MIME headers, permitting a maliciously crafted form to consume well over 10MB. In addition, ReadForm contained no limit on the number of disk files created, permitting a relatively small request body to create a large number of disk temporary files. With fix, ReadForm now properly accounts for various forms of memory overhead, and should now stay within its documented limit of 10MB + maxMemory bytes of memory consumption. Users should still be aware that this limit is high and may still be hazardous. In addition, ReadForm now creates at most one on-disk temporary file, combining multiple form parts into a single temporary file. The mime/multipart.File interface type's documentation states, \"If stored on disk, the File's underlying concrete type will be an *os.File.\". This is no longer the case when a form contains more than one file part, due to this coalescing of parts into a single file. The previous behavior of using distinct files for each form part may be reenabled with the environment variable GODEBUG=multipartfiles=distinct. Users should be aware that multipart.ReadForm and the http.Request methods that call it do not limit the amount of disk consumed by temporary files. Callers can limit the size of form data with http.MaxBytesReader."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - A denial of service is possible from excessive resource consumption in net/http and mime/multipart. Multipart form parsing with mime/multipart.Reader.ReadForm can consume largely unlimited amounts of memory and disk files. This also affects form parsing in the net/http package with the Request methods FormFile, FormValue, ParseMultipartForm, and PostFormValue. ReadForm takes a maxMemory parameter, and is documented as storing \"up to maxMemory bytes +10MB (reserved for non-file parts) in memory\". File parts which cannot be stored in memory are stored on disk in temporary files. The unconfigurable 10MB reserved for non-file parts is excessively large and can potentially open a denial of service vector on its own. However, ReadForm did not properly account for all memory consumed by a parsed form, such as map entry overhead, part names, and MIME headers, permitting a maliciously crafted form to consume well over 10MB. In addition, ReadForm contained no limit on the number of disk files created, permitting a relatively small request body to create a large number of disk temporary files. With fix, ReadForm now properly accounts for various forms of memory overhead, and should now stay within its documented limit of 10MB + maxMemory bytes of memory consumption. Users should still be aware that this limit is high and may still be hazardous. In addition, ReadForm now creates at most one on-disk temporary file, combining multiple form parts into a single temporary file. The mime/multipart.File interface type's documentation states, \"If stored on disk, the File's underlying concrete type will be an *os.File.\". This is no longer the case when a form contains more than one file part, due to this coalescing of parts into a single file. The previous behavior of using distinct files for each form part may be reenabled with the environment variable GODEBUG=multipartfiles=distinct. Users should be aware that multipart.ReadForm and the http.Request methods that call it do not limit the amount of disk consumed by temporary files. Callers can limit the size of form data with http.MaxBytesReader.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-29400",
+        "description": "Templates containing actions in unquoted HTML attributes (e.g. \"attr={{.}}\") executed with empty input can result in output with unexpected results when parsed due to HTML normalization rules. This may allow injection of arbitrary attributes into tags."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Templates containing actions in unquoted HTML attributes (e.g. \"attr={{.}}\") executed with empty input can result in output with unexpected results when parsed due to HTML normalization rules. This may allow injection of arbitrary attributes into tags.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-39318",
+        "description": "The html/template package does not properly handle HTML-like \"\" comment tokens, nor hashbang \"#!\" comment tokens, in <script> contexts. This may cause the template parser to improperly interpret the contents of <script> contexts, causing actions to be improperly escaped. This may be leveraged to perform an XSS attack."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - The html/template package does not properly handle HTML-like \"\" comment tokens, nor hashbang \"#!\" comment tokens, in <script> contexts. This may cause the template parser to improperly interpret the contents of <script> contexts, causing actions to be improperly escaped. This may be leveraged to perform an XSS attack.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-39319",
+        "description": "The html/template package does not apply the proper rules for handling occurrences of \"<script\", \"<!--\", and \"</script\" within JS literals in <script> contexts. This may cause the template parser to improperly consider script contexts to be terminated early, causing actions to be improperly escaped. This could be leveraged to perform an XSS attack."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - The html/template package does not apply the proper rules for handling occurrences of \"<script\", \"<!--\", and \"</script\" within JS literals in <script> contexts. This may cause the template parser to improperly consider script contexts to be terminated early, causing actions to be improperly escaped. This could be leveraged to perform an XSS attack.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-24534",
+        "description": "HTTP and MIME header parsing can allocate large amounts of memory, even when parsing small inputs, potentially leading to a denial of service. Certain unusual patterns of input data can cause the common function used to parse HTTP and MIME headers to allocate substantially more memory than required to hold the parsed headers. An attacker can exploit this behavior to cause an HTTP server to allocate large amounts of memory from a small request, potentially leading to memory exhaustion and a denial of service. With fix, header parsing now correctly allocates only the memory required to hold parsed headers."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - HTTP and MIME header parsing can allocate large amounts of memory, even when parsing small inputs, potentially leading to a denial of service. Certain unusual patterns of input data can cause the common function used to parse HTTP and MIME headers to allocate substantially more memory than required to hold the parsed headers. An attacker can exploit this behavior to cause an HTTP server to allocate large amounts of memory from a small request, potentially leading to memory exhaustion and a denial of service. With fix, header parsing now correctly allocates only the memory required to hold parsed headers.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-32148",
+        "description": "Improper exposure of client IP addresses in net/http before Go 1.17.12 and Go 1.18.4 can be triggered by calling httputil.ReverseProxy.ServeHTTP with a Request.Header map containing a nil value for the X-Forwarded-For header, which causes ReverseProxy to set the client IP as the value of the X-Forwarded-For header."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - Improper exposure of client IP addresses in net/http before Go 1.17.12 and Go 1.18.4 can be triggered by calling httputil.ReverseProxy.ServeHTTP with a Request.Header map containing a nil value for the X-Forwarded-For header, which causes ReverseProxy to set the client IP as the value of the X-Forwarded-For header.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-30631",
+        "description": "Uncontrolled recursion in Reader.Read in compress/gzip before Go 1.17.12 and Go 1.18.4 allows an attacker to cause a panic due to stack exhaustion via an archive containing a large number of concatenated 0-length compressed files."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Uncontrolled recursion in Reader.Read in compress/gzip before Go 1.17.12 and Go 1.18.4 allows an attacker to cause a panic due to stack exhaustion via an archive containing a large number of concatenated 0-length compressed files.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-1705",
+        "description": "Acceptance of some invalid Transfer-Encoding headers in the HTTP/1 client in net/http before Go 1.17.12 and Go 1.18.4 allows HTTP request smuggling if combined with an intermediate server that also improperly fails to reject the header as invalid."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - Acceptance of some invalid Transfer-Encoding headers in the HTTP/1 client in net/http before Go 1.17.12 and Go 1.18.4 allows HTTP request smuggling if combined with an intermediate server that also improperly fails to reject the header as invalid.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2021-33195",
+        "description": "Go before 1.15.13 and 1.16.x before 1.16.5 has functions for DNS lookups that do not validate replies from DNS servers, and thus a return value may contain an unsafe injection (e.g., XSS) that does not conform to the RFC1035 format."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Go before 1.15.13 and 1.16.x before 1.16.5 has functions for DNS lookups that do not validate replies from DNS servers, and thus a return value may contain an unsafe injection (e.g., XSS) that does not conform to the RFC1035 format.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-30630",
+        "description": "Uncontrolled recursion in Glob in io/fs before Go 1.17.12 and Go 1.18.4 allows an attacker to cause a panic due to stack exhaustion via a path which contains a large number of path separators."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Uncontrolled recursion in Glob in io/fs before Go 1.17.12 and Go 1.18.4 allows an attacker to cause a panic due to stack exhaustion via a path which contains a large number of path separators.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-39326",
+        "description": "A malicious HTTP sender can use chunk extensions to cause a receiver reading from a request or response body to read many more bytes from the network than are in the body. A malicious HTTP client can further exploit this to cause a server to automatically read a large amount of data (up to about 1GiB) when a handler fails to read the entire body of a request. Chunk extensions are a little-used HTTP feature which permit including additional metadata in a request or response body sent using the chunked encoding. The net/http chunked encoding reader discards this metadata. A sender can exploit this by inserting a large metadata segment with each byte transferred. The chunk reader now produces an error if the ratio of real body to encoded bytes grows too small."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - A malicious HTTP sender can use chunk extensions to cause a receiver reading from a request or response body to read many more bytes from the network than are in the body. A malicious HTTP client can further exploit this to cause a server to automatically read a large amount of data (up to about 1GiB) when a handler fails to read the entire body of a request. Chunk extensions are a little-used HTTP feature which permit including additional metadata in a request or response body sent using the chunked encoding. The net/http chunked encoding reader discards this metadata. A sender can exploit this by inserting a large metadata segment with each byte transferred. The chunk reader now produces an error if the ratio of real body to encoded bytes grows too small.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2021-3114",
+        "description": "In Go before 1.14.14 and 1.15.x before 1.15.7, crypto/elliptic/p224.go can generate incorrect outputs, related to an underflow of the lowest limb during the final complete reduction in the P-224 field."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - In Go before 1.14.14 and 1.15.x before 1.15.7, crypto/elliptic/p224.go can generate incorrect outputs, related to an underflow of the lowest limb during the final complete reduction in the P-224 field.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-2880",
+        "description": "Requests forwarded by ReverseProxy include the raw query parameters from the inbound request, including unparsable parameters rejected by net/http. This could permit query parameter smuggling when a Go proxy forwards a parameter with an unparsable value. After fix, ReverseProxy sanitizes the query parameters in the forwarded query when the outbound request's Form field is set after the ReverseProxy. Director function returns, indicating that the proxy has parsed the query parameters. Proxies which do not parse query parameters continue to forward the original query parameters unchanged."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Requests forwarded by ReverseProxy include the raw query parameters from the inbound request, including unparsable parameters rejected by net/http. This could permit query parameter smuggling when a Go proxy forwards a parameter with an unparsable value. After fix, ReverseProxy sanitizes the query parameters in the forwarded query when the outbound request's Form field is set after the ReverseProxy. Director function returns, indicating that the proxy has parsed the query parameters. Proxies which do not parse query parameters continue to forward the original query parameters unchanged.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-30580",
+        "description": "Code injection in Cmd.Start in os/exec before Go 1.17.11 and Go 1.18.3 allows execution of any binaries in the working directory named either \"..com\" or \"..exe\" by calling Cmd.Run, Cmd.Start, Cmd.Output, or Cmd.CombinedOutput when Cmd.Path is unset."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Code injection in Cmd.Start in os/exec before Go 1.17.11 and Go 1.18.3 allows execution of any binaries in the working directory named either \"..com\" or \"..exe\" by calling Cmd.Run, Cmd.Start, Cmd.Output, or Cmd.CombinedOutput when Cmd.Path is unset.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-45336",
+        "description": "The HTTP client drops sensitive headers after following a cross-domain redirect. For example, a request to a.com/ containing an Authorization header which is redirected to b.com/ will not send that header to b.com. In the event that the client received a subsequent same-domain redirect, however, the sensitive headers would be restored. For example, a chain of redirects from a.com/, to b.com/1, and finally to b.com/2 would incorrectly send the Authorization header to b.com/2."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - The HTTP client drops sensitive headers after following a cross-domain redirect. For example, a request to a.com/ containing an Authorization header which is redirected to b.com/ will not send that header to b.com. In the event that the client received a subsequent same-domain redirect, however, the sensitive headers would be restored. For example, a chain of redirects from a.com/, to b.com/1, and finally to b.com/2 would incorrectly send the Authorization header to b.com/2.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2021-33198",
+        "description": "In Go before 1.15.13 and 1.16.x before 1.16.5, there can be a panic for a large exponent to the math/big.Rat SetString or UnmarshalText method."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - In Go before 1.15.13 and 1.16.x before 1.16.5, there can be a panic for a large exponent to the math/big.Rat SetString or UnmarshalText method.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-30629",
+        "description": "Non-random values for ticket_age_add in session tickets in crypto/tls before Go 1.17.11 and Go 1.18.3 allow an attacker that can observe TLS handshakes to correlate successive connections by comparing ticket ages during session resumption."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "component_not_present",
+      "impact_statement": "Severity: LOW - Non-random values for ticket_age_add in session tickets in crypto/tls before Go 1.17.11 and Go 1.18.3 allow an attacker that can observe TLS handshakes to correlate successive connections by comparing ticket ages during session resumption.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2021-27918",
+        "description": "encoding/xml in Go before 1.15.9 and 1.16.x before 1.16.1 has an infinite loop if a custom TokenReader (for xml.NewTokenDecoder) returns EOF in the middle of an element. This can occur in the Decode, DecodeElement, or Skip method."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - encoding/xml in Go before 1.15.9 and 1.16.x before 1.16.1 has an infinite loop if a custom TokenReader (for xml.NewTokenDecoder) returns EOF in the middle of an element. This can occur in the Decode, DecodeElement, or Skip method.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2021-33197",
+        "description": "In Go before 1.15.13 and 1.16.x before 1.16.5, some configurations of ReverseProxy (from net/http/httputil) result in a situation where an attacker is able to drop arbitrary headers."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - In Go before 1.15.13 and 1.16.x before 1.16.5, some configurations of ReverseProxy (from net/http/httputil) result in a situation where an attacker is able to drop arbitrary headers.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-45341",
+        "description": "A certificate with a URI which has a IPv6 address with a zone ID may incorrectly satisfy a URI name constraint that applies to the certificate chain. Certificates containing URIs are not permitted in the web PKI, so this only affects users of private PKIs which make use of URIs."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - A certificate with a URI which has a IPv6 address with a zone ID may incorrectly satisfy a URI name constraint that applies to the certificate chain. Certificates containing URIs are not permitted in the web PKI, so this only affects users of private PKIs which make use of URIs.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-30634",
+        "description": "Infinite loop in Read in crypto/rand before Go 1.17.11 and Go 1.18.3 on Windows allows attacker to cause an indefinite hang by passing a buffer larger than 1 << 32 - 1 bytes."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Infinite loop in Read in crypto/rand before Go 1.17.11 and Go 1.18.3 on Windows allows attacker to cause an indefinite hang by passing a buffer larger than 1 << 32 - 1 bytes.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-23806",
+        "description": "Curve.IsOnCurve in crypto/elliptic in Go before 1.16.14 and 1.17.x before 1.17.7 can incorrectly return true in situations with a big.Int value that is not a valid field element."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: CRITICAL - Curve.IsOnCurve in crypto/elliptic in Go before 1.16.14 and 1.17.x before 1.17.7 can incorrectly return true in situations with a big.Int value that is not a valid field element.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2021-33196",
+        "description": "In archive/zip in Go before 1.15.13 and 1.16.x before 1.16.5, a crafted file count (in an archive's header) can cause a NewReader or OpenReader panic."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - In archive/zip in Go before 1.15.13 and 1.16.x before 1.16.5, a crafted file count (in an archive's header) can cause a NewReader or OpenReader panic.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-24537",
+        "description": "Calling any of the Parse functions on Go source code which contains //line directives with very large line numbers can cause an infinite loop due to integer overflow."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Calling any of the Parse functions on Go source code which contains //line directives with very large line numbers can cause an infinite loop due to integer overflow.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2021-39293",
+        "description": "In archive/zip in Go before 1.16.8 and 1.17.x before 1.17.1, a crafted archive header (falsely designating that many files are present) can cause a NewReader or OpenReader panic. NOTE: this issue exists because of an incomplete fix for CVE-2021-33196."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - In archive/zip in Go before 1.16.8 and 1.17.x before 1.17.1, a crafted archive header (falsely designating that many files are present) can cause a NewReader or OpenReader panic. NOTE: this issue exists because of an incomplete fix for CVE-2021-33196.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-24532",
+        "description": "The ScalarMult and ScalarBaseMult methods of the P256 Curve may return an incorrect result if called with some specific unreduced scalars (a scalar larger than the order of the curve). This does not impact usages of crypto/ecdsa or crypto/ecdh."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - The ScalarMult and ScalarBaseMult methods of the P256 Curve may return an incorrect result if called with some specific unreduced scalars (a scalar larger than the order of the curve). This does not impact usages of crypto/ecdsa or crypto/ecdh.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-23772",
+        "description": "Rat.SetString in math/big in Go before 1.16.14 and 1.17.x before 1.17.7 has an overflow that can lead to Uncontrolled Memory Consumption."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Rat.SetString in math/big in Go before 1.16.14 and 1.17.x before 1.17.7 has an overflow that can lead to Uncontrolled Memory Consumption.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-41715",
+        "description": "Programs which compile regular expressions from untrusted sources may be vulnerable to memory exhaustion or denial of service. The parsed regexp representation is linear in the size of the input, but in some cases the constant factor can be as high as 40,000, making relatively small regexps consume much larger amounts of memory. After fix, each regexp being parsed is limited to a 256 MB memory footprint. Regular expressions whose representation would use more space than that are rejected. Normal use of regular expressions is unaffected."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Programs which compile regular expressions from untrusted sources may be vulnerable to memory exhaustion or denial of service. The parsed regexp representation is linear in the size of the input, but in some cases the constant factor can be as high as 40,000, making relatively small regexps consume much larger amounts of memory. After fix, each regexp being parsed is limited to a 256 MB memory footprint. Regular expressions whose representation would use more space than that are rejected. Normal use of regular expressions is unaffected.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-41724",
+        "description": "Large handshake records may cause panics in crypto/tls. Both clients and servers may send large TLS handshake records which cause servers and clients, respectively, to panic when attempting to construct responses. This affects all TLS 1.3 clients, TLS 1.2 clients which explicitly enable session resumption (by setting Config.ClientSessionCache to a non-nil value), and TLS 1.3 servers which request client certificates (by setting Config.ClientAuth >= RequestClientCert)."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Large handshake records may cause panics in crypto/tls. Both clients and servers may send large TLS handshake records which cause servers and clients, respectively, to panic when attempting to construct responses. This affects all TLS 1.3 clients, TLS 1.2 clients which explicitly enable session resumption (by setting Config.ClientSessionCache to a non-nil value), and TLS 1.3 servers which request client certificates (by setting Config.ClientAuth >= RequestClientCert).",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-2879",
+        "description": "Reader.Read does not set a limit on the maximum size of file headers. A maliciously crafted archive could cause Read to allocate unbounded amounts of memory, potentially causing resource exhaustion or panics. After fix, Reader.Read limits the maximum size of header blocks to 1 MiB."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Reader.Read does not set a limit on the maximum size of file headers. A maliciously crafted archive could cause Read to allocate unbounded amounts of memory, potentially causing resource exhaustion or panics. After fix, Reader.Read limits the maximum size of header blocks to 1 MiB.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-22871",
+        "description": "The net/http package improperly accepts a bare LF as a line terminator in chunked data chunk-size lines. This can permit request smuggling if a net/http server is used in conjunction with a server that incorrectly accepts a bare LF as part of a chunk-ext."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: CRITICAL - The net/http package improperly accepts a bare LF as a line terminator in chunked data chunk-size lines. This can permit request smuggling if a net/http server is used in conjunction with a server that incorrectly accepts a bare LF as part of a chunk-ext.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-4673",
+        "description": "Proxy-Authorization and Proxy-Authenticate headers persisted on cross-origin redirects potentially leaking sensitive information."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - Proxy-Authorization and Proxy-Authenticate headers persisted on cross-origin redirects potentially leaking sensitive information.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-45284",
+        "description": "On Windows, The IsLocal function does not correctly detect reserved device names in some cases. Reserved names followed by spaces, such as \"COM1 \", and reserved names \"COM\" and \"LPT\" followed by superscript 1, 2, or 3, are incorrectly reported as local. With fix, IsLocal now correctly reports these names as non-local."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - On Windows, The IsLocal function does not correctly detect reserved device names in some cases. Reserved names followed by spaces, such as \"COM1 \", and reserved names \"COM\" and \"LPT\" followed by superscript 1, 2, or 3, are incorrectly reported as local. With fix, IsLocal now correctly reports these names as non-local.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-28131",
+        "description": "Uncontrolled recursion in Decoder.Skip in encoding/xml before Go 1.17.12 and Go 1.18.4 allows an attacker to cause a panic due to stack exhaustion via a deeply nested XML document."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Uncontrolled recursion in Decoder.Skip in encoding/xml before Go 1.17.12 and Go 1.18.4 allows an attacker to cause a panic due to stack exhaustion via a deeply nested XML document.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-24921",
+        "description": "regexp.Compile in Go before 1.16.15 and 1.17.x before 1.17.8 allows stack exhaustion via a deeply nested expression."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - regexp.Compile in Go before 1.16.15 and 1.17.x before 1.17.8 allows stack exhaustion via a deeply nested expression.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-41716",
+        "description": "Due to unsanitized NUL values, attackers may be able to maliciously set environment variables on Windows. In syscall.StartProcess and os/exec.Cmd, invalid environment variable values containing NUL values are not properly checked for. A malicious environment variable value can exploit this behavior to set a value for a different environment variable. For example, the environment variable string \"A=B\\x00C=D\" sets the variables \"A=B\" and \"C=D\"."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - Due to unsanitized NUL values, attackers may be able to maliciously set environment variables on Windows. In syscall.StartProcess and os/exec.Cmd, invalid environment variable values containing NUL values are not properly checked for. A malicious environment variable value can exploit this behavior to set a value for a different environment variable. For example, the environment variable string \"A=B\\x00C=D\" sets the variables \"A=B\" and \"C=D\".",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-29403",
+        "description": "On Unix platforms, the Go runtime does not behave differently when a binary is run with the setuid/setgid bits. This can be dangerous in certain cases, such as when dumping memory state, or assuming the status of standard i/o file descriptors. If a setuid/setgid binary is executed with standard I/O file descriptors closed, opening any files can result in unexpected content being read or written with elevated privileges. Similarly, if a setuid/setgid program is terminated, either via panic or signal, it may leak the contents of its registers."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - On Unix platforms, the Go runtime does not behave differently when a binary is run with the setuid/setgid bits. This can be dangerous in certain cases, such as when dumping memory state, or assuming the status of standard i/o file descriptors. If a setuid/setgid binary is executed with standard I/O file descriptors closed, opening any files can result in unexpected content being read or written with elevated privileges. Similarly, if a setuid/setgid program is terminated, either via panic or signal, it may leak the contents of its registers.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-0913",
+        "description": "os.OpenFile(path, os.O_CREATE|O_EXCL) behaved differently on Unix and Windows systems when the target path was a dangling symlink. On Unix systems, OpenFile with O_CREATE and O_EXCL flags never follows symlinks. On Windows, when the target path was a symlink to a nonexistent location, OpenFile would create a file in that location. OpenFile now always returns an error when the O_CREATE and O_EXCL flags are both set and the target path is a symlink."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - os.OpenFile(path, os.O_CREATE|O_EXCL) behaved differently on Unix and Windows systems when the target path was a dangling symlink. On Unix systems, OpenFile with O_CREATE and O_EXCL flags never follows symlinks. On Windows, when the target path was a symlink to a nonexistent location, OpenFile would create a file in that location. OpenFile now always returns an error when the O_CREATE and O_EXCL flags are both set and the target path is a symlink.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-22866",
+        "description": "Due to the usage of a variable time instruction in the assembly implementation of an internal function, a small number of bits of secret scalars are leaked on the ppc64le architecture. Due to the way this function is used, we do not believe this leakage is enough to allow recovery of the private key when P-256 is used in any well known protocols."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - Due to the usage of a variable time instruction in the assembly implementation of an internal function, a small number of bits of secret scalars are leaked on the ppc64le architecture. Due to the way this function is used, we do not believe this leakage is enough to allow recovery of the private key when P-256 is used in any well known protocols.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-4674",
+        "description": "The go command may execute unexpected commands when operating in untrusted VCS repositories. This occurs when possibly dangerous VCS configuration is present in repositories. This can happen when a repository was fetched via one VCS (e.g. Git), but contains metadata for another VCS (e.g. Mercurial). Modules which are retrieved using the go command line, i.e. via \"go get\", are not affected."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - The go command may execute unexpected commands when operating in untrusted VCS repositories. This occurs when possibly dangerous VCS configuration is present in repositories. This can happen when a repository was fetched via one VCS (e.g. Git), but contains metadata for another VCS (e.g. Mercurial). Modules which are retrieved using the go command line, i.e. via \"go get\", are not affected.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2021-31525",
+        "description": "net/http in Go before 1.15.12 and 1.16.x before 1.16.4 allows remote attackers to cause a denial of service (panic) via a large header to ReadRequest or ReadResponse. Server, Transport, and Client can each be affected in some configurations."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - net/http in Go before 1.15.12 and 1.16.x before 1.16.4 allows remote attackers to cause a denial of service (panic) via a large header to ReadRequest or ReadResponse. Server, Transport, and Client can each be affected in some configurations.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-24789",
+        "description": "The archive/zip package's handling of certain types of invalid zip files differs from the behavior of most zip implementations. This misalignment could be exploited to create an zip file with contents that vary depending on the implementation reading the file. The archive/zip package now rejects files containing these errors."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - The archive/zip package's handling of certain types of invalid zip files differs from the behavior of most zip implementations. This misalignment could be exploited to create an zip file with contents that vary depending on the implementation reading the file. The archive/zip package now rejects files containing these errors.",
+      "action_statement": "Component found in SBOM: stdlib"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2022-1962",
+        "description": "Uncontrolled recursion in the Parse functions in go/parser before Go 1.17.12 and Go 1.18.4 allow an attacker to cause a panic due to stack exhaustion via deeply nested types or declarations."
+      },
+      "products": [
+        {
+          "@id": "nirmata/kyverno:latest",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib@1.14.12?package-id=cd1a48fd5aed482a",
+              "name": "stdlib",
+              "version": "go1.14.12",
+              "purl": "pkg:golang/stdlib@1.14.12"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - Uncontrolled recursion in the Parse functions in go/parser before Go 1.17.12 and Go 1.18.4 allow an attacker to cause a panic due to stack exhaustion via deeply nested types or declarations.",
+      "action_statement": "Component found in SBOM: stdlib"
+    }
+  ]
+}
