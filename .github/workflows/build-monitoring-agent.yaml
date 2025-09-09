@@ -253,30 +253,54 @@ jobs:
                 echo "      Last lines of scan result:"
                 echo "$result" | tail -3 | sed 's/^/        /'
                 
-                # Parse violations from summary line (try multiple patterns)
-                violations=$(echo "$result" | tail -5 | grep -oE 'fail: [0-9]+' | cut -d' ' -f2 || echo "0")
-                if [ "$violations" = "0" ]; then
-                  # Try alternative patterns
-                  violations=$(echo "$result" | grep -oE '[0-9]+ fail' | head -1 | cut -d' ' -f1 || echo "0")
-                fi
-                if [ "$violations" = "0" ]; then
-                  # Try counting FAIL occurrences
-                  violations=$(echo "$result" | grep -c "FAIL" || echo "0")
+                # Debug: Show full Kyverno output for this file
+                echo "      === FULL KYVERNO OUTPUT FOR $(basename $yaml_file) ==="
+                echo "$result"
+                echo "      === END KYVERNO OUTPUT ==="
+                
+                # Parse violations with multiple approaches
+                violations=0
+                
+                # Method 1: Look for "fail: X" pattern
+                fail_count=$(echo "$result" | grep -oE 'fail: [0-9]+' | cut -d' ' -f2 | head -1 || echo "0")
+                if [ "$fail_count" != "0" ]; then
+                  violations=$fail_count
+                  echo "      Method 1 (fail: X): Found $violations violations"
                 fi
                 
-                echo "      Raw Kyverno output (last 5 lines):"
-                echo "$result" | tail -5 | sed 's/^/        /'
-                echo "      Violations detected: $violations"
+                # Method 2: Count FAIL lines if method 1 didn't work
+                if [ "$violations" = "0" ]; then
+                  fail_lines=$(echo "$result" | grep -c "FAIL" || echo "0")
+                  if [ "$fail_lines" != "0" ]; then
+                    violations=$fail_lines
+                    echo "      Method 2 (FAIL count): Found $violations violations"
+                  fi
+                fi
+                
+                # Method 3: Look for violation summary patterns
+                if [ "$violations" = "0" ]; then
+                  summary_count=$(echo "$result" | grep -oE '[0-9]+ violation|violation.*[0-9]+' | grep -oE '[0-9]+' | head -1 || echo "0")
+                  if [ "$summary_count" != "0" ]; then
+                    violations=$summary_count
+                    echo "      Method 3 (violation summary): Found $violations violations"
+                  fi
+                fi
+                
+                echo "      📊 FINAL violations detected for $(basename $yaml_file): $violations"
                 CHART_VIOLATIONS=$((CHART_VIOLATIONS + violations))
               fi
             done
             
             # Ensure violations count is a valid number
             if ! [[ "$CHART_VIOLATIONS" =~ ^[0-9]+$ ]]; then
+              echo "⚠️ WARNING: CHART_VIOLATIONS '$CHART_VIOLATIONS' is not a valid number, setting to 0"
               CHART_VIOLATIONS=0
             fi
             
+            echo "📊 Chart $chart summary: Found $CHART_VIOLATIONS violations"
+            PREVIOUS_TOTAL=$TOTAL_VIOLATIONS
             TOTAL_VIOLATIONS=$((TOTAL_VIOLATIONS + CHART_VIOLATIONS))
+            echo "📊 Running total: $PREVIOUS_TOTAL + $CHART_VIOLATIONS = $TOTAL_VIOLATIONS"
             
             echo "## 📊 $chart Chart Results" >> $SCAN_SUMMARY
             echo "" >> $SCAN_SUMMARY

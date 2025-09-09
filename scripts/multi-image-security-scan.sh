@@ -413,11 +413,29 @@ EOF
                 if [ -f "$OUTPUT_DIR/vex/${filename_base}-vex-document.json" ]; then
                     image_vex_statements=$(jq '.statements | length' "$OUTPUT_DIR/vex/${filename_base}-vex-document.json" 2>/dev/null || echo "0")
                 fi
+                
+                # Extract vulnerability severity breakdown for this image
+                image_critical=0
+                image_high=0
+                image_medium=0
+                image_low=0
+                if [ -f "$OUTPUT_DIR/grype/${filename_base}-vulnerabilities.json" ]; then
+                    image_critical=$(jq '[.matches[] | select(.vulnerability.severity == "Critical")] | length' "$OUTPUT_DIR/grype/${filename_base}-vulnerabilities.json" 2>/dev/null || echo "0")
+                    image_high=$(jq '[.matches[] | select(.vulnerability.severity == "High")] | length' "$OUTPUT_DIR/grype/${filename_base}-vulnerabilities.json" 2>/dev/null || echo "0")
+                    image_medium=$(jq '[.matches[] | select(.vulnerability.severity == "Medium")] | length' "$OUTPUT_DIR/grype/${filename_base}-vulnerabilities.json" 2>/dev/null || echo "0")
+                    image_low=$(jq '[.matches[] | select(.vulnerability.severity == "Low")] | length' "$OUTPUT_DIR/grype/${filename_base}-vulnerabilities.json" 2>/dev/null || echo "0")
+                fi
+            fi
+            
+            # Format vulnerability breakdown with severity details
+            vuln_breakdown="$image_vulns"
+            if [ "$image_vulns" -gt 0 ]; then
+                vuln_breakdown="$image_vulns (🔴 Critical: $image_critical, 🟠 High: $image_high, 🟡 Medium: $image_medium, 🟢 Low: $image_low)"
             fi
             
             cat >> "$OUTPUT_DIR/multi-image-security-summary.md" << EOF
 - **$full_image_name**
-  - Vulnerabilities: $image_vulns
+  - Vulnerabilities: $vuln_breakdown
   - SBOM Components: $image_components  
   - VEX Statements: $image_vex_statements
   - Reports: \`${filename_base}-*\`
