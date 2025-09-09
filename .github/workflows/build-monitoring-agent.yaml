@@ -987,10 +987,15 @@ jobs:
             - Kyverno: All Kyverno component images
             
             📁 Organized Report Structure:
-            - security-reports/grype/{image-key}-{timestamp}-vulnerabilities.*
-            - security-reports/sbom/{image-key}-{timestamp}-sbom.*
-            - security-reports/vex/{image-key}-{timestamp}-vex-document.json
+            - security-reports/grype/{image-name-tag}-{timestamp}-vulnerabilities.*
+            - security-reports/sbom/{image-name-tag}-{timestamp}-sbom.*
+            - security-reports/vex/{image-name-tag}-{timestamp}-vex-document.json
             - security-reports/multi-image-security-summary.md
+            
+            📝 Example Filenames:
+            - mysql-8_0-1703123456-vulnerabilities.json
+            - nginx-1_25-alpine-1703123456-sbom.cyclonedx.json
+            - nirmata_kyverno-latest-1703123456-vex-document.json
             
             [skip ci]"
             

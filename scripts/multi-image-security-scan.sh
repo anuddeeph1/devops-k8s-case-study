@@ -133,8 +133,9 @@ scan_single_image() {
     
     log_info "=== Scanning $full_image_name ==="
     
-    # Generate filename with timestamp
-    local filename_base="${image_key}-${TIMESTAMP}"
+    # Generate filename with image name and timestamp
+    local clean_image_name=$(generate_filename "$full_image_name")
+    local filename_base="${clean_image_name}-${TIMESTAMP}"
     
     # Create image-specific directories
     mkdir -p "$OUTPUT_DIR/grype"
@@ -395,7 +396,8 @@ EOF
     # List successfully scanned images
     for image_key in "${!FULL_IMAGE_NAMES[@]}"; do
         local full_image_name="${FULL_IMAGE_NAMES[$image_key]}"
-        local filename_base="${image_key}-${TIMESTAMP}"
+        local clean_image_name=$(generate_filename "$full_image_name")
+        local filename_base="${clean_image_name}-${TIMESTAMP}"
         
         if [ -f "$OUTPUT_DIR/grype/${filename_base}-vulnerabilities.json" ]; then
             local image_vulns=0
@@ -429,15 +431,16 @@ EOF
 \`\`\`
 security-reports/
 ├── grype/
-│   ├── {image-key}-{timestamp}-vulnerabilities.json
-│   ├── {image-key}-{timestamp}-vulnerabilities.txt
-│   └── {image-key}-{timestamp}-vulnerabilities.sarif
+│   ├── mysql-8_0-{timestamp}-vulnerabilities.json
+│   ├── nginx-1_25-alpine-{timestamp}-vulnerabilities.txt
+│   └── nirmata_kyverno-latest-{timestamp}-vulnerabilities.sarif
 ├── sbom/
-│   ├── {image-key}-{timestamp}-sbom.cyclonedx.json
-│   ├── {image-key}-{timestamp}-sbom.spdx.json
-│   └── {image-key}-{timestamp}-sbom.txt
+│   ├── mysql-8_0-{timestamp}-sbom.cyclonedx.json
+│   ├── nginx-1_25-alpine-{timestamp}-sbom.spdx.json
+│   └── nirmata_background-controller-latest-{timestamp}-sbom.txt
 └── vex/
-    └── {image-key}-{timestamp}-vex-document.json
+    ├── mysql-8_0-{timestamp}-vex-document.json
+    └── nginx-1_25-alpine-{timestamp}-vex-document.json
 \`\`\`
 
 ## 🔧 Usage Examples
