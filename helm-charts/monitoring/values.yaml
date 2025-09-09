@@ -11,7 +11,7 @@ monitoring:
     
     # Health check configuration
     healthCheck:
-      enabled: false  # Temporarily disabled to test network connectivity
+      enabled: true  # Temporarily disabled to test network connectivity
     
     resources:
       requests:
