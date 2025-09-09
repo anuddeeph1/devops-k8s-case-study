@@ -41,16 +41,18 @@ spec:
               enabled: true
             allowWebServerEgress:
               enabled: true
+            # DISABLED: Monitoring uses Kubernetes APIs, not direct service connections
             allowMonitoringAccess:
-              enabled: true
+              enabled: false
             allowMonitoringIngress:
-              enabled: true
+              enabled: false
             allowLoadTestingAccess:
               enabled: true
             allowWebServerLoadTesting:
               enabled: true
+            # DISABLED: Violates requirement "ONLY web server to database connections"
             allowDatabaseMonitoring:
-              enabled: true
+              enabled: false
 
         
         # Pod labels match our microservices
