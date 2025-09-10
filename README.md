@@ -165,13 +165,20 @@ graph TD
 ### Network Security (Auto-Generated via Kyverno)
 ```
 📍 Namespace: devops-case-study
-├── 🔒 default-deny-all (blocks all traffic)
-├── 🌐 allow-dns (DNS resolution)
-├── 💾 allow-web-to-database (web→db on port 3306)
-├── 🔄 allow-backup-to-database (backup-jobs→db on port 3306)
+├── 🔒 default-deny-all (blocks all traffic by default)
+├── 🌐 allow-dns (DNS resolution for all pods)
+├── 💾 allow-web-to-database (web-server→database on port 3306)
+├── 🔄 backup-egress-{pod-name} (backup-jobs→database + DNS) [AUTO-GENERATED]
+├── 🔄 backup-ingress-{pod-name} (database←backup-jobs on port 3306) [AUTO-GENERATED]  
 ├── 📊 allow-monitoring-access (monitoring→all services)
-├── 🔄 allow-load-testing-access (load-tester→web-server)
+├── 🧪 allow-load-testing-access (load-tester→web-server)
 └── 📡 allow-web-server-ingress (external→web-server on port 8080)
+
+🤖 Dynamic Policies (Generated on-demand):
+├── backup-egress-manual-backup-YYYYMMDD-HHMMSS-{hash}
+├── backup-ingress-manual-backup-YYYYMMDD-HHMMSS-{hash}
+├── backup-egress-database-restore-YYYYMMDD-HHMMSS-{hash}
+└── backup-ingress-database-restore-YYYYMMDD-HHMMSS-{hash}
 ```
 
 ## 🛠️ Technology Stack
@@ -690,18 +697,20 @@ graph LR
     DB[Database]  
     Test[Load Tester]
     Monitor[Pod Monitor]
-    Backup[Backup Jobs]
+    Backup[Backup Jobs<br/>CronJob + Manual]
     DNS[DNS Server]
     API[Kubernetes API]
+    AutoGen[🤖 Kyverno<br/>Auto-Generated<br/>NetworkPolicies]
     
-    %% Allowed flows
+    %% Core Application flows
     Internet -->|HTTP:80| Web
     Web -->|MySQL:3306| DB
     Test -->|HTTP:80| Web
     Web -->|HTTP Response| Internet
     
-    %% Backup Jobs allowed flows
-    Backup -->|MySQL:3306| DB
+    %% Backup Operations flows (Bidirectional with NetworkPolicies)
+    Backup -->|MySQL:3306<br/>🛡️ backup-egress-*| DB
+    DB -->|Accept Backup<br/>🛡️ backup-ingress-*| Backup
     Backup -->|DNS:53| DNS
     
     %% Pod Monitor allowed flows (full egress access)
@@ -717,12 +726,17 @@ graph LR
     Test -->|DNS:53| DNS
     DB -->|DNS:53| DNS
     
-    %% Blocked flows (enforced by database ingress policy)
-    Internet -.->|BLOCKED| DB
-    Test -.->|BLOCKED| DB
-    Monitor -.->|BLOCKED MySQL:3306| DB
+    %% Auto-generation relationships
+    Backup -.->|Pod Created<br/>Labels Detected| AutoGen
+    AutoGen -.->|Generates<br/>NetworkPolicies| Backup
+    AutoGen -.->|Generates<br/>NetworkPolicies| DB
     
-    %% Styles
+    %% Blocked flows (enforced by database ingress policy)
+    Internet -.->|❌ BLOCKED| DB
+    Test -.->|❌ BLOCKED| DB
+    Monitor -.->|❌ BLOCKED MySQL:3306| DB
+    
+    %% Styles for components
     style Internet fill:#e1f5fe
     style Web fill:#e8f5e8
     style DB fill:#fff3e0
@@ -731,23 +745,32 @@ graph LR
     style Backup fill:#fff8e1
     style DNS fill:#eeeeee
     style API fill:#f1f8e9
+    style AutoGen fill:#e8f5e8,stroke:#4caf50,stroke-width:3px
 ```
 
 **✅ Allowed Traffic:**
-- Internet → Web Server (HTTP:80)
-- Web Server → Database (MySQL:3306) - **Core Requirement**
-- Backup Jobs → Database (MySQL:3306) - **Backup Operations**
-- Load Tester → Web Server (HTTP:80) - HPA Demo
-- Pod Monitor → Kubernetes API (HTTPS:443) - Monitoring Operation
-- Pod Monitor → Web Server (HTTP:80) - Monitoring Access
-- Pod Monitor → Load Tester (HTTP:80) - Monitoring Access  
-- Pod Monitor → Internet (All Traffic) - External Monitoring Services
-- All Pods → DNS Server (DNS:53) - Service Discovery
+- **🌐 Internet → Web Server** (HTTP:80) - Public web access
+- **💾 Web Server → Database** (MySQL:3306) - **Core business requirement**
+- **🔄 Backup Jobs ⇄ Database** (MySQL:3306) - **Backup & restore operations**
+  - `backup-egress-{pod-name}` - Backup pods can connect to database + DNS
+  - `backup-ingress-{pod-name}` - Database accepts backup connections
+- **🧪 Load Tester → Web Server** (HTTP:80) - HPA performance testing
+- **📊 Pod Monitor → Kubernetes API** (HTTPS:443) - Cluster monitoring
+- **📊 Pod Monitor → Web/Load Tester** (HTTP:80) - Service monitoring  
+- **📊 Pod Monitor → Internet** (All Traffic) - External monitoring services
+- **🌐 All Pods → DNS Server** (DNS:53) - Service discovery
+
+**🤖 Auto-Generated NetworkPolicies:**
+- **CronJob Backups** - Every 6 hours → Auto-generates backup NetworkPolicies
+- **Manual Backups** - `./scripts/manual-backup.sh` → Auto-generates backup NetworkPolicies
+- **Database Restores** - `./scripts/restore-backup.sh` → Auto-generates backup NetworkPolicies
+- **Policy Cleanup** - NetworkPolicies auto-deleted when backup pods complete
 
 **❌ Blocked Traffic:**
-- Internet → Database (Violates "only web-to-database" requirement)
-- Load Tester → Database (Violates "only web-to-database" requirement)
-- Pod Monitor → Database (MySQL:3306) - **Blocked by Database Ingress Policy**
+- **🌐 Internet → Database** (Violates zero-trust principle)
+- **🧪 Load Tester → Database** (No business requirement)
+- **📊 Pod Monitor → Database** (Monitoring via Kubernetes API only)
+- **🔄 All other connections** (Default-deny-all policy)
 
 ### 🔑 **Secret Management**
 - **Kubernetes Secrets**: Database credentials

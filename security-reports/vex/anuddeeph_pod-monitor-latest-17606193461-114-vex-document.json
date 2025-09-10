@@ -1,0 +1,8 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://github.com/anuddeeph1/devops-k8s-case-study/vex/pod-monitor-latest-17606193461-114",
+  "author": "GitHub Actions Security Scanner",
+  "timestamp": "2025-09-10T07:16:33.140717Z",
+  "version": 1,
+  "statements": []
+}
