@@ -1,9 +1,9 @@
 # 🛡️ Multi-Image Container Security Analysis Report
 
-**Scan Date:** 2025-09-10 01:46:21  
+**Scan Date:** 2025-09-10 01:56:18  
 **Scanner:** Multi-Image Security Scanner  
 **Output Directory:** ./security-reports  
-**Timestamp:** 1757468781  
+**Timestamp:** 1757469378  
 
 ## 📊 Overall Summary
 
@@ -23,82 +23,82 @@
   - Vulnerabilities: 18 (🔴 Critical: 1, 🟠 High: 3, 🟡 Medium: 8, 🟢 Low: 6)
   - SBOM Components: 269  
   - VEX Statements: 10
-  - Reports: `reg_nirmata_io_nirmata_kubectl-1_32_1-1757468781-*`
+  - Reports: `reg_nirmata_io_nirmata_kubectl-1_32_1-1757469378-*`
 - **reg.nirmata.io/nirmata/cleanup-controller:latest**
   - Vulnerabilities: 23 (🔴 Critical: 3, 🟠 High: 7, 🟡 Medium: 10, 🟢 Low: 3)
   - SBOM Components: 1023  
   - VEX Statements: 7
-  - Reports: `reg_nirmata_io_nirmata_cleanup-controller-latest-1757468781-*`
+  - Reports: `reg_nirmata_io_nirmata_cleanup-controller-latest-1757469378-*`
 - **reg.nirmata.io/nirmata/reports-server:latest**
   - Vulnerabilities: 0
   - SBOM Components: 1521  
   - VEX Statements: 0
-  - Reports: `reg_nirmata_io_nirmata_reports-server-latest-1757468781-*`
+  - Reports: `reg_nirmata_io_nirmata_reports-server-latest-1757469378-*`
 - **ghcr.io/nirmata/kubectl:1.30.2**
   - Vulnerabilities: 14 (🔴 Critical: 1, 🟠 High: 6, 🟡 Medium: 7, 🟢 Low: 0)
   - SBOM Components: 1032  
   - VEX Statements: 11
-  - Reports: `ghcr_io_nirmata_kubectl-1_30_2-1757468781-*`
+  - Reports: `ghcr_io_nirmata_kubectl-1_30_2-1757469378-*`
 - **reg.nirmata.io/nirmata/kubectl:1.31.1**
   - Vulnerabilities: 27 (🔴 Critical: 1, 🟠 High: 7, 🟡 Medium: 13, 🟢 Low: 6)
   - SBOM Components: 264  
   - VEX Statements: 16
-  - Reports: `reg_nirmata_io_nirmata_kubectl-1_31_1-1757468781-*`
+  - Reports: `reg_nirmata_io_nirmata_kubectl-1_31_1-1757469378-*`
 - **alpine:3.18**
   - Vulnerabilities: 6 (🔴 Critical: 0, 🟠 High: 0, 🟡 Medium: 0, 🟢 Low: 6)
   - SBOM Components: 95  
   - VEX Statements: 2
-  - Reports: `alpine-3_18-1757468781-*`
+  - Reports: `alpine-3_18-1757469378-*`
 - **nginx:1.25-alpine**
   - Vulnerabilities: 88 (🔴 Critical: 7, 🟠 High: 25, 🟡 Medium: 44, 🟢 Low: 12)
   - SBOM Components: 1402  
   - VEX Statements: 55
-  - Reports: `nginx-1_25-alpine-1757468781-*`
+  - Reports: `nginx-1_25-alpine-1757469378-*`
 - **reg.nirmata.io/nirmata/kyverno:latest**
   - Vulnerabilities: 23 (🔴 Critical: 3, 🟠 High: 7, 🟡 Medium: 10, 🟢 Low: 3)
   - SBOM Components: 1026  
   - VEX Statements: 7
-  - Reports: `reg_nirmata_io_nirmata_kyverno-latest-1757468781-*`
+  - Reports: `reg_nirmata_io_nirmata_kyverno-latest-1757469378-*`
 - **alpine/curl:latest**
   - Vulnerabilities: 6 (🔴 Critical: 0, 🟠 High: 0, 🟡 Medium: 0, 🟢 Low: 6)
   - SBOM Components: 119  
   - VEX Statements: 2
-  - Reports: `alpine_curl-latest-1757468781-*`
+  - Reports: `alpine_curl-latest-1757469378-*`
 - **reg.nirmata.io/nirmata/background-controller:latest**
   - Vulnerabilities: 23 (🔴 Critical: 3, 🟠 High: 7, 🟡 Medium: 10, 🟢 Low: 3)
   - SBOM Components: 1023  
   - VEX Statements: 7
-  - Reports: `reg_nirmata_io_nirmata_background-controller-latest-1757468781-*`
+  - Reports: `reg_nirmata_io_nirmata_background-controller-latest-1757469378-*`
 - **reg.nirmata.io/nirmata/kyvernopre:latest**
   - Vulnerabilities: 23 (🔴 Critical: 3, 🟠 High: 7, 🟡 Medium: 10, 🟢 Low: 3)
   - SBOM Components: 1022  
   - VEX Statements: 7
-  - Reports: `reg_nirmata_io_nirmata_kyvernopre-latest-1757468781-*`
+  - Reports: `reg_nirmata_io_nirmata_kyvernopre-latest-1757469378-*`
 - **busybox:1.35**
   - Vulnerabilities: 5 (🔴 Critical: 1, 🟠 High: 2, 🟡 Medium: 0, 🟢 Low: 2)
   - SBOM Components: 3  
   - VEX Statements: 5
-  - Reports: `busybox-1_35-1757468781-*`
+  - Reports: `busybox-1_35-1757469378-*`
 - **reg.nirmata.io/nirmata/kyverno-cli:latest**
   - Vulnerabilities: 25 (🔴 Critical: 4, 🟠 High: 8, 🟡 Medium: 10, 🟢 Low: 3)
   - SBOM Components: 1061  
   - VEX Statements: 7
-  - Reports: `reg_nirmata_io_nirmata_kyverno-cli-latest-1757468781-*`
+  - Reports: `reg_nirmata_io_nirmata_kyverno-cli-latest-1757469378-*`
 - **reg.nirmata.io/nirmata/reports-controller:latest**
   - Vulnerabilities: 23 (🔴 Critical: 3, 🟠 High: 7, 🟡 Medium: 10, 🟢 Low: 3)
   - SBOM Components: 1023  
   - VEX Statements: 7
-  - Reports: `reg_nirmata_io_nirmata_reports-controller-latest-1757468781-*`
+  - Reports: `reg_nirmata_io_nirmata_reports-controller-latest-1757469378-*`
 - **ghcr.io/nirmata/etcd:v3.5.18-cve-free**
   - Vulnerabilities: 27 (🔴 Critical: 3, 🟠 High: 12, 🟡 Medium: 12, 🟢 Low: 0)
   - SBOM Components: 1570  
   - VEX Statements: 5
-  - Reports: `ghcr_io_nirmata_etcd-v3_5_18-cve-free-1757468781-*`
+  - Reports: `ghcr_io_nirmata_etcd-v3_5_18-cve-free-1757469378-*`
 - **mysql:8.0**
   - Vulnerabilities: 10 (🔴 Critical: 1, 🟠 High: 4, 🟡 Medium: 5, 🟢 Low: 0)
   - SBOM Components: 20589  
   - VEX Statements: 5
-  - Reports: `mysql-8_0-1757468781-*`
+  - Reports: `mysql-8_0-1757469378-*`
 
 ## 📁 Report Files Structure
 
@@ -164,4 +164,4 @@ This scan can be integrated into CI/CD pipelines:
 ```
 
 ---
-*Generated at: Wed Sep 10 01:51:37 UTC 2025*
+*Generated at: Wed Sep 10 02:01:48 UTC 2025*
