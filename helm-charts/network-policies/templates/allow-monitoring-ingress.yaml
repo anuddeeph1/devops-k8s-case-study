@@ -14,7 +14,6 @@ spec:
   background: {{ .Values.kyverno.background }}
   rules:
   - name: generate-allow-monitoring-ingress
-    skipBackgroundRequests: true
     match:
       any:
       - resources:
