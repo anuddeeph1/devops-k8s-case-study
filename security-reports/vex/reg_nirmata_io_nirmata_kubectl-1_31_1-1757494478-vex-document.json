@@ -1,0 +1,101 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://github.com/devops-k8s-case-study/vex/reg_nirmata_io_nirmata_kubectl-1_31_1-1757494478",
+  "author": "Multi-Image Security Scanner",
+  "timestamp": "2025-09-10T08:56:13.536831Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2024-9143",
+        "description": "Vulnerability CVE-2024-9143"
+      },
+      "products": [
+        {
+          "@id": "reg.nirmata.io/nirmata/kubectl:1.31.1",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/libcrypto3@3.3.2-r0?arch=x86_64&distro=alpine-3.20.3&package-id=5052d7368c8afc67&upstream=openssl",
+              "name": "libcrypto3",
+              "version": "3.3.2-r0",
+              "purl": "pkg:apk/alpine/libcrypto3@3.3.2-r0?arch=x86_64&distro=alpine-3.20.3&upstream=openssl"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - No description available",
+      "action_statement": "Component found in SBOM: libcrypto3"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-12797",
+        "description": "Vulnerability CVE-2024-12797"
+      },
+      "products": [
+        {
+          "@id": "reg.nirmata.io/nirmata/kubectl:1.31.1",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/libcrypto3@3.3.2-r0?arch=x86_64&distro=alpine-3.20.3&package-id=5052d7368c8afc67&upstream=openssl",
+              "name": "libcrypto3",
+              "version": "3.3.2-r0",
+              "purl": "pkg:apk/alpine/libcrypto3@3.3.2-r0?arch=x86_64&distro=alpine-3.20.3&upstream=openssl"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - No description available",
+      "action_statement": "Component found in SBOM: libcrypto3"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-13176",
+        "description": "Vulnerability CVE-2024-13176"
+      },
+      "products": [
+        {
+          "@id": "reg.nirmata.io/nirmata/kubectl:1.31.1",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/libcrypto3@3.3.2-r0?arch=x86_64&distro=alpine-3.20.3&package-id=5052d7368c8afc67&upstream=openssl",
+              "name": "libcrypto3",
+              "version": "3.3.2-r0",
+              "purl": "pkg:apk/alpine/libcrypto3@3.3.2-r0?arch=x86_64&distro=alpine-3.20.3&upstream=openssl"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - No description available",
+      "action_statement": "Component found in SBOM: libcrypto3"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-26519",
+        "description": "Vulnerability CVE-2025-26519"
+      },
+      "products": [
+        {
+          "@id": "reg.nirmata.io/nirmata/kubectl:1.31.1",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/musl@1.2.5-r0?arch=x86_64&distro=alpine-3.20.3&package-id=d3d609391a838c28",
+              "name": "musl",
+              "version": "1.2.5-r0",
+              "purl": "pkg:apk/alpine/musl@1.2.5-r0?arch=x86_64&distro=alpine-3.20.3"
+            }
+          ]
+        }
+      ],
+      "status": "under_investigation",
+      "justification": "vulnerability_disputed",
+      "impact_statement": "Severity: HIGH - No description available",
+      "action_statement": "Component found in SBOM: musl"
+    }
+  ]
+}

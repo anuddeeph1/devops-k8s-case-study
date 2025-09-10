@@ -1,0 +1,3867 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "grype",
+          "version": "0.99.1",
+          "informationUri": "https://github.com/anchore/grype",
+          "rules": [
+            {
+              "id": "CVE-2024-28182-nghttp2-libs",
+              "name": "ApkMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2024-28182 medium vulnerability for nghttp2-libs package"
+              },
+              "fullDescription": {
+                "text": "nghttp2 is an implementation of the Hypertext Transfer Protocol version 2 in C. The nghttp2 library prior to version 1.61.0 keeps reading the unbounded number of HTTP/2 CONTINUATION frames even after a stream is reset to keep HPACK context in sync.  This causes excessive CPU usage to decode HPACK stream. nghttp2 v1.61.0 mitigates this vulnerability by limiting the number of CONTINUATION frames it accepts per stream. There is no workaround for this vulnerability."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-28182\nSeverity: medium\nPackage: nghttp2-libs\nVersion: 1.58.0-r0\nFix Version: \nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: nvd:cpe\nLink: [CVE-2024-28182](https://nvd.nist.gov/vuln/detail/CVE-2024-28182)",
+                "markdown": "**Vulnerability CVE-2024-28182**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | nghttp2-libs  | 1.58.0-r0  |   | apk  | /lib/apk/db/installed  | nvd:cpe  | [CVE-2024-28182](https://nvd.nist.gov/vuln/detail/CVE-2024-28182)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/nghttp2-libs@1.58.0-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=nghttp2"
+                ],
+                "security-severity": "5.3"
+              }
+            },
+            {
+              "id": "CVE-2024-5535-libcrypto3",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-5535 critical vulnerability for libcrypto3 package"
+              },
+              "fullDescription": {
+                "text": "Version 3.1.4-r6 is affected with an available fix in versions 3.1.6-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-5535\nSeverity: critical\nPackage: libcrypto3\nVersion: 3.1.4-r6\nFix Version: 3.1.6-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-5535](https://security.alpinelinux.org/vuln/CVE-2024-5535)",
+                "markdown": "**Vulnerability CVE-2024-5535**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| critical  | libcrypto3  | 3.1.4-r6  | 3.1.6-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-5535](https://security.alpinelinux.org/vuln/CVE-2024-5535)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcrypto3@3.1.4-r6?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=openssl"
+                ],
+                "security-severity": "9.1"
+              }
+            },
+            {
+              "id": "CVE-2024-5535-libssl3",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-5535 critical vulnerability for libssl3 package"
+              },
+              "fullDescription": {
+                "text": "Version 3.1.4-r6 is affected with an available fix in versions 3.1.6-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-5535\nSeverity: critical\nPackage: libssl3\nVersion: 3.1.4-r6\nFix Version: 3.1.6-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-5535](https://security.alpinelinux.org/vuln/CVE-2024-5535)",
+                "markdown": "**Vulnerability CVE-2024-5535**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| critical  | libssl3  | 3.1.4-r6  | 3.1.6-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-5535](https://security.alpinelinux.org/vuln/CVE-2024-5535)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libssl3@3.1.4-r6?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=openssl"
+                ],
+                "security-severity": "9.1"
+              }
+            },
+            {
+              "id": "CVE-2025-0665-curl",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2025-0665 critical vulnerability for curl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.12.0-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-0665\nSeverity: critical\nPackage: curl\nVersion: 8.5.0-r0\nFix Version: 8.12.0-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2025-0665](https://security.alpinelinux.org/vuln/CVE-2025-0665)",
+                "markdown": "**Vulnerability CVE-2025-0665**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| critical  | curl  | 8.5.0-r0  | 8.12.0-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2025-0665](https://security.alpinelinux.org/vuln/CVE-2025-0665)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/curl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "9.8"
+              }
+            },
+            {
+              "id": "CVE-2025-0665-libcurl",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2025-0665 critical vulnerability for libcurl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.12.0-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-0665\nSeverity: critical\nPackage: libcurl\nVersion: 8.5.0-r0\nFix Version: 8.12.0-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2025-0665](https://security.alpinelinux.org/vuln/CVE-2025-0665)",
+                "markdown": "**Vulnerability CVE-2025-0665**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| critical  | libcurl  | 8.5.0-r0  | 8.12.0-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2025-0665](https://security.alpinelinux.org/vuln/CVE-2025-0665)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcurl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=curl"
+                ],
+                "security-severity": "9.8"
+              }
+            },
+            {
+              "id": "CVE-2024-7264-curl",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-7264 medium vulnerability for curl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.9.1-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-7264\nSeverity: medium\nPackage: curl\nVersion: 8.5.0-r0\nFix Version: 8.9.1-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-7264](https://security.alpinelinux.org/vuln/CVE-2024-7264)",
+                "markdown": "**Vulnerability CVE-2024-7264**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | curl  | 8.5.0-r0  | 8.9.1-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-7264](https://security.alpinelinux.org/vuln/CVE-2024-7264)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/curl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "6.5"
+              }
+            },
+            {
+              "id": "CVE-2024-7264-libcurl",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-7264 medium vulnerability for libcurl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.9.1-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-7264\nSeverity: medium\nPackage: libcurl\nVersion: 8.5.0-r0\nFix Version: 8.9.1-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-7264](https://security.alpinelinux.org/vuln/CVE-2024-7264)",
+                "markdown": "**Vulnerability CVE-2024-7264**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libcurl  | 8.5.0-r0  | 8.9.1-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-7264](https://security.alpinelinux.org/vuln/CVE-2024-7264)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcurl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=curl"
+                ],
+                "security-severity": "6.5"
+              }
+            },
+            {
+              "id": "CVE-2024-2398-curl",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-2398 high vulnerability for curl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.7.1-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-2398\nSeverity: high\nPackage: curl\nVersion: 8.5.0-r0\nFix Version: 8.7.1-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-2398](https://security.alpinelinux.org/vuln/CVE-2024-2398)",
+                "markdown": "**Vulnerability CVE-2024-2398**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | curl  | 8.5.0-r0  | 8.7.1-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-2398](https://security.alpinelinux.org/vuln/CVE-2024-2398)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/curl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "8.6"
+              }
+            },
+            {
+              "id": "CVE-2024-2398-libcurl",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-2398 high vulnerability for libcurl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.7.1-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-2398\nSeverity: high\nPackage: libcurl\nVersion: 8.5.0-r0\nFix Version: 8.7.1-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-2398](https://security.alpinelinux.org/vuln/CVE-2024-2398)",
+                "markdown": "**Vulnerability CVE-2024-2398**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | libcurl  | 8.5.0-r0  | 8.7.1-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-2398](https://security.alpinelinux.org/vuln/CVE-2024-2398)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcurl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=curl"
+                ],
+                "security-severity": "8.6"
+              }
+            },
+            {
+              "id": "CVE-2024-6197-curl",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-6197 high vulnerability for curl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.9.0-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-6197\nSeverity: high\nPackage: curl\nVersion: 8.5.0-r0\nFix Version: 8.9.0-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-6197](https://security.alpinelinux.org/vuln/CVE-2024-6197)",
+                "markdown": "**Vulnerability CVE-2024-6197**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | curl  | 8.5.0-r0  | 8.9.0-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-6197](https://security.alpinelinux.org/vuln/CVE-2024-6197)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/curl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "CVE-2024-6197-libcurl",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-6197 high vulnerability for libcurl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.9.0-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-6197\nSeverity: high\nPackage: libcurl\nVersion: 8.5.0-r0\nFix Version: 8.9.0-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-6197](https://security.alpinelinux.org/vuln/CVE-2024-6197)",
+                "markdown": "**Vulnerability CVE-2024-6197**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | libcurl  | 8.5.0-r0  | 8.9.0-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-6197](https://security.alpinelinux.org/vuln/CVE-2024-6197)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcurl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=curl"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "CVE-2024-7006-tiff",
+              "name": "ApkMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2024-7006 high vulnerability for tiff package"
+              },
+              "fullDescription": {
+                "text": "A null pointer dereference flaw was found in Libtiff via `tif_dirinfo.c`. This issue may allow an attacker to trigger memory allocation failures through certain means, such as restricting the heap space size or injecting faults, causing a segmentation fault. This can cause an application crash, eventually leading to a denial of service."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-7006\nSeverity: high\nPackage: tiff\nVersion: 4.6.0-r0\nFix Version: \nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: nvd:cpe\nLink: [CVE-2024-7006](https://nvd.nist.gov/vuln/detail/CVE-2024-7006)",
+                "markdown": "**Vulnerability CVE-2024-7006**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | tiff  | 4.6.0-r0  |   | apk  | /lib/apk/db/installed  | nvd:cpe  | [CVE-2024-7006](https://nvd.nist.gov/vuln/detail/CVE-2024-7006)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/tiff@4.6.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "CVE-2024-6119-libcrypto3",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-6119 high vulnerability for libcrypto3 package"
+              },
+              "fullDescription": {
+                "text": "Version 3.1.4-r6 is affected with an available fix in versions 3.1.7-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-6119\nSeverity: high\nPackage: libcrypto3\nVersion: 3.1.4-r6\nFix Version: 3.1.7-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-6119](https://security.alpinelinux.org/vuln/CVE-2024-6119)",
+                "markdown": "**Vulnerability CVE-2024-6119**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | libcrypto3  | 3.1.4-r6  | 3.1.7-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-6119](https://security.alpinelinux.org/vuln/CVE-2024-6119)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcrypto3@3.1.4-r6?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=openssl"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "CVE-2024-6119-libssl3",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-6119 high vulnerability for libssl3 package"
+              },
+              "fullDescription": {
+                "text": "Version 3.1.4-r6 is affected with an available fix in versions 3.1.7-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-6119\nSeverity: high\nPackage: libssl3\nVersion: 3.1.4-r6\nFix Version: 3.1.7-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-6119](https://security.alpinelinux.org/vuln/CVE-2024-6119)",
+                "markdown": "**Vulnerability CVE-2024-6119**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | libssl3  | 3.1.4-r6  | 3.1.7-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-6119](https://security.alpinelinux.org/vuln/CVE-2024-6119)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libssl3@3.1.4-r6?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=openssl"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "CVE-2024-6874-curl",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-6874 medium vulnerability for curl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.9.0-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-6874\nSeverity: medium\nPackage: curl\nVersion: 8.5.0-r0\nFix Version: 8.9.0-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-6874](https://security.alpinelinux.org/vuln/CVE-2024-6874)",
+                "markdown": "**Vulnerability CVE-2024-6874**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | curl  | 8.5.0-r0  | 8.9.0-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-6874](https://security.alpinelinux.org/vuln/CVE-2024-6874)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/curl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "4.3"
+              }
+            },
+            {
+              "id": "CVE-2024-6874-libcurl",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-6874 medium vulnerability for libcurl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.9.0-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-6874\nSeverity: medium\nPackage: libcurl\nVersion: 8.5.0-r0\nFix Version: 8.9.0-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-6874](https://security.alpinelinux.org/vuln/CVE-2024-6874)",
+                "markdown": "**Vulnerability CVE-2024-6874**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libcurl  | 8.5.0-r0  | 8.9.0-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-6874](https://security.alpinelinux.org/vuln/CVE-2024-6874)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcurl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=curl"
+                ],
+                "security-severity": "4.3"
+              }
+            },
+            {
+              "id": "CVE-2024-8176-libexpat",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-8176 high vulnerability for libexpat package"
+              },
+              "fullDescription": {
+                "text": "Version 2.6.2-r0 is affected with an available fix in versions 2.7.0-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-8176\nSeverity: high\nPackage: libexpat\nVersion: 2.6.2-r0\nFix Version: 2.7.0-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-8176](https://security.alpinelinux.org/vuln/CVE-2024-8176)",
+                "markdown": "**Vulnerability CVE-2024-8176**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | libexpat  | 2.6.2-r0  | 2.7.0-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-8176](https://security.alpinelinux.org/vuln/CVE-2024-8176)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libexpat@2.6.2-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=expat"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "CVE-2024-9681-curl",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-9681 medium vulnerability for curl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.11.0-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-9681\nSeverity: medium\nPackage: curl\nVersion: 8.5.0-r0\nFix Version: 8.11.0-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-9681](https://security.alpinelinux.org/vuln/CVE-2024-9681)",
+                "markdown": "**Vulnerability CVE-2024-9681**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | curl  | 8.5.0-r0  | 8.11.0-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-9681](https://security.alpinelinux.org/vuln/CVE-2024-9681)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/curl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "6.5"
+              }
+            },
+            {
+              "id": "CVE-2024-9681-libcurl",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-9681 medium vulnerability for libcurl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.11.0-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-9681\nSeverity: medium\nPackage: libcurl\nVersion: 8.5.0-r0\nFix Version: 8.11.0-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-9681](https://security.alpinelinux.org/vuln/CVE-2024-9681)",
+                "markdown": "**Vulnerability CVE-2024-9681**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libcurl  | 8.5.0-r0  | 8.11.0-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-9681](https://security.alpinelinux.org/vuln/CVE-2024-9681)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcurl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=curl"
+                ],
+                "security-severity": "6.5"
+              }
+            },
+            {
+              "id": "CVE-2024-9143-libcrypto3",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-9143 medium vulnerability for libcrypto3 package"
+              },
+              "fullDescription": {
+                "text": "Version 3.1.4-r6 is affected with an available fix in versions 3.1.7-r1"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-9143\nSeverity: medium\nPackage: libcrypto3\nVersion: 3.1.4-r6\nFix Version: 3.1.7-r1\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-9143](https://security.alpinelinux.org/vuln/CVE-2024-9143)",
+                "markdown": "**Vulnerability CVE-2024-9143**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libcrypto3  | 3.1.4-r6  | 3.1.7-r1  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-9143](https://security.alpinelinux.org/vuln/CVE-2024-9143)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcrypto3@3.1.4-r6?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=openssl"
+                ],
+                "security-severity": "4.3"
+              }
+            },
+            {
+              "id": "CVE-2024-9143-libssl3",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-9143 medium vulnerability for libssl3 package"
+              },
+              "fullDescription": {
+                "text": "Version 3.1.4-r6 is affected with an available fix in versions 3.1.7-r1"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-9143\nSeverity: medium\nPackage: libssl3\nVersion: 3.1.4-r6\nFix Version: 3.1.7-r1\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-9143](https://security.alpinelinux.org/vuln/CVE-2024-9143)",
+                "markdown": "**Vulnerability CVE-2024-9143**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libssl3  | 3.1.4-r6  | 3.1.7-r1  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-9143](https://security.alpinelinux.org/vuln/CVE-2024-9143)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libssl3@3.1.4-r6?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=openssl"
+                ],
+                "security-severity": "4.3"
+              }
+            },
+            {
+              "id": "CVE-2024-2004-curl",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-2004 low vulnerability for curl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.7.1-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-2004\nSeverity: low\nPackage: curl\nVersion: 8.5.0-r0\nFix Version: 8.7.1-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-2004](https://security.alpinelinux.org/vuln/CVE-2024-2004)",
+                "markdown": "**Vulnerability CVE-2024-2004**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | curl  | 8.5.0-r0  | 8.7.1-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-2004](https://security.alpinelinux.org/vuln/CVE-2024-2004)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/curl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "3.5"
+              }
+            },
+            {
+              "id": "CVE-2024-2004-libcurl",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-2004 low vulnerability for libcurl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.7.1-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-2004\nSeverity: low\nPackage: libcurl\nVersion: 8.5.0-r0\nFix Version: 8.7.1-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-2004](https://security.alpinelinux.org/vuln/CVE-2024-2004)",
+                "markdown": "**Vulnerability CVE-2024-2004**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | libcurl  | 8.5.0-r0  | 8.7.1-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-2004](https://security.alpinelinux.org/vuln/CVE-2024-2004)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcurl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=curl"
+                ],
+                "security-severity": "3.5"
+              }
+            },
+            {
+              "id": "CVE-2025-0725-curl",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2025-0725 high vulnerability for curl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.12.0-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-0725\nSeverity: high\nPackage: curl\nVersion: 8.5.0-r0\nFix Version: 8.12.0-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2025-0725](https://security.alpinelinux.org/vuln/CVE-2025-0725)",
+                "markdown": "**Vulnerability CVE-2025-0725**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | curl  | 8.5.0-r0  | 8.12.0-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2025-0725](https://security.alpinelinux.org/vuln/CVE-2025-0725)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/curl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "7.3"
+              }
+            },
+            {
+              "id": "CVE-2025-0725-libcurl",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2025-0725 high vulnerability for libcurl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.12.0-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-0725\nSeverity: high\nPackage: libcurl\nVersion: 8.5.0-r0\nFix Version: 8.12.0-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2025-0725](https://security.alpinelinux.org/vuln/CVE-2025-0725)",
+                "markdown": "**Vulnerability CVE-2025-0725**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | libcurl  | 8.5.0-r0  | 8.12.0-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2025-0725](https://security.alpinelinux.org/vuln/CVE-2025-0725)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcurl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=curl"
+                ],
+                "security-severity": "7.3"
+              }
+            },
+            {
+              "id": "CVE-2023-6277-tiff",
+              "name": "ApkMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2023-6277 medium vulnerability for tiff package"
+              },
+              "fullDescription": {
+                "text": "An out-of-memory flaw was found in libtiff. Passing a crafted tiff file to TIFFOpen() API may allow a remote attacker to cause a denial of service via a craft input with size smaller than 379 KB."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2023-6277\nSeverity: medium\nPackage: tiff\nVersion: 4.6.0-r0\nFix Version: \nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: nvd:cpe\nLink: [CVE-2023-6277](https://nvd.nist.gov/vuln/detail/CVE-2023-6277)",
+                "markdown": "**Vulnerability CVE-2023-6277**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | tiff  | 4.6.0-r0  |   | apk  | /lib/apk/db/installed  | nvd:cpe  | [CVE-2023-6277](https://nvd.nist.gov/vuln/detail/CVE-2023-6277)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/tiff@4.6.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "6.5"
+              }
+            },
+            {
+              "id": "CVE-2024-45492-libexpat",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-45492 critical vulnerability for libexpat package"
+              },
+              "fullDescription": {
+                "text": "Version 2.6.2-r0 is affected with an available fix in versions 2.6.3-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-45492\nSeverity: critical\nPackage: libexpat\nVersion: 2.6.2-r0\nFix Version: 2.6.3-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-45492](https://security.alpinelinux.org/vuln/CVE-2024-45492)",
+                "markdown": "**Vulnerability CVE-2024-45492**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| critical  | libexpat  | 2.6.2-r0  | 2.6.3-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-45492](https://security.alpinelinux.org/vuln/CVE-2024-45492)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libexpat@2.6.2-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=expat"
+                ],
+                "security-severity": "9.8"
+              }
+            },
+            {
+              "id": "CVE-2023-52356-tiff",
+              "name": "ApkMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2023-52356 high vulnerability for tiff package"
+              },
+              "fullDescription": {
+                "text": "A segment fault (SEGV) flaw was found in libtiff that could be triggered by passing a crafted tiff file to the TIFFReadRGBATileExt() API. This flaw allows a remote attacker to cause a heap-buffer overflow, leading to a denial of service."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2023-52356\nSeverity: high\nPackage: tiff\nVersion: 4.6.0-r0\nFix Version: \nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: nvd:cpe\nLink: [CVE-2023-52356](https://nvd.nist.gov/vuln/detail/CVE-2023-52356)",
+                "markdown": "**Vulnerability CVE-2023-52356**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | tiff  | 4.6.0-r0  |   | apk  | /lib/apk/db/installed  | nvd:cpe  | [CVE-2023-52356](https://nvd.nist.gov/vuln/detail/CVE-2023-52356)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/tiff@4.6.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "CVE-2024-8096-curl",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-8096 medium vulnerability for curl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.10.0-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-8096\nSeverity: medium\nPackage: curl\nVersion: 8.5.0-r0\nFix Version: 8.10.0-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-8096](https://security.alpinelinux.org/vuln/CVE-2024-8096)",
+                "markdown": "**Vulnerability CVE-2024-8096**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | curl  | 8.5.0-r0  | 8.10.0-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-8096](https://security.alpinelinux.org/vuln/CVE-2024-8096)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/curl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "6.5"
+              }
+            },
+            {
+              "id": "CVE-2024-8096-libcurl",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-8096 medium vulnerability for libcurl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.10.0-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-8096\nSeverity: medium\nPackage: libcurl\nVersion: 8.5.0-r0\nFix Version: 8.10.0-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-8096](https://security.alpinelinux.org/vuln/CVE-2024-8096)",
+                "markdown": "**Vulnerability CVE-2024-8096**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libcurl  | 8.5.0-r0  | 8.10.0-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-8096](https://security.alpinelinux.org/vuln/CVE-2024-8096)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcurl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=curl"
+                ],
+                "security-severity": "6.5"
+              }
+            },
+            {
+              "id": "CVE-2024-2379-curl",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-2379 medium vulnerability for curl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.7.1-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-2379\nSeverity: medium\nPackage: curl\nVersion: 8.5.0-r0\nFix Version: 8.7.1-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-2379](https://security.alpinelinux.org/vuln/CVE-2024-2379)",
+                "markdown": "**Vulnerability CVE-2024-2379**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | curl  | 8.5.0-r0  | 8.7.1-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-2379](https://security.alpinelinux.org/vuln/CVE-2024-2379)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/curl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "6.3"
+              }
+            },
+            {
+              "id": "CVE-2024-2379-libcurl",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-2379 medium vulnerability for libcurl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.7.1-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-2379\nSeverity: medium\nPackage: libcurl\nVersion: 8.5.0-r0\nFix Version: 8.7.1-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-2379](https://security.alpinelinux.org/vuln/CVE-2024-2379)",
+                "markdown": "**Vulnerability CVE-2024-2379**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libcurl  | 8.5.0-r0  | 8.7.1-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-2379](https://security.alpinelinux.org/vuln/CVE-2024-2379)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcurl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=curl"
+                ],
+                "security-severity": "6.3"
+              }
+            },
+            {
+              "id": "CVE-2024-11053-curl",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-11053 low vulnerability for curl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.11.1-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-11053\nSeverity: low\nPackage: curl\nVersion: 8.5.0-r0\nFix Version: 8.11.1-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-11053](https://security.alpinelinux.org/vuln/CVE-2024-11053)",
+                "markdown": "**Vulnerability CVE-2024-11053**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | curl  | 8.5.0-r0  | 8.11.1-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-11053](https://security.alpinelinux.org/vuln/CVE-2024-11053)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/curl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "3.4"
+              }
+            },
+            {
+              "id": "CVE-2024-11053-libcurl",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-11053 low vulnerability for libcurl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.11.1-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-11053\nSeverity: low\nPackage: libcurl\nVersion: 8.5.0-r0\nFix Version: 8.11.1-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-11053](https://security.alpinelinux.org/vuln/CVE-2024-11053)",
+                "markdown": "**Vulnerability CVE-2024-11053**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | libcurl  | 8.5.0-r0  | 8.11.1-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-11053](https://security.alpinelinux.org/vuln/CVE-2024-11053)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcurl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=curl"
+                ],
+                "security-severity": "3.4"
+              }
+            },
+            {
+              "id": "CVE-2024-34459-libxml2",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-34459 high vulnerability for libxml2 package"
+              },
+              "fullDescription": {
+                "text": "Version 2.11.7-r0 is affected with an available fix in versions 2.11.8-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-34459\nSeverity: high\nPackage: libxml2\nVersion: 2.11.7-r0\nFix Version: 2.11.8-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-34459](https://security.alpinelinux.org/vuln/CVE-2024-34459)",
+                "markdown": "**Vulnerability CVE-2024-34459**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | libxml2  | 2.11.7-r0  | 2.11.8-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-34459](https://security.alpinelinux.org/vuln/CVE-2024-34459)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libxml2@2.11.7-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "CVE-2024-45491-libexpat",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-45491 critical vulnerability for libexpat package"
+              },
+              "fullDescription": {
+                "text": "Version 2.6.2-r0 is affected with an available fix in versions 2.6.3-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-45491\nSeverity: critical\nPackage: libexpat\nVersion: 2.6.2-r0\nFix Version: 2.6.3-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-45491](https://security.alpinelinux.org/vuln/CVE-2024-45491)",
+                "markdown": "**Vulnerability CVE-2024-45491**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| critical  | libexpat  | 2.6.2-r0  | 2.6.3-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-45491](https://security.alpinelinux.org/vuln/CVE-2024-45491)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libexpat@2.6.2-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=expat"
+                ],
+                "security-severity": "9.8"
+              }
+            },
+            {
+              "id": "CVE-2024-4741-libcrypto3",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-4741 high vulnerability for libcrypto3 package"
+              },
+              "fullDescription": {
+                "text": "Version 3.1.4-r6 is affected with an available fix in versions 3.1.6-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-4741\nSeverity: high\nPackage: libcrypto3\nVersion: 3.1.4-r6\nFix Version: 3.1.6-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-4741](https://security.alpinelinux.org/vuln/CVE-2024-4741)",
+                "markdown": "**Vulnerability CVE-2024-4741**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | libcrypto3  | 3.1.4-r6  | 3.1.6-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-4741](https://security.alpinelinux.org/vuln/CVE-2024-4741)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcrypto3@3.1.4-r6?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=openssl"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "CVE-2024-4741-libssl3",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-4741 high vulnerability for libssl3 package"
+              },
+              "fullDescription": {
+                "text": "Version 3.1.4-r6 is affected with an available fix in versions 3.1.6-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-4741\nSeverity: high\nPackage: libssl3\nVersion: 3.1.4-r6\nFix Version: 3.1.6-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-4741](https://security.alpinelinux.org/vuln/CVE-2024-4741)",
+                "markdown": "**Vulnerability CVE-2024-4741**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | libssl3  | 3.1.4-r6  | 3.1.6-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-4741](https://security.alpinelinux.org/vuln/CVE-2024-4741)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libssl3@3.1.4-r6?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=openssl"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "CVE-2025-31115-xz-libs",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2025-31115 high vulnerability for xz-libs package"
+              },
+              "fullDescription": {
+                "text": "Version 5.4.5-r0 is affected with an available fix in versions 5.4.5-r1"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-31115\nSeverity: high\nPackage: xz-libs\nVersion: 5.4.5-r0\nFix Version: 5.4.5-r1\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2025-31115](https://security.alpinelinux.org/vuln/CVE-2025-31115)",
+                "markdown": "**Vulnerability CVE-2025-31115**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | xz-libs  | 5.4.5-r0  | 5.4.5-r1  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2025-31115](https://security.alpinelinux.org/vuln/CVE-2025-31115)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/xz-libs@5.4.5-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=xz"
+                ],
+                "security-severity": "8.7"
+              }
+            },
+            {
+              "id": "CVE-2024-2466-curl",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-2466 medium vulnerability for curl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.7.1-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-2466\nSeverity: medium\nPackage: curl\nVersion: 8.5.0-r0\nFix Version: 8.7.1-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-2466](https://security.alpinelinux.org/vuln/CVE-2024-2466)",
+                "markdown": "**Vulnerability CVE-2024-2466**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | curl  | 8.5.0-r0  | 8.7.1-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-2466](https://security.alpinelinux.org/vuln/CVE-2024-2466)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/curl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "6.5"
+              }
+            },
+            {
+              "id": "CVE-2024-2466-libcurl",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-2466 medium vulnerability for libcurl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.7.1-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-2466\nSeverity: medium\nPackage: libcurl\nVersion: 8.5.0-r0\nFix Version: 8.7.1-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-2466](https://security.alpinelinux.org/vuln/CVE-2024-2466)",
+                "markdown": "**Vulnerability CVE-2024-2466**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libcurl  | 8.5.0-r0  | 8.7.1-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-2466](https://security.alpinelinux.org/vuln/CVE-2024-2466)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcurl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=curl"
+                ],
+                "security-severity": "6.5"
+              }
+            },
+            {
+              "id": "CVE-2024-0853-curl",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-0853 medium vulnerability for curl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.6.0-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-0853\nSeverity: medium\nPackage: curl\nVersion: 8.5.0-r0\nFix Version: 8.6.0-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-0853](https://security.alpinelinux.org/vuln/CVE-2024-0853)",
+                "markdown": "**Vulnerability CVE-2024-0853**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | curl  | 8.5.0-r0  | 8.6.0-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-0853](https://security.alpinelinux.org/vuln/CVE-2024-0853)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/curl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "5.3"
+              }
+            },
+            {
+              "id": "CVE-2024-0853-libcurl",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-0853 medium vulnerability for libcurl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.6.0-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-0853\nSeverity: medium\nPackage: libcurl\nVersion: 8.5.0-r0\nFix Version: 8.6.0-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-0853](https://security.alpinelinux.org/vuln/CVE-2024-0853)",
+                "markdown": "**Vulnerability CVE-2024-0853**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libcurl  | 8.5.0-r0  | 8.6.0-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-0853](https://security.alpinelinux.org/vuln/CVE-2024-0853)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcurl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=curl"
+                ],
+                "security-severity": "5.3"
+              }
+            },
+            {
+              "id": "CVE-2024-45490-libexpat",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-45490 high vulnerability for libexpat package"
+              },
+              "fullDescription": {
+                "text": "Version 2.6.2-r0 is affected with an available fix in versions 2.6.3-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-45490\nSeverity: high\nPackage: libexpat\nVersion: 2.6.2-r0\nFix Version: 2.6.3-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-45490](https://security.alpinelinux.org/vuln/CVE-2024-45490)",
+                "markdown": "**Vulnerability CVE-2024-45490**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | libexpat  | 2.6.2-r0  | 2.6.3-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-45490](https://security.alpinelinux.org/vuln/CVE-2024-45490)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libexpat@2.6.2-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=expat"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "CVE-2025-27113-libxml2",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2025-27113 high vulnerability for libxml2 package"
+              },
+              "fullDescription": {
+                "text": "Version 2.11.7-r0 is affected with an available fix in versions 2.11.8-r2"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-27113\nSeverity: high\nPackage: libxml2\nVersion: 2.11.7-r0\nFix Version: 2.11.8-r2\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2025-27113](https://security.alpinelinux.org/vuln/CVE-2025-27113)",
+                "markdown": "**Vulnerability CVE-2025-27113**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | libxml2  | 2.11.7-r0  | 2.11.8-r2  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2025-27113](https://security.alpinelinux.org/vuln/CVE-2025-27113)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libxml2@2.11.7-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "CVE-2024-50602-libexpat",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-50602 medium vulnerability for libexpat package"
+              },
+              "fullDescription": {
+                "text": "Version 2.6.2-r0 is affected with an available fix in versions 2.6.4-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-50602\nSeverity: medium\nPackage: libexpat\nVersion: 2.6.2-r0\nFix Version: 2.6.4-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-50602](https://security.alpinelinux.org/vuln/CVE-2024-50602)",
+                "markdown": "**Vulnerability CVE-2024-50602**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libexpat  | 2.6.2-r0  | 2.6.4-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-50602](https://security.alpinelinux.org/vuln/CVE-2024-50602)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libexpat@2.6.2-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=expat"
+                ],
+                "security-severity": "5.9"
+              }
+            },
+            {
+              "id": "CVE-2024-13176-libcrypto3",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-13176 medium vulnerability for libcrypto3 package"
+              },
+              "fullDescription": {
+                "text": "Version 3.1.4-r6 is affected with an available fix in versions 3.1.8-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-13176\nSeverity: medium\nPackage: libcrypto3\nVersion: 3.1.4-r6\nFix Version: 3.1.8-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-13176](https://security.alpinelinux.org/vuln/CVE-2024-13176)",
+                "markdown": "**Vulnerability CVE-2024-13176**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libcrypto3  | 3.1.4-r6  | 3.1.8-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-13176](https://security.alpinelinux.org/vuln/CVE-2024-13176)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcrypto3@3.1.4-r6?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=openssl"
+                ],
+                "security-severity": "4.1"
+              }
+            },
+            {
+              "id": "CVE-2024-13176-libssl3",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-13176 medium vulnerability for libssl3 package"
+              },
+              "fullDescription": {
+                "text": "Version 3.1.4-r6 is affected with an available fix in versions 3.1.8-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-13176\nSeverity: medium\nPackage: libssl3\nVersion: 3.1.4-r6\nFix Version: 3.1.8-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-13176](https://security.alpinelinux.org/vuln/CVE-2024-13176)",
+                "markdown": "**Vulnerability CVE-2024-13176**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libssl3  | 3.1.4-r6  | 3.1.8-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-13176](https://security.alpinelinux.org/vuln/CVE-2024-13176)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libssl3@3.1.4-r6?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=openssl"
+                ],
+                "security-severity": "4.1"
+              }
+            },
+            {
+              "id": "CVE-2024-4603-libcrypto3",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-4603 medium vulnerability for libcrypto3 package"
+              },
+              "fullDescription": {
+                "text": "Version 3.1.4-r6 is affected with an available fix in versions 3.1.5-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-4603\nSeverity: medium\nPackage: libcrypto3\nVersion: 3.1.4-r6\nFix Version: 3.1.5-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-4603](https://security.alpinelinux.org/vuln/CVE-2024-4603)",
+                "markdown": "**Vulnerability CVE-2024-4603**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libcrypto3  | 3.1.4-r6  | 3.1.5-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-4603](https://security.alpinelinux.org/vuln/CVE-2024-4603)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcrypto3@3.1.4-r6?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=openssl"
+                ],
+                "security-severity": "5.3"
+              }
+            },
+            {
+              "id": "CVE-2024-4603-libssl3",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-4603 medium vulnerability for libssl3 package"
+              },
+              "fullDescription": {
+                "text": "Version 3.1.4-r6 is affected with an available fix in versions 3.1.5-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-4603\nSeverity: medium\nPackage: libssl3\nVersion: 3.1.4-r6\nFix Version: 3.1.5-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-4603](https://security.alpinelinux.org/vuln/CVE-2024-4603)",
+                "markdown": "**Vulnerability CVE-2024-4603**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libssl3  | 3.1.4-r6  | 3.1.5-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-4603](https://security.alpinelinux.org/vuln/CVE-2024-4603)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libssl3@3.1.4-r6?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=openssl"
+                ],
+                "security-severity": "5.3"
+              }
+            },
+            {
+              "id": "CVE-2025-32415-libxml2",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2025-32415 high vulnerability for libxml2 package"
+              },
+              "fullDescription": {
+                "text": "Version 2.11.7-r0 is affected with an available fix in versions 2.11.8-r3"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-32415\nSeverity: high\nPackage: libxml2\nVersion: 2.11.7-r0\nFix Version: 2.11.8-r3\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2025-32415](https://security.alpinelinux.org/vuln/CVE-2025-32415)",
+                "markdown": "**Vulnerability CVE-2025-32415**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | libxml2  | 2.11.7-r0  | 2.11.8-r3  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2025-32415](https://security.alpinelinux.org/vuln/CVE-2025-32415)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libxml2@2.11.7-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "CVE-2025-32414-libxml2",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2025-32414 high vulnerability for libxml2 package"
+              },
+              "fullDescription": {
+                "text": "Version 2.11.7-r0 is affected with an available fix in versions 2.11.8-r3"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-32414\nSeverity: high\nPackage: libxml2\nVersion: 2.11.7-r0\nFix Version: 2.11.8-r3\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2025-32414](https://security.alpinelinux.org/vuln/CVE-2025-32414)",
+                "markdown": "**Vulnerability CVE-2025-32414**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | libxml2  | 2.11.7-r0  | 2.11.8-r3  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2025-32414](https://security.alpinelinux.org/vuln/CVE-2025-32414)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libxml2@2.11.7-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "CVE-2025-0167-curl",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2025-0167 low vulnerability for curl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.12.0-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-0167\nSeverity: low\nPackage: curl\nVersion: 8.5.0-r0\nFix Version: 8.12.0-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2025-0167](https://security.alpinelinux.org/vuln/CVE-2025-0167)",
+                "markdown": "**Vulnerability CVE-2025-0167**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | curl  | 8.5.0-r0  | 8.12.0-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2025-0167](https://security.alpinelinux.org/vuln/CVE-2025-0167)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/curl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "3.4"
+              }
+            },
+            {
+              "id": "CVE-2025-0167-libcurl",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2025-0167 low vulnerability for libcurl package"
+              },
+              "fullDescription": {
+                "text": "Version 8.5.0-r0 is affected with an available fix in versions 8.12.0-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-0167\nSeverity: low\nPackage: libcurl\nVersion: 8.5.0-r0\nFix Version: 8.12.0-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2025-0167](https://security.alpinelinux.org/vuln/CVE-2025-0167)",
+                "markdown": "**Vulnerability CVE-2025-0167**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | libcurl  | 8.5.0-r0  | 8.12.0-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2025-0167](https://security.alpinelinux.org/vuln/CVE-2025-0167)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcurl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=curl"
+                ],
+                "security-severity": "3.4"
+              }
+            },
+            {
+              "id": "CVE-2023-42364-busybox",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2023-42364 medium vulnerability for busybox package"
+              },
+              "fullDescription": {
+                "text": "Version 1.36.1-r15 is affected with an available fix in versions 1.36.1-r19"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2023-42364\nSeverity: medium\nPackage: busybox\nVersion: 1.36.1-r15\nFix Version: 1.36.1-r19\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2023-42364](https://security.alpinelinux.org/vuln/CVE-2023-42364)",
+                "markdown": "**Vulnerability CVE-2023-42364**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | busybox  | 1.36.1-r15  | 1.36.1-r19  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2023-42364](https://security.alpinelinux.org/vuln/CVE-2023-42364)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/busybox@1.36.1-r15?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "5.5"
+              }
+            },
+            {
+              "id": "CVE-2023-42365-busybox",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2023-42365 medium vulnerability for busybox package"
+              },
+              "fullDescription": {
+                "text": "Version 1.36.1-r15 is affected with an available fix in versions 1.36.1-r19"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2023-42365\nSeverity: medium\nPackage: busybox\nVersion: 1.36.1-r15\nFix Version: 1.36.1-r19\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2023-42365](https://security.alpinelinux.org/vuln/CVE-2023-42365)",
+                "markdown": "**Vulnerability CVE-2023-42365**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | busybox  | 1.36.1-r15  | 1.36.1-r19  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2023-42365](https://security.alpinelinux.org/vuln/CVE-2023-42365)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/busybox@1.36.1-r15?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "5.5"
+              }
+            },
+            {
+              "id": "CVE-2023-42364-busybox-binsh",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2023-42364 medium vulnerability for busybox-binsh package"
+              },
+              "fullDescription": {
+                "text": "Version 1.36.1-r15 is affected with an available fix in versions 1.36.1-r19"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2023-42364\nSeverity: medium\nPackage: busybox-binsh\nVersion: 1.36.1-r15\nFix Version: 1.36.1-r19\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2023-42364](https://security.alpinelinux.org/vuln/CVE-2023-42364)",
+                "markdown": "**Vulnerability CVE-2023-42364**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | busybox-binsh  | 1.36.1-r15  | 1.36.1-r19  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2023-42364](https://security.alpinelinux.org/vuln/CVE-2023-42364)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/busybox-binsh@1.36.1-r15?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=busybox"
+                ],
+                "security-severity": "5.5"
+              }
+            },
+            {
+              "id": "CVE-2023-42365-busybox-binsh",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2023-42365 medium vulnerability for busybox-binsh package"
+              },
+              "fullDescription": {
+                "text": "Version 1.36.1-r15 is affected with an available fix in versions 1.36.1-r19"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2023-42365\nSeverity: medium\nPackage: busybox-binsh\nVersion: 1.36.1-r15\nFix Version: 1.36.1-r19\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2023-42365](https://security.alpinelinux.org/vuln/CVE-2023-42365)",
+                "markdown": "**Vulnerability CVE-2023-42365**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | busybox-binsh  | 1.36.1-r15  | 1.36.1-r19  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2023-42365](https://security.alpinelinux.org/vuln/CVE-2023-42365)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/busybox-binsh@1.36.1-r15?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=busybox"
+                ],
+                "security-severity": "5.5"
+              }
+            },
+            {
+              "id": "CVE-2023-42364-ssl_client",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2023-42364 medium vulnerability for ssl_client package"
+              },
+              "fullDescription": {
+                "text": "Version 1.36.1-r15 is affected with an available fix in versions 1.36.1-r19"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2023-42364\nSeverity: medium\nPackage: ssl_client\nVersion: 1.36.1-r15\nFix Version: 1.36.1-r19\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2023-42364](https://security.alpinelinux.org/vuln/CVE-2023-42364)",
+                "markdown": "**Vulnerability CVE-2023-42364**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | ssl_client  | 1.36.1-r15  | 1.36.1-r19  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2023-42364](https://security.alpinelinux.org/vuln/CVE-2023-42364)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/ssl_client@1.36.1-r15?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=busybox"
+                ],
+                "security-severity": "5.5"
+              }
+            },
+            {
+              "id": "CVE-2023-42365-ssl_client",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2023-42365 medium vulnerability for ssl_client package"
+              },
+              "fullDescription": {
+                "text": "Version 1.36.1-r15 is affected with an available fix in versions 1.36.1-r19"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2023-42365\nSeverity: medium\nPackage: ssl_client\nVersion: 1.36.1-r15\nFix Version: 1.36.1-r19\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2023-42365](https://security.alpinelinux.org/vuln/CVE-2023-42365)",
+                "markdown": "**Vulnerability CVE-2023-42365**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | ssl_client  | 1.36.1-r15  | 1.36.1-r19  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2023-42365](https://security.alpinelinux.org/vuln/CVE-2023-42365)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/ssl_client@1.36.1-r15?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=busybox"
+                ],
+                "security-severity": "5.5"
+              }
+            },
+            {
+              "id": "CVE-2023-42363-busybox",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2023-42363 medium vulnerability for busybox package"
+              },
+              "fullDescription": {
+                "text": "Version 1.36.1-r15 is affected with an available fix in versions 1.36.1-r17"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2023-42363\nSeverity: medium\nPackage: busybox\nVersion: 1.36.1-r15\nFix Version: 1.36.1-r17\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2023-42363](https://security.alpinelinux.org/vuln/CVE-2023-42363)",
+                "markdown": "**Vulnerability CVE-2023-42363**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | busybox  | 1.36.1-r15  | 1.36.1-r17  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2023-42363](https://security.alpinelinux.org/vuln/CVE-2023-42363)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/busybox@1.36.1-r15?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "5.5"
+              }
+            },
+            {
+              "id": "CVE-2023-42363-busybox-binsh",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2023-42363 medium vulnerability for busybox-binsh package"
+              },
+              "fullDescription": {
+                "text": "Version 1.36.1-r15 is affected with an available fix in versions 1.36.1-r17"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2023-42363\nSeverity: medium\nPackage: busybox-binsh\nVersion: 1.36.1-r15\nFix Version: 1.36.1-r17\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2023-42363](https://security.alpinelinux.org/vuln/CVE-2023-42363)",
+                "markdown": "**Vulnerability CVE-2023-42363**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | busybox-binsh  | 1.36.1-r15  | 1.36.1-r17  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2023-42363](https://security.alpinelinux.org/vuln/CVE-2023-42363)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/busybox-binsh@1.36.1-r15?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=busybox"
+                ],
+                "security-severity": "5.5"
+              }
+            },
+            {
+              "id": "CVE-2023-42363-ssl_client",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2023-42363 medium vulnerability for ssl_client package"
+              },
+              "fullDescription": {
+                "text": "Version 1.36.1-r15 is affected with an available fix in versions 1.36.1-r17"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2023-42363\nSeverity: medium\nPackage: ssl_client\nVersion: 1.36.1-r15\nFix Version: 1.36.1-r17\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2023-42363](https://security.alpinelinux.org/vuln/CVE-2023-42363)",
+                "markdown": "**Vulnerability CVE-2023-42363**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | ssl_client  | 1.36.1-r15  | 1.36.1-r17  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2023-42363](https://security.alpinelinux.org/vuln/CVE-2023-42363)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/ssl_client@1.36.1-r15?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=busybox"
+                ],
+                "security-severity": "5.5"
+              }
+            },
+            {
+              "id": "CVE-2023-42366-busybox",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2023-42366 medium vulnerability for busybox package"
+              },
+              "fullDescription": {
+                "text": "Version 1.36.1-r15 is affected with an available fix in versions 1.36.1-r16"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2023-42366\nSeverity: medium\nPackage: busybox\nVersion: 1.36.1-r15\nFix Version: 1.36.1-r16\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2023-42366](https://security.alpinelinux.org/vuln/CVE-2023-42366)",
+                "markdown": "**Vulnerability CVE-2023-42366**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | busybox  | 1.36.1-r15  | 1.36.1-r16  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2023-42366](https://security.alpinelinux.org/vuln/CVE-2023-42366)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/busybox@1.36.1-r15?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "5.5"
+              }
+            },
+            {
+              "id": "CVE-2023-42366-busybox-binsh",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2023-42366 medium vulnerability for busybox-binsh package"
+              },
+              "fullDescription": {
+                "text": "Version 1.36.1-r15 is affected with an available fix in versions 1.36.1-r16"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2023-42366\nSeverity: medium\nPackage: busybox-binsh\nVersion: 1.36.1-r15\nFix Version: 1.36.1-r16\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2023-42366](https://security.alpinelinux.org/vuln/CVE-2023-42366)",
+                "markdown": "**Vulnerability CVE-2023-42366**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | busybox-binsh  | 1.36.1-r15  | 1.36.1-r16  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2023-42366](https://security.alpinelinux.org/vuln/CVE-2023-42366)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/busybox-binsh@1.36.1-r15?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=busybox"
+                ],
+                "security-severity": "5.5"
+              }
+            },
+            {
+              "id": "CVE-2023-42366-ssl_client",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2023-42366 medium vulnerability for ssl_client package"
+              },
+              "fullDescription": {
+                "text": "Version 1.36.1-r15 is affected with an available fix in versions 1.36.1-r16"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2023-42366\nSeverity: medium\nPackage: ssl_client\nVersion: 1.36.1-r15\nFix Version: 1.36.1-r16\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2023-42366](https://security.alpinelinux.org/vuln/CVE-2023-42366)",
+                "markdown": "**Vulnerability CVE-2023-42366**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | ssl_client  | 1.36.1-r15  | 1.36.1-r16  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2023-42366](https://security.alpinelinux.org/vuln/CVE-2023-42366)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/ssl_client@1.36.1-r15?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=busybox"
+                ],
+                "security-severity": "5.5"
+              }
+            },
+            {
+              "id": "CVE-2025-5025-curl",
+              "name": "ApkMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2025-5025 medium vulnerability for curl package"
+              },
+              "fullDescription": {
+                "text": "libcurl supports *pinning* of the server certificate public key for HTTPS transfers. Due to an omission, this check is not performed when connecting with QUIC for HTTP/3, when the TLS backend is wolfSSL. Documentation says the option works with wolfSSL, failing to specify that it does not for QUIC and HTTP/3. Since pinning makes the transfer succeed if the pin is fine, users could unwittingly connect to an impostor server without noticing."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-5025\nSeverity: medium\nPackage: curl\nVersion: 8.5.0-r0\nFix Version: \nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: nvd:cpe\nLink: [CVE-2025-5025](https://nvd.nist.gov/vuln/detail/CVE-2025-5025)",
+                "markdown": "**Vulnerability CVE-2025-5025**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | curl  | 8.5.0-r0  |   | apk  | /lib/apk/db/installed  | nvd:cpe  | [CVE-2025-5025](https://nvd.nist.gov/vuln/detail/CVE-2025-5025)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/curl@8.5.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "4.8"
+              }
+            },
+            {
+              "id": "CVE-2025-26519-musl",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2025-26519 high vulnerability for musl package"
+              },
+              "fullDescription": {
+                "text": "Version 1.2.4_git20230717-r4 is affected with an available fix in versions 1.2.4_git20230717-r5"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-26519\nSeverity: high\nPackage: musl\nVersion: 1.2.4_git20230717-r4\nFix Version: 1.2.4_git20230717-r5\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2025-26519](https://security.alpinelinux.org/vuln/CVE-2025-26519)",
+                "markdown": "**Vulnerability CVE-2025-26519**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | musl  | 1.2.4_git20230717-r4  | 1.2.4_git20230717-r5  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2025-26519](https://security.alpinelinux.org/vuln/CVE-2025-26519)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "8.1"
+              }
+            },
+            {
+              "id": "CVE-2025-26519-musl-utils",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2025-26519 high vulnerability for musl-utils package"
+              },
+              "fullDescription": {
+                "text": "Version 1.2.4_git20230717-r4 is affected with an available fix in versions 1.2.4_git20230717-r5"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-26519\nSeverity: high\nPackage: musl-utils\nVersion: 1.2.4_git20230717-r4\nFix Version: 1.2.4_git20230717-r5\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2025-26519](https://security.alpinelinux.org/vuln/CVE-2025-26519)",
+                "markdown": "**Vulnerability CVE-2025-26519**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | musl-utils  | 1.2.4_git20230717-r4  | 1.2.4_git20230717-r5  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2025-26519](https://security.alpinelinux.org/vuln/CVE-2025-26519)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/musl-utils@1.2.4_git20230717-r4?arch=x86_64\u0026distro=alpine-3.19.1\u0026upstream=musl"
+                ],
+                "security-severity": "8.1"
+              }
+            },
+            {
+              "id": "CVE-2025-24855-libxslt",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2025-24855 high vulnerability for libxslt package"
+              },
+              "fullDescription": {
+                "text": "Version 1.1.39-r0 is affected with an available fix in versions 1.1.39-r1"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-24855\nSeverity: high\nPackage: libxslt\nVersion: 1.1.39-r0\nFix Version: 1.1.39-r1\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2025-24855](https://security.alpinelinux.org/vuln/CVE-2025-24855)",
+                "markdown": "**Vulnerability CVE-2025-24855**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | libxslt  | 1.1.39-r0  | 1.1.39-r1  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2025-24855](https://security.alpinelinux.org/vuln/CVE-2025-24855)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libxslt@1.1.39-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "7.8"
+              }
+            },
+            {
+              "id": "CVE-2023-6228-tiff",
+              "name": "ApkMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2023-6228 medium vulnerability for tiff package"
+              },
+              "fullDescription": {
+                "text": "An issue was found in the tiffcp utility distributed by the libtiff package where a crafted TIFF file on processing may cause a heap-based buffer overflow leads to an application crash."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2023-6228\nSeverity: medium\nPackage: tiff\nVersion: 4.6.0-r0\nFix Version: \nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: nvd:cpe\nLink: [CVE-2023-6228](https://nvd.nist.gov/vuln/detail/CVE-2023-6228)",
+                "markdown": "**Vulnerability CVE-2023-6228**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | tiff  | 4.6.0-r0  |   | apk  | /lib/apk/db/installed  | nvd:cpe  | [CVE-2023-6228](https://nvd.nist.gov/vuln/detail/CVE-2023-6228)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/tiff@4.6.0-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "5.5"
+              }
+            },
+            {
+              "id": "CVE-2024-55549-libxslt",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-55549 high vulnerability for libxslt package"
+              },
+              "fullDescription": {
+                "text": "Version 1.1.39-r0 is affected with an available fix in versions 1.1.39-r1"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-55549\nSeverity: high\nPackage: libxslt\nVersion: 1.1.39-r0\nFix Version: 1.1.39-r1\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-55549](https://security.alpinelinux.org/vuln/CVE-2024-55549)",
+                "markdown": "**Vulnerability CVE-2024-55549**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | libxslt  | 1.1.39-r0  | 1.1.39-r1  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-55549](https://security.alpinelinux.org/vuln/CVE-2024-55549)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libxslt@1.1.39-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "7.8"
+              }
+            },
+            {
+              "id": "CVE-2024-56171-libxml2",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-56171 high vulnerability for libxml2 package"
+              },
+              "fullDescription": {
+                "text": "Version 2.11.7-r0 is affected with an available fix in versions 2.11.8-r1"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-56171\nSeverity: high\nPackage: libxml2\nVersion: 2.11.7-r0\nFix Version: 2.11.8-r1\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2024-56171](https://security.alpinelinux.org/vuln/CVE-2024-56171)",
+                "markdown": "**Vulnerability CVE-2024-56171**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | libxml2  | 2.11.7-r0  | 2.11.8-r1  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2024-56171](https://security.alpinelinux.org/vuln/CVE-2024-56171)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libxml2@2.11.7-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "7.8"
+              }
+            },
+            {
+              "id": "CVE-2025-24928-libxml2",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2025-24928 high vulnerability for libxml2 package"
+              },
+              "fullDescription": {
+                "text": "Version 2.11.7-r0 is affected with an available fix in versions 2.11.8-r1"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-24928\nSeverity: high\nPackage: libxml2\nVersion: 2.11.7-r0\nFix Version: 2.11.8-r1\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.19\nLink: [CVE-2025-24928](https://security.alpinelinux.org/vuln/CVE-2025-24928)",
+                "markdown": "**Vulnerability CVE-2025-24928**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | libxml2  | 2.11.7-r0  | 2.11.8-r1  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.19  | [CVE-2025-24928](https://security.alpinelinux.org/vuln/CVE-2025-24928)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libxml2@2.11.7-r0?arch=x86_64\u0026distro=alpine-3.19.1"
+                ],
+                "security-severity": "7.8"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "CVE-2024-28182-nghttp2-libs",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: nghttp2-libs, version 1.58.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c4cfa3304d1fb3c92cb457b7a213b3ebd594b6ee8b6f35b35a72f2ab1eb90ee3:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-5535-libcrypto3",
+          "level": "error",
+          "message": {
+            "text": "A critical vulnerability in apk package: libcrypto3, version 3.1.4-r6 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2c1f15357f7688ae038497a60880affec63297bd4fa31fce48a3aa99cc4d4918:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-5535-libssl3",
+          "level": "error",
+          "message": {
+            "text": "A critical vulnerability in apk package: libssl3, version 3.1.4-r6 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a683a9679e59af76cca8f488005b0d2eb7e441c72a066e7b86d06e7ecdf8bcb1:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-0665-curl",
+          "level": "error",
+          "message": {
+            "text": "A critical vulnerability in apk package: curl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1807a60753e00166b3213aefd8017ee0ad018d0e1c29aa4495cfeb2752718073:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-0665-libcurl",
+          "level": "error",
+          "message": {
+            "text": "A critical vulnerability in apk package: libcurl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "eae72f99b2a15536f82b12adb84a461de2f12e2ea1916b9eba66e17e1ef80675:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-7264-curl",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: curl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1807a60753e00166b3213aefd8017ee0ad018d0e1c29aa4495cfeb2752718073:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-7264-libcurl",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libcurl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "eae72f99b2a15536f82b12adb84a461de2f12e2ea1916b9eba66e17e1ef80675:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-2398-curl",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: curl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1807a60753e00166b3213aefd8017ee0ad018d0e1c29aa4495cfeb2752718073:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-2398-libcurl",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: libcurl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "eae72f99b2a15536f82b12adb84a461de2f12e2ea1916b9eba66e17e1ef80675:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-6197-curl",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: curl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1807a60753e00166b3213aefd8017ee0ad018d0e1c29aa4495cfeb2752718073:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-6197-libcurl",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: libcurl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "eae72f99b2a15536f82b12adb84a461de2f12e2ea1916b9eba66e17e1ef80675:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-7006-tiff",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: tiff, version 4.6.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "9ce88608caf07988763465b87bef346a59e5d53a989ec3c1b8a47491486b9084:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-6119-libcrypto3",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: libcrypto3, version 3.1.4-r6 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2c1f15357f7688ae038497a60880affec63297bd4fa31fce48a3aa99cc4d4918:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-6119-libssl3",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: libssl3, version 3.1.4-r6 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a683a9679e59af76cca8f488005b0d2eb7e441c72a066e7b86d06e7ecdf8bcb1:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-6874-curl",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: curl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1807a60753e00166b3213aefd8017ee0ad018d0e1c29aa4495cfeb2752718073:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-6874-libcurl",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libcurl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "eae72f99b2a15536f82b12adb84a461de2f12e2ea1916b9eba66e17e1ef80675:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-8176-libexpat",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: libexpat, version 2.6.2-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a66c14f449976fb9448ffd1c33e4187798e48c204930b5aacfbdc061f93606b7:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-9681-curl",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: curl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1807a60753e00166b3213aefd8017ee0ad018d0e1c29aa4495cfeb2752718073:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-9681-libcurl",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libcurl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "eae72f99b2a15536f82b12adb84a461de2f12e2ea1916b9eba66e17e1ef80675:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-9143-libcrypto3",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libcrypto3, version 3.1.4-r6 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2c1f15357f7688ae038497a60880affec63297bd4fa31fce48a3aa99cc4d4918:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-9143-libssl3",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libssl3, version 3.1.4-r6 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a683a9679e59af76cca8f488005b0d2eb7e441c72a066e7b86d06e7ecdf8bcb1:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-2004-curl",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in apk package: curl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1807a60753e00166b3213aefd8017ee0ad018d0e1c29aa4495cfeb2752718073:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-2004-libcurl",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in apk package: libcurl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "eae72f99b2a15536f82b12adb84a461de2f12e2ea1916b9eba66e17e1ef80675:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-0725-curl",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: curl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1807a60753e00166b3213aefd8017ee0ad018d0e1c29aa4495cfeb2752718073:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-0725-libcurl",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: libcurl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "eae72f99b2a15536f82b12adb84a461de2f12e2ea1916b9eba66e17e1ef80675:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2023-6277-tiff",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: tiff, version 4.6.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "9ce88608caf07988763465b87bef346a59e5d53a989ec3c1b8a47491486b9084:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-45492-libexpat",
+          "level": "error",
+          "message": {
+            "text": "A critical vulnerability in apk package: libexpat, version 2.6.2-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a66c14f449976fb9448ffd1c33e4187798e48c204930b5aacfbdc061f93606b7:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2023-52356-tiff",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: tiff, version 4.6.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "9ce88608caf07988763465b87bef346a59e5d53a989ec3c1b8a47491486b9084:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-8096-curl",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: curl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1807a60753e00166b3213aefd8017ee0ad018d0e1c29aa4495cfeb2752718073:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-8096-libcurl",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libcurl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "eae72f99b2a15536f82b12adb84a461de2f12e2ea1916b9eba66e17e1ef80675:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-2379-curl",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: curl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1807a60753e00166b3213aefd8017ee0ad018d0e1c29aa4495cfeb2752718073:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-2379-libcurl",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libcurl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "eae72f99b2a15536f82b12adb84a461de2f12e2ea1916b9eba66e17e1ef80675:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-11053-curl",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in apk package: curl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1807a60753e00166b3213aefd8017ee0ad018d0e1c29aa4495cfeb2752718073:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-11053-libcurl",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in apk package: libcurl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "eae72f99b2a15536f82b12adb84a461de2f12e2ea1916b9eba66e17e1ef80675:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-34459-libxml2",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: libxml2, version 2.11.7-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c95383327505be2db1eecb5130eee95bd50e2261998c00ba94c3447a62983284:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-45491-libexpat",
+          "level": "error",
+          "message": {
+            "text": "A critical vulnerability in apk package: libexpat, version 2.6.2-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a66c14f449976fb9448ffd1c33e4187798e48c204930b5aacfbdc061f93606b7:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-4741-libcrypto3",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: libcrypto3, version 3.1.4-r6 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2c1f15357f7688ae038497a60880affec63297bd4fa31fce48a3aa99cc4d4918:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-4741-libssl3",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: libssl3, version 3.1.4-r6 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a683a9679e59af76cca8f488005b0d2eb7e441c72a066e7b86d06e7ecdf8bcb1:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-31115-xz-libs",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: xz-libs, version 5.4.5-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "71efcac5eb2ca06cf37166d6dd3bd6af570bf4cdac658674206b8b2c05523f0e:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-2466-curl",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: curl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1807a60753e00166b3213aefd8017ee0ad018d0e1c29aa4495cfeb2752718073:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-2466-libcurl",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libcurl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "eae72f99b2a15536f82b12adb84a461de2f12e2ea1916b9eba66e17e1ef80675:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-0853-curl",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: curl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1807a60753e00166b3213aefd8017ee0ad018d0e1c29aa4495cfeb2752718073:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-0853-libcurl",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libcurl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "eae72f99b2a15536f82b12adb84a461de2f12e2ea1916b9eba66e17e1ef80675:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-45490-libexpat",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: libexpat, version 2.6.2-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a66c14f449976fb9448ffd1c33e4187798e48c204930b5aacfbdc061f93606b7:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-27113-libxml2",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: libxml2, version 2.11.7-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c95383327505be2db1eecb5130eee95bd50e2261998c00ba94c3447a62983284:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-50602-libexpat",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libexpat, version 2.6.2-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a66c14f449976fb9448ffd1c33e4187798e48c204930b5aacfbdc061f93606b7:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-13176-libcrypto3",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libcrypto3, version 3.1.4-r6 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2c1f15357f7688ae038497a60880affec63297bd4fa31fce48a3aa99cc4d4918:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-13176-libssl3",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libssl3, version 3.1.4-r6 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a683a9679e59af76cca8f488005b0d2eb7e441c72a066e7b86d06e7ecdf8bcb1:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-4603-libcrypto3",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libcrypto3, version 3.1.4-r6 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2c1f15357f7688ae038497a60880affec63297bd4fa31fce48a3aa99cc4d4918:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-4603-libssl3",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libssl3, version 3.1.4-r6 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a683a9679e59af76cca8f488005b0d2eb7e441c72a066e7b86d06e7ecdf8bcb1:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-32415-libxml2",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: libxml2, version 2.11.7-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c95383327505be2db1eecb5130eee95bd50e2261998c00ba94c3447a62983284:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-32414-libxml2",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: libxml2, version 2.11.7-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c95383327505be2db1eecb5130eee95bd50e2261998c00ba94c3447a62983284:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-0167-curl",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in apk package: curl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1807a60753e00166b3213aefd8017ee0ad018d0e1c29aa4495cfeb2752718073:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-0167-libcurl",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in apk package: libcurl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "eae72f99b2a15536f82b12adb84a461de2f12e2ea1916b9eba66e17e1ef80675:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2023-42364-busybox",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: busybox, version 1.36.1-r15 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "85efbc0f243028bddc65f99e29704150b3c19fe4d579d7669aa297774b19fe59:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2023-42365-busybox",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: busybox, version 1.36.1-r15 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "85efbc0f243028bddc65f99e29704150b3c19fe4d579d7669aa297774b19fe59:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2023-42364-busybox-binsh",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: busybox-binsh, version 1.36.1-r15 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b54108d5b6b371f369345f7b485ce81542edb6cdaadec247107fdd69bf1c52ad:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2023-42365-busybox-binsh",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: busybox-binsh, version 1.36.1-r15 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b54108d5b6b371f369345f7b485ce81542edb6cdaadec247107fdd69bf1c52ad:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2023-42364-ssl_client",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: ssl_client, version 1.36.1-r15 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3eee89b90b32bdcdb548228e4ec9ba34d6ccfea5f9d9c7dcf31b7117bd08a4ff:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2023-42365-ssl_client",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: ssl_client, version 1.36.1-r15 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3eee89b90b32bdcdb548228e4ec9ba34d6ccfea5f9d9c7dcf31b7117bd08a4ff:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2023-42363-busybox",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: busybox, version 1.36.1-r15 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "85efbc0f243028bddc65f99e29704150b3c19fe4d579d7669aa297774b19fe59:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2023-42363-busybox-binsh",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: busybox-binsh, version 1.36.1-r15 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b54108d5b6b371f369345f7b485ce81542edb6cdaadec247107fdd69bf1c52ad:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2023-42363-ssl_client",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: ssl_client, version 1.36.1-r15 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3eee89b90b32bdcdb548228e4ec9ba34d6ccfea5f9d9c7dcf31b7117bd08a4ff:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2023-42366-busybox",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: busybox, version 1.36.1-r15 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "85efbc0f243028bddc65f99e29704150b3c19fe4d579d7669aa297774b19fe59:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2023-42366-busybox-binsh",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: busybox-binsh, version 1.36.1-r15 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b54108d5b6b371f369345f7b485ce81542edb6cdaadec247107fdd69bf1c52ad:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2023-42366-ssl_client",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: ssl_client, version 1.36.1-r15 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3eee89b90b32bdcdb548228e4ec9ba34d6ccfea5f9d9c7dcf31b7117bd08a4ff:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-5025-curl",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: curl, version 8.5.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1807a60753e00166b3213aefd8017ee0ad018d0e1c29aa4495cfeb2752718073:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-26519-musl",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: musl, version 1.2.4_git20230717-r4 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "00938a360badce961ae3075a88a91a4ce06dae2d5e85d29f1e90e241d1ffcb33:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-26519-musl-utils",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: musl-utils, version 1.2.4_git20230717-r4 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2e2e198634c14cd33dca719f3a2e32132604738412c82da06ca7eb918b40330e:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-24855-libxslt",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: libxslt, version 1.1.39-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2d2c746de411e6bad0611871b107ba289de33c81f81be0730d7f3361d0565e8d:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2023-6228-tiff",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: tiff, version 4.6.0-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "9ce88608caf07988763465b87bef346a59e5d53a989ec3c1b8a47491486b9084:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-55549-libxslt",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: libxslt, version 1.1.39-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "2d2c746de411e6bad0611871b107ba289de33c81f81be0730d7f3361d0565e8d:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-56171-libxml2",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: libxml2, version 2.11.7-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c95383327505be2db1eecb5130eee95bd50e2261998c00ba94c3447a62983284:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-24928-libxml2",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: libxml2, version 2.11.7-r0 was found in image nginx:1.25-alpine at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "nginx//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "nginx:1.25-alpine@sha256:ce495f7b0b7de22d7a72caa65f8a58a1e4903099ecab992b57d8728fa210aa1b:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "c95383327505be2db1eecb5130eee95bd50e2261998c00ba94c3447a62983284:1"
+          }
+        }
+      ]
+    }
+  ]
+}
