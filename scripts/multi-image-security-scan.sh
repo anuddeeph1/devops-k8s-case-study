@@ -1,9 +1,8 @@
 #!/bin/bash
 
-# Enhanced Multi-Image Security Scanner Script
+# Multi-Image Security Scanner Script
 # Scans all container images used in the project (excluding pod-monitor)
-# with Grype vulnerability scanning, SBOM generation, and enhanced VEX document creation
-# Features: Online vulnerability intelligence from OSV Database, CISA KEV, GitHub Advisories, NVD
+# with Grype vulnerability scanning, SBOM generation, and VEX document creation
 # Usage: ./multi-image-security-scan.sh [output-dir]
 
 # Removed set -e to allow script to continue when individual image scans fail
@@ -189,20 +188,15 @@ scan_single_image() {
         # Continue scanning even if SBOM fails
     fi
     
-    # Generate enhanced VEX document with online intelligence
-    log_info "Generating enhanced VEX document with online vulnerability intelligence..."
-    log_info "Data sources: OSV Database, CISA KEV, GitHub Security Advisories, NVD"
-    if generate_enhanced_vex_document "$full_image_name" "$filename_base"; then
-        if command -v jq &> /dev/null && [ -f "$OUTPUT_DIR/vex/${filename_base}-enhanced-vex-document.json" ]; then
-            image_vex_statements=$(jq '.statements | length' "$OUTPUT_DIR/vex/${filename_base}-enhanced-vex-document.json" 2>/dev/null || echo "0")
-            intelligence_coverage=$(jq -r '.intelligence_coverage' "$OUTPUT_DIR/vex/${filename_base}-intelligence-summary.json" 2>/dev/null || echo "0/0")
-            cisa_kev_matches=$(jq -r '.cisa_kev_matches' "$OUTPUT_DIR/vex/${filename_base}-intelligence-summary.json" 2>/dev/null || echo "0")
+    # Generate VEX document
+    log_info "Generating VEX document..."
+    if generate_vex_document "$full_image_name" "$filename_base"; then
+        if command -v jq &> /dev/null && [ -f "$OUTPUT_DIR/vex/${filename_base}-vex-document.json" ]; then
+            image_vex_statements=$(jq '.statements | length' "$OUTPUT_DIR/vex/${filename_base}-vex-document.json" 2>/dev/null || echo "0")
             log_info "Generated $image_vex_statements VEX statements"
-            log_info "Intelligence coverage: $intelligence_coverage CVEs"
-            log_info "CISA KEV critical vulnerabilities: $cisa_kev_matches"
         fi
     else
-        log_warning "Enhanced VEX document generation failed for $full_image_name - continuing with other scans"
+        log_warning "VEX document generation failed for $full_image_name - continuing with other scans"
         # Don't mark scan as failed for VEX generation issues
         image_vex_statements=0
     fi
@@ -222,7 +216,7 @@ scan_single_image() {
     fi
 }
 
-generate_enhanced_vex_document() {
+generate_vex_document() {
     local full_image_name="$1"
     local filename_base="$2"
     
@@ -234,28 +228,153 @@ generate_enhanced_vex_document() {
         return 1
     fi
     
-    # Generate enhanced VEX document using external Python script
-    local output_file="$OUTPUT_DIR/vex/${filename_base}-enhanced-vex-document.json"
-    local intelligence_summary_file="$OUTPUT_DIR/vex/${filename_base}-intelligence-summary.json"
-    
-    # Use the enhanced VEX generator script
-    python3 "$(dirname "$0")/enhanced-vex-generator.py" \
-        "$sbom_file" \
-        "$grype_file" \
-        "$output_file" \
-        "$intelligence_summary_file" \
-        "$full_image_name"
+    # Generate VEX document using Python
+    python3 << EOF
+import json
+import os
+import sys
+from datetime import datetime, timezone
+
+def generate_vex():
+    try:
+        sbom_file = "$sbom_file"
+        grype_file = "$grype_file"
+        output_file = "$OUTPUT_DIR/vex/${filename_base}-vex-document.json"
+        
+        with open(sbom_file, 'r') as f:
+            sbom_data = json.load(f)
+        
+        with open(grype_file, 'r') as f:
+            grype_data = json.load(f)
+        
+        # Build component map from SBOM
+        sbom_components = {}
+        for component in sbom_data.get("components", []):
+            name = component.get("name", "")
+            version = component.get("version", "")
+            purl = component.get("purl", "")
+            
+            if name:
+                key = f"{name}@{version}" if version else name
+                sbom_components[key.lower()] = {
+                    "name": name,
+                    "version": version,
+                    "purl": purl,
+                    "bom_ref": component.get("bom-ref", f"component-{len(sbom_components)}")
+                }
+        
+        # Create VEX document structure
+        vex_doc = {
+            "@context": "https://openvex.dev/ns/v0.2.0",
+            "@id": f"https://github.com/devops-k8s-case-study/vex/${filename_base}",
+            "author": "Multi-Image Security Scanner",
+            "timestamp": datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
+            "version": 1,
+            "statements": []
+        }
+        
+        # Process vulnerabilities
+        processed_cves = set()
+        
+        for match in grype_data.get("matches", []):
+            vulnerability = match.get("vulnerability", {})
+            cve_id = vulnerability.get("id", "")
+            
+            if not cve_id.startswith("CVE-") or cve_id in processed_cves:
+                continue
+                
+            processed_cves.add(cve_id)
+            
+            # Get artifact information
+            artifact = match.get("artifact", {})
+            artifact_name = artifact.get("name", "unknown-component")
+            artifact_version = artifact.get("version", "")
+            
+            # Find matching SBOM component
+            search_key = f"{artifact_name}@{artifact_version}".lower() if artifact_version else artifact_name.lower()
+            sbom_component = sbom_components.get(search_key)
+            
+            # Determine status based on severity
+            severity = vulnerability.get("severity", "Unknown").upper()
+            if severity in ["CRITICAL", "HIGH"]:
+                status = "under_investigation"
+                justification = "vulnerability_disputed"
+            elif severity == "MEDIUM":
+                status = "not_affected"
+                justification = "vulnerable_code_not_in_execute_path"
+            else:
+                status = "not_affected"
+                justification = "component_not_present"
+            
+            # Create subcomponent reference
+            if sbom_component:
+                subcomponent = {
+                    "@id": sbom_component["bom_ref"],
+                    "name": sbom_component["name"],
+                    "version": sbom_component["version"]
+                }
+                if sbom_component["purl"]:
+                    subcomponent["purl"] = sbom_component["purl"]
+            else:
+                subcomponent = {
+                    "@id": f"component-{artifact_name}-{artifact_version}",
+                    "name": artifact_name
+                }
+                if artifact_version:
+                    subcomponent["version"] = artifact_version
+            
+            # Create VEX statement
+            statement = {
+                "vulnerability": {
+                    "name": cve_id,
+                    "description": vulnerability.get("description", f"Vulnerability {cve_id}")
+                },
+                "products": [
+                    {
+                        "@id": "$full_image_name",
+                        "subcomponents": [subcomponent]
+                    }
+                ],
+                "status": status,
+                "justification": justification,
+                "impact_statement": f"Severity: {severity} - {vulnerability.get('description', 'No description available')}",
+                "action_statement": f"Component {'found in SBOM' if sbom_component else 'detected by scanner'}: {artifact_name}"
+            }
+            
+            vex_doc["statements"].append(statement)
+        
+        # Write VEX document
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        with open(output_file, 'w') as f:
+            json.dump(vex_doc, f, indent=2)
+            
+        print(f"Generated VEX document with {len(vex_doc['statements'])} statements")
+        return True
+        
+    except Exception as e:
+        print(f"Error generating VEX: {e}", file=sys.stderr)
+        return False
+
+if __name__ == "__main__":
+    try:
+        if generate_vex():
+            sys.exit(0)
+        else:
+            sys.exit(1)
+    except Exception as e:
+        print(f"Fatal error in VEX generation: {e}", file=sys.stderr)
+        sys.exit(1)
+EOF
 }
 
 create_consolidated_summary() {
     log_info "Creating consolidated security summary report..."
     
     cat > "$OUTPUT_DIR/multi-image-security-summary.md" << EOF
-# 🛡️ Enhanced Multi-Image Container Security Analysis Report
+# 🛡️ Multi-Image Container Security Analysis Report
 
 **Scan Date:** $SCAN_DATE  
-**Scanner:** Enhanced Multi-Image Security Scanner with Online Intelligence  
-**Intelligence Sources:** OSV Database, CISA KEV, GitHub Security Advisories, NVD API  
+**Scanner:** Multi-Image Security Scanner  
 **Output Directory:** $OUTPUT_DIR  
 **Timestamp:** $TIMESTAMP  
 
@@ -291,8 +410,8 @@ EOF
                 if [ -f "$OUTPUT_DIR/sbom/${filename_base}-sbom.cyclonedx.json" ]; then
                     image_components=$(jq '.components | length' "$OUTPUT_DIR/sbom/${filename_base}-sbom.cyclonedx.json" 2>/dev/null || echo "0")
                 fi
-                if [ -f "$OUTPUT_DIR/vex/${filename_base}-enhanced-vex-document.json" ]; then
-                    image_vex_statements=$(jq '.statements | length' "$OUTPUT_DIR/vex/${filename_base}-enhanced-vex-document.json" 2>/dev/null || echo "0")
+                if [ -f "$OUTPUT_DIR/vex/${filename_base}-vex-document.json" ]; then
+                    image_vex_statements=$(jq '.statements | length' "$OUTPUT_DIR/vex/${filename_base}-vex-document.json" 2>/dev/null || echo "0")
                 fi
                 
                 # Extract vulnerability severity breakdown for this image
@@ -339,10 +458,8 @@ security-reports/
 │   ├── nginx-1_25-alpine-{timestamp}-sbom.spdx.json
 │   └── nirmata_background-controller-latest-{timestamp}-sbom.txt
 └── vex/
-    ├── mysql-8_0-{timestamp}-enhanced-vex-document.json
-    ├── mysql-8_0-{timestamp}-intelligence-summary.json
-    ├── nginx-1_25-alpine-{timestamp}-enhanced-vex-document.json
-    └── nginx-1_25-alpine-{timestamp}-intelligence-summary.json
+    ├── mysql-8_0-{timestamp}-vex-document.json
+    └── nginx-1_25-alpine-{timestamp}-vex-document.json
 \`\`\`
 
 ## 🔧 Usage Examples
@@ -401,8 +518,7 @@ EOF
 display_final_results() {
     echo ""
     echo "==========================================="
-    echo "🛡️  ENHANCED MULTI-IMAGE SECURITY RESULTS"
-    echo "🌐  Intelligence from OSV, CISA KEV, GitHub, NVD"
+    echo "🛡️  MULTI-IMAGE SECURITY SCAN RESULTS"
     echo "==========================================="
     echo "Timestamp: $TIMESTAMP"
     echo "Scan Date: $SCAN_DATE"
@@ -436,14 +552,11 @@ display_final_results() {
 
 # Main execution
 main() {
-    echo "🛡️ Enhanced Multi-Image Container Security Scanner"
-    echo "==================================================="
-    echo "🌐 Intelligence Sources: OSV Database, CISA KEV, GitHub Advisories, NVD"
-    echo ""
+    echo "🛡️ Multi-Image Container Security Scanner"
+    echo "=========================================="
     
-    log_info "Starting enhanced security scan for $TOTAL_IMAGES container images"
-    log_info "Features: Grype scanning + SBOM generation + Enhanced VEX with online intelligence"
-    log_info "Excluding pod-monitor from scan (scanned separately with dedicated pipeline)"
+    log_info "Starting security scan for $TOTAL_IMAGES container images"
+    log_info "Excluding pod-monitor from scan"
     log_info "Output directory: $OUTPUT_DIR"
     log_info "Timestamp: $TIMESTAMP"
     
