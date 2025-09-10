@@ -20,6 +20,10 @@ networkPolicies:
       enabled: true
       description: "Allow web-server to access database on port 3306"
       
+    allowBackupToDatabase:
+      enabled: true
+      description: "Allow backup jobs to access database on port 3306"
+      
     allowWebServerIngress:
       enabled: true
       description: "Allow ingress traffic to web-server"
@@ -54,6 +58,7 @@ podLabels:
   webServer: "web-server" 
   monitoring: "monitoring"
   loadTesting: "load-testing"
+  backup: "database"  # Backup jobs use the database app.kubernetes.io/name label
 
 # Ports configuration
 ports:
