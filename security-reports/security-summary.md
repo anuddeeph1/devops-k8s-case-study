@@ -1,19 +1,19 @@
 # 🛡️ Container Security Analysis Report
 
-**Image:** `anuddeeph/pod-monitor:latest-17605735926-112`  
-**Scan Date:** Wed Sep 10 06:55:39 UTC 2025  
-**Commit:** 2f4fd70b206ef594b248e2c6d9af8d0d8f77313e  
+**Image:** `anuddeeph/pod-monitor:latest-17606193461-114`  
+**Scan Date:** Wed Sep 10 07:16:33 UTC 2025  
+**Commit:** a99b7983c36ba92db80dae9058eae7d5b68cfa11  
 **Branch:** workflows  
 
 ## 📊 Vulnerability Summary
 
 | Severity | Count |
 |----------|-------|
-| 🔴 Critical | 1 |
-| 🟠 High | 5 |
-| 🟡 Medium | 9 |
+| 🔴 Critical | 0 |
+| 🟠 High | 1 |
+| 🟡 Medium | 4 |
 | 🟢 Low | 0 |
-| **Total** | **15** |
+| **Total** | **5** |
 
 ## 📋 SBOM Information
 
@@ -23,7 +23,7 @@
 
 ## 📑 VEX Document
 
-- **VEX Statements:** 10
+- **VEX Statements:** 0
 - **VEX Created:** ✅ Yes
 - **Compliance:** OpenVEX v0.2.0
 
