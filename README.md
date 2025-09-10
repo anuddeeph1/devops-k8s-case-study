@@ -168,6 +168,7 @@ graph TD
 ├── 🔒 default-deny-all (blocks all traffic)
 ├── 🌐 allow-dns (DNS resolution)
 ├── 💾 allow-web-to-database (web→db on port 3306)
+├── 🔄 allow-backup-to-database (backup-jobs→db on port 3306)
 ├── 📊 allow-monitoring-access (monitoring→all services)
 ├── 🔄 allow-load-testing-access (load-tester→web-server)
 └── 📡 allow-web-server-ingress (external→web-server on port 8080)
@@ -686,6 +687,7 @@ graph LR
     DB[Database]  
     Test[Load Tester]
     Monitor[Pod Monitor]
+    Backup[Backup Jobs]
     DNS[DNS Server]
     API[Kubernetes API]
     
@@ -694,6 +696,10 @@ graph LR
     Web -->|MySQL:3306| DB
     Test -->|HTTP:80| Web
     Web -->|HTTP Response| Internet
+    
+    %% Backup Jobs allowed flows
+    Backup -->|MySQL:3306| DB
+    Backup -->|DNS:53| DNS
     
     %% Pod Monitor allowed flows (full egress access)
     Monitor -->|HTTPS:443| API
@@ -719,6 +725,7 @@ graph LR
     style DB fill:#fff3e0
     style Test fill:#f3e5f5
     style Monitor fill:#e8eaf6
+    style Backup fill:#fff8e1
     style DNS fill:#eeeeee
     style API fill:#f1f8e9
 ```
@@ -726,6 +733,7 @@ graph LR
 **✅ Allowed Traffic:**
 - Internet → Web Server (HTTP:80)
 - Web Server → Database (MySQL:3306) - **Core Requirement**
+- Backup Jobs → Database (MySQL:3306) - **Backup Operations**
 - Load Tester → Web Server (HTTP:80) - HPA Demo
 - Pod Monitor → Kubernetes API (HTTPS:443) - Monitoring Operation
 - Pod Monitor → Web Server (HTTP:80) - Monitoring Access
