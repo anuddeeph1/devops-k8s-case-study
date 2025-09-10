@@ -1,19 +1,19 @@
 # 🛡️ Multi-Image Container Security Analysis Report
 
 **Images Scanned:** 16  
-**Scan Date:** Wed Sep 10 06:45:36 UTC 2025  
-**Commit:** 81683b6532d3011ea6661b178c759030b344ff7e  
+**Scan Date:** Wed Sep 10 07:00:12 UTC 2025  
+**Commit:** 2f4fd70b206ef594b248e2c6d9af8d0d8f77313e  
 **Branch:** workflows  
 
 ## 📊 Vulnerability Summary
 
 | Severity | Count |
 |----------|-------|
-| 🔴 Critical | 243 |
-| 🟠 High | 739 |
-| 🟡 Medium | 1088 |
-| 🟢 Low | 392 |
-| **Total** | **2462** |
+| 🔴 Critical | 278 |
+| 🟠 High | 846 |
+| 🟡 Medium | 1246 |
+| 🟢 Low | 448 |
+| **Total** | **2818** |
 
 ## 📋 SBOM Information
 
@@ -42,13 +42,13 @@ This scan covers all project container images except pod-monitor:
 
 ### Security Assessment
 
-⚠️ **2462 vulnerabilities detected across 16 container images**
+⚠️ **2818 vulnerabilities detected across 16 container images**
 
 **Priority Actions:**
-- 🔴 **Critical vulnerabilities (243)**: Immediate patching required
-- 🟠 **High vulnerabilities (739)**: Schedule updates within 7 days  
-- 🟡 **Medium vulnerabilities (1088)**: Plan updates in next maintenance cycle
-- 🟢 **Low vulnerabilities (392)**: Monitor and update when convenient
+- 🔴 **Critical vulnerabilities (278)**: Immediate patching required
+- 🟠 **High vulnerabilities (846)**: Schedule updates within 7 days  
+- 🟡 **Medium vulnerabilities (1246)**: Plan updates in next maintenance cycle
+- 🟢 **Low vulnerabilities (448)**: Monitor and update when convenient
 
 **Recommended Actions:**
 1. Review individual vulnerability reports for each image
@@ -68,7 +68,7 @@ Individual scan results for each image:
 ## 🔒 Security Validation
 
 - **Scan Status:** true
-- **Scan Timestamp:** 1757486729
+- **Scan Timestamp:** 1757487604
 - **Exit Code:** 0
 - **Components Analyzed:** 33042 across 16 images
 

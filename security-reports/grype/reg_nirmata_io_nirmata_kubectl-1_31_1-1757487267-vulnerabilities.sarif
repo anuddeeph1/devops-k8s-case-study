@@ -1,0 +1,1423 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "grype",
+          "version": "0.99.1",
+          "informationUri": "https://github.com/anchore/grype",
+          "rules": [
+            {
+              "id": "CVE-2024-9143-libcrypto3",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-9143 medium vulnerability for libcrypto3 package"
+              },
+              "fullDescription": {
+                "text": "Version 3.3.2-r0 is affected with an available fix in versions 3.3.2-r1"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-9143\nSeverity: medium\nPackage: libcrypto3\nVersion: 3.3.2-r0\nFix Version: 3.3.2-r1\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.20\nLink: [CVE-2024-9143](https://security.alpinelinux.org/vuln/CVE-2024-9143)",
+                "markdown": "**Vulnerability CVE-2024-9143**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libcrypto3  | 3.3.2-r0  | 3.3.2-r1  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.20  | [CVE-2024-9143](https://security.alpinelinux.org/vuln/CVE-2024-9143)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcrypto3@3.3.2-r0?arch=x86_64\u0026distro=alpine-3.20.3\u0026upstream=openssl"
+                ],
+                "security-severity": "4.3"
+              }
+            },
+            {
+              "id": "CVE-2024-9143-libssl3",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-9143 medium vulnerability for libssl3 package"
+              },
+              "fullDescription": {
+                "text": "Version 3.3.2-r0 is affected with an available fix in versions 3.3.2-r1"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-9143\nSeverity: medium\nPackage: libssl3\nVersion: 3.3.2-r0\nFix Version: 3.3.2-r1\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.20\nLink: [CVE-2024-9143](https://security.alpinelinux.org/vuln/CVE-2024-9143)",
+                "markdown": "**Vulnerability CVE-2024-9143**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libssl3  | 3.3.2-r0  | 3.3.2-r1  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.20  | [CVE-2024-9143](https://security.alpinelinux.org/vuln/CVE-2024-9143)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libssl3@3.3.2-r0?arch=x86_64\u0026distro=alpine-3.20.3\u0026upstream=openssl"
+                ],
+                "security-severity": "4.3"
+              }
+            },
+            {
+              "id": "CVE-2024-12797-libcrypto3",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-12797 medium vulnerability for libcrypto3 package"
+              },
+              "fullDescription": {
+                "text": "Version 3.3.2-r0 is affected with an available fix in versions 3.3.3-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-12797\nSeverity: medium\nPackage: libcrypto3\nVersion: 3.3.2-r0\nFix Version: 3.3.3-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.20\nLink: [CVE-2024-12797](https://security.alpinelinux.org/vuln/CVE-2024-12797)",
+                "markdown": "**Vulnerability CVE-2024-12797**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libcrypto3  | 3.3.2-r0  | 3.3.3-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.20  | [CVE-2024-12797](https://security.alpinelinux.org/vuln/CVE-2024-12797)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcrypto3@3.3.2-r0?arch=x86_64\u0026distro=alpine-3.20.3\u0026upstream=openssl"
+                ],
+                "security-severity": "6.3"
+              }
+            },
+            {
+              "id": "CVE-2024-12797-libssl3",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-12797 medium vulnerability for libssl3 package"
+              },
+              "fullDescription": {
+                "text": "Version 3.3.2-r0 is affected with an available fix in versions 3.3.3-r0"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-12797\nSeverity: medium\nPackage: libssl3\nVersion: 3.3.2-r0\nFix Version: 3.3.3-r0\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.20\nLink: [CVE-2024-12797](https://security.alpinelinux.org/vuln/CVE-2024-12797)",
+                "markdown": "**Vulnerability CVE-2024-12797**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libssl3  | 3.3.2-r0  | 3.3.3-r0  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.20  | [CVE-2024-12797](https://security.alpinelinux.org/vuln/CVE-2024-12797)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libssl3@3.3.2-r0?arch=x86_64\u0026distro=alpine-3.20.3\u0026upstream=openssl"
+                ],
+                "security-severity": "6.3"
+              }
+            },
+            {
+              "id": "CVE-2024-34156-stdlib",
+              "name": "GoModuleMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2024-34156 high vulnerability for stdlib package"
+              },
+              "fullDescription": {
+                "text": "Calling Decoder.Decode on a message which contains deeply nested structures can cause a panic due to stack exhaustion. This is a follow-up to CVE-2022-30635."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-34156\nSeverity: high\nPackage: stdlib\nVersion: go1.22.6\nFix Version: 1.22.7,1.23.1\nType: go-module\nLocation: /usr/bin/kubectl\nData Namespace: nvd:cpe\nLink: [CVE-2024-34156](https://nvd.nist.gov/vuln/detail/CVE-2024-34156)",
+                "markdown": "**Vulnerability CVE-2024-34156**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | stdlib  | go1.22.6  | 1.22.7,1.23.1  | go-module  | /usr/bin/kubectl  | nvd:cpe  | [CVE-2024-34156](https://nvd.nist.gov/vuln/detail/CVE-2024-34156)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:golang/stdlib@1.22.6"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "CVE-2024-34158-stdlib",
+              "name": "GoModuleMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2024-34158 high vulnerability for stdlib package"
+              },
+              "fullDescription": {
+                "text": "Calling Parse on a \"// +build\" build tag line with deeply nested expressions can cause a panic due to stack exhaustion."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-34158\nSeverity: high\nPackage: stdlib\nVersion: go1.22.6\nFix Version: 1.22.7,1.23.1\nType: go-module\nLocation: /usr/bin/kubectl\nData Namespace: nvd:cpe\nLink: [CVE-2024-34158](https://nvd.nist.gov/vuln/detail/CVE-2024-34158)",
+                "markdown": "**Vulnerability CVE-2024-34158**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | stdlib  | go1.22.6  | 1.22.7,1.23.1  | go-module  | /usr/bin/kubectl  | nvd:cpe  | [CVE-2024-34158](https://nvd.nist.gov/vuln/detail/CVE-2024-34158)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:golang/stdlib@1.22.6"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "GHSA-6v2p-p543-phr9-golang.org/x/oauth2",
+              "name": "GoModuleMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-6v2p-p543-phr9 high vulnerability for golang.org/x/oauth2 package"
+              },
+              "fullDescription": {
+                "text": "golang.org/x/oauth2 Improper Validation of Syntactic Correctness of Input vulnerability"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability GHSA-6v2p-p543-phr9\nSeverity: high\nPackage: golang.org/x/oauth2\nVersion: v0.21.0\nFix Version: 0.27.0\nType: go-module\nLocation: /usr/bin/kubectl\nData Namespace: github:language:go\nLink: [GHSA-6v2p-p543-phr9](https://github.com/advisories/GHSA-6v2p-p543-phr9)",
+                "markdown": "**Vulnerability GHSA-6v2p-p543-phr9**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | golang.org/x/oauth2  | v0.21.0  | 0.27.0  | go-module  | /usr/bin/kubectl  | github:language:go  | [GHSA-6v2p-p543-phr9](https://github.com/advisories/GHSA-6v2p-p543-phr9)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:golang/golang.org/x/oauth2@v0.21.0"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "CVE-2024-34155-stdlib",
+              "name": "GoModuleMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2024-34155 medium vulnerability for stdlib package"
+              },
+              "fullDescription": {
+                "text": "Calling any of the Parse functions on Go source code which contains deeply nested literals can cause a panic due to stack exhaustion."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-34155\nSeverity: medium\nPackage: stdlib\nVersion: go1.22.6\nFix Version: 1.22.7,1.23.1\nType: go-module\nLocation: /usr/bin/kubectl\nData Namespace: nvd:cpe\nLink: [CVE-2024-34155](https://nvd.nist.gov/vuln/detail/CVE-2024-34155)",
+                "markdown": "**Vulnerability CVE-2024-34155**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | stdlib  | go1.22.6  | 1.22.7,1.23.1  | go-module  | /usr/bin/kubectl  | nvd:cpe  | [CVE-2024-34155](https://nvd.nist.gov/vuln/detail/CVE-2024-34155)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:golang/stdlib@1.22.6"
+                ],
+                "security-severity": "4.3"
+              }
+            },
+            {
+              "id": "CVE-2025-47907-stdlib",
+              "name": "GoModuleMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2025-47907 high vulnerability for stdlib package"
+              },
+              "fullDescription": {
+                "text": "Cancelling a query (e.g. by cancelling the context passed to one of the query methods) during a call to the Scan method of the returned Rows can result in unexpected results if other queries are being made in parallel. This can result in a race condition that may overwrite the expected results with those of another query, causing the call to Scan to return either unexpected results from the other query or an error."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-47907\nSeverity: high\nPackage: stdlib\nVersion: go1.22.6\nFix Version: 1.23.12,1.24.6\nType: go-module\nLocation: /usr/bin/kubectl\nData Namespace: nvd:cpe\nLink: [CVE-2025-47907](https://nvd.nist.gov/vuln/detail/CVE-2025-47907)",
+                "markdown": "**Vulnerability CVE-2025-47907**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | stdlib  | go1.22.6  | 1.23.12,1.24.6  | go-module  | /usr/bin/kubectl  | nvd:cpe  | [CVE-2025-47907](https://nvd.nist.gov/vuln/detail/CVE-2025-47907)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:golang/stdlib@1.22.6"
+                ],
+                "security-severity": "7.0"
+              }
+            },
+            {
+              "id": "CVE-2024-13176-libcrypto3",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-13176 medium vulnerability for libcrypto3 package"
+              },
+              "fullDescription": {
+                "text": "Version 3.3.2-r0 is affected with an available fix in versions 3.3.2-r2"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-13176\nSeverity: medium\nPackage: libcrypto3\nVersion: 3.3.2-r0\nFix Version: 3.3.2-r2\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.20\nLink: [CVE-2024-13176](https://security.alpinelinux.org/vuln/CVE-2024-13176)",
+                "markdown": "**Vulnerability CVE-2024-13176**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libcrypto3  | 3.3.2-r0  | 3.3.2-r2  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.20  | [CVE-2024-13176](https://security.alpinelinux.org/vuln/CVE-2024-13176)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libcrypto3@3.3.2-r0?arch=x86_64\u0026distro=alpine-3.20.3\u0026upstream=openssl"
+                ],
+                "security-severity": "4.1"
+              }
+            },
+            {
+              "id": "CVE-2024-13176-libssl3",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2024-13176 medium vulnerability for libssl3 package"
+              },
+              "fullDescription": {
+                "text": "Version 3.3.2-r0 is affected with an available fix in versions 3.3.2-r2"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-13176\nSeverity: medium\nPackage: libssl3\nVersion: 3.3.2-r0\nFix Version: 3.3.2-r2\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.20\nLink: [CVE-2024-13176](https://security.alpinelinux.org/vuln/CVE-2024-13176)",
+                "markdown": "**Vulnerability CVE-2024-13176**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | libssl3  | 3.3.2-r0  | 3.3.2-r2  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.20  | [CVE-2024-13176](https://security.alpinelinux.org/vuln/CVE-2024-13176)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/libssl3@3.3.2-r0?arch=x86_64\u0026distro=alpine-3.20.3\u0026upstream=openssl"
+                ],
+                "security-severity": "4.1"
+              }
+            },
+            {
+              "id": "CVE-2024-45336-stdlib",
+              "name": "GoModuleMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2024-45336 medium vulnerability for stdlib package"
+              },
+              "fullDescription": {
+                "text": "The HTTP client drops sensitive headers after following a cross-domain redirect. For example, a request to a.com/ containing an Authorization header which is redirected to b.com/ will not send that header to b.com. In the event that the client received a subsequent same-domain redirect, however, the sensitive headers would be restored. For example, a chain of redirects from a.com/, to b.com/1, and finally to b.com/2 would incorrectly send the Authorization header to b.com/2."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-45336\nSeverity: medium\nPackage: stdlib\nVersion: go1.22.6\nFix Version: 1.22.11,1.23.5,1.24.0-rc.2\nType: go-module\nLocation: /usr/bin/kubectl\nData Namespace: nvd:cpe\nLink: [CVE-2024-45336](https://nvd.nist.gov/vuln/detail/CVE-2024-45336)",
+                "markdown": "**Vulnerability CVE-2024-45336**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | stdlib  | go1.22.6  | 1.22.11,1.23.5,1.24.0-rc.2  | go-module  | /usr/bin/kubectl  | nvd:cpe  | [CVE-2024-45336](https://nvd.nist.gov/vuln/detail/CVE-2024-45336)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:golang/stdlib@1.22.6"
+                ],
+                "security-severity": "6.1"
+              }
+            },
+            {
+              "id": "CVE-2024-45341-stdlib",
+              "name": "GoModuleMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2024-45341 medium vulnerability for stdlib package"
+              },
+              "fullDescription": {
+                "text": "A certificate with a URI which has a IPv6 address with a zone ID may incorrectly satisfy a URI name constraint that applies to the certificate chain. Certificates containing URIs are not permitted in the web PKI, so this only affects users of private PKIs which make use of URIs."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-45341\nSeverity: medium\nPackage: stdlib\nVersion: go1.22.6\nFix Version: 1.22.11,1.23.5,1.24.0-rc.2\nType: go-module\nLocation: /usr/bin/kubectl\nData Namespace: nvd:cpe\nLink: [CVE-2024-45341](https://nvd.nist.gov/vuln/detail/CVE-2024-45341)",
+                "markdown": "**Vulnerability CVE-2024-45341**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | stdlib  | go1.22.6  | 1.22.11,1.23.5,1.24.0-rc.2  | go-module  | /usr/bin/kubectl  | nvd:cpe  | [CVE-2024-45341](https://nvd.nist.gov/vuln/detail/CVE-2024-45341)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:golang/stdlib@1.22.6"
+                ],
+                "security-severity": "6.1"
+              }
+            },
+            {
+              "id": "CVE-2025-22871-stdlib",
+              "name": "GoModuleMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2025-22871 critical vulnerability for stdlib package"
+              },
+              "fullDescription": {
+                "text": "The net/http package improperly accepts a bare LF as a line terminator in chunked data chunk-size lines. This can permit request smuggling if a net/http server is used in conjunction with a server that incorrectly accepts a bare LF as part of a chunk-ext."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-22871\nSeverity: critical\nPackage: stdlib\nVersion: go1.22.6\nFix Version: 1.23.8,1.24.2\nType: go-module\nLocation: /usr/bin/kubectl\nData Namespace: nvd:cpe\nLink: [CVE-2025-22871](https://nvd.nist.gov/vuln/detail/CVE-2025-22871)",
+                "markdown": "**Vulnerability CVE-2025-22871**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| critical  | stdlib  | go1.22.6  | 1.23.8,1.24.2  | go-module  | /usr/bin/kubectl  | nvd:cpe  | [CVE-2025-22871](https://nvd.nist.gov/vuln/detail/CVE-2025-22871)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:golang/stdlib@1.22.6"
+                ],
+                "security-severity": "9.1"
+              }
+            },
+            {
+              "id": "CVE-2025-4673-stdlib",
+              "name": "GoModuleMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2025-4673 medium vulnerability for stdlib package"
+              },
+              "fullDescription": {
+                "text": "Proxy-Authorization and Proxy-Authenticate headers persisted on cross-origin redirects potentially leaking sensitive information."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-4673\nSeverity: medium\nPackage: stdlib\nVersion: go1.22.6\nFix Version: 1.23.10,1.24.4\nType: go-module\nLocation: /usr/bin/kubectl\nData Namespace: nvd:cpe\nLink: [CVE-2025-4673](https://nvd.nist.gov/vuln/detail/CVE-2025-4673)",
+                "markdown": "**Vulnerability CVE-2025-4673**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | stdlib  | go1.22.6  | 1.23.10,1.24.4  | go-module  | /usr/bin/kubectl  | nvd:cpe  | [CVE-2025-4673](https://nvd.nist.gov/vuln/detail/CVE-2025-4673)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:golang/stdlib@1.22.6"
+                ],
+                "security-severity": "6.8"
+              }
+            },
+            {
+              "id": "GHSA-vvgc-356p-c3xw-golang.org/x/net",
+              "name": "GoModuleMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-vvgc-356p-c3xw medium vulnerability for golang.org/x/net package"
+              },
+              "fullDescription": {
+                "text": "golang.org/x/net vulnerable to Cross-site Scripting"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability GHSA-vvgc-356p-c3xw\nSeverity: medium\nPackage: golang.org/x/net\nVersion: v0.26.0\nFix Version: 0.38.0\nType: go-module\nLocation: /usr/bin/kubectl\nData Namespace: github:language:go\nLink: [GHSA-vvgc-356p-c3xw](https://github.com/advisories/GHSA-vvgc-356p-c3xw)",
+                "markdown": "**Vulnerability GHSA-vvgc-356p-c3xw**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | golang.org/x/net  | v0.26.0  | 0.38.0  | go-module  | /usr/bin/kubectl  | github:language:go  | [GHSA-vvgc-356p-c3xw](https://github.com/advisories/GHSA-vvgc-356p-c3xw)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:golang/golang.org/x/net@v0.26.0"
+                ],
+                "security-severity": "6.5"
+              }
+            },
+            {
+              "id": "CVE-2025-26519-musl",
+              "name": "ApkMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2025-26519 high vulnerability for musl package"
+              },
+              "fullDescription": {
+                "text": "Version 1.2.5-r0 is affected with an available fix in versions 1.2.5-r1"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-26519\nSeverity: high\nPackage: musl\nVersion: 1.2.5-r0\nFix Version: 1.2.5-r1\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.20\nLink: [CVE-2025-26519](https://security.alpinelinux.org/vuln/CVE-2025-26519)",
+                "markdown": "**Vulnerability CVE-2025-26519**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | musl  | 1.2.5-r0  | 1.2.5-r1  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.20  | [CVE-2025-26519](https://security.alpinelinux.org/vuln/CVE-2025-26519)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/musl@1.2.5-r0?arch=x86_64\u0026distro=alpine-3.20.3"
+                ],
+                "security-severity": "8.1"
+              }
+            },
+            {
+              "id": "CVE-2025-26519-musl-utils",
+              "name": "ApkMatcherExactIndirectMatch",
+              "shortDescription": {
+                "text": "CVE-2025-26519 high vulnerability for musl-utils package"
+              },
+              "fullDescription": {
+                "text": "Version 1.2.5-r0 is affected with an available fix in versions 1.2.5-r1"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-26519\nSeverity: high\nPackage: musl-utils\nVersion: 1.2.5-r0\nFix Version: 1.2.5-r1\nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: alpine:distro:alpine:3.20\nLink: [CVE-2025-26519](https://security.alpinelinux.org/vuln/CVE-2025-26519)",
+                "markdown": "**Vulnerability CVE-2025-26519**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | musl-utils  | 1.2.5-r0  | 1.2.5-r1  | apk  | /lib/apk/db/installed  | alpine:distro:alpine:3.20  | [CVE-2025-26519](https://security.alpinelinux.org/vuln/CVE-2025-26519)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/musl-utils@1.2.5-r0?arch=x86_64\u0026distro=alpine-3.20.3\u0026upstream=musl"
+                ],
+                "security-severity": "8.1"
+              }
+            },
+            {
+              "id": "CVE-2024-58251-busybox",
+              "name": "ApkMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2024-58251 low vulnerability for busybox package"
+              },
+              "fullDescription": {
+                "text": "In netstat in BusyBox through 1.37.0, local users can launch of network application with an argv[0] containing an ANSI terminal escape sequence, leading to a denial of service (terminal locked up) when netstat is used by a victim."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-58251\nSeverity: low\nPackage: busybox\nVersion: 1.36.1-r29\nFix Version: \nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: nvd:cpe\nLink: [CVE-2024-58251](https://nvd.nist.gov/vuln/detail/CVE-2024-58251)",
+                "markdown": "**Vulnerability CVE-2024-58251**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | busybox  | 1.36.1-r29  |   | apk  | /lib/apk/db/installed  | nvd:cpe  | [CVE-2024-58251](https://nvd.nist.gov/vuln/detail/CVE-2024-58251)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/busybox@1.36.1-r29?arch=x86_64\u0026distro=alpine-3.20.3"
+                ],
+                "security-severity": "2.5"
+              }
+            },
+            {
+              "id": "CVE-2024-58251-busybox-binsh",
+              "name": "ApkMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2024-58251 low vulnerability for busybox-binsh package"
+              },
+              "fullDescription": {
+                "text": "In netstat in BusyBox through 1.37.0, local users can launch of network application with an argv[0] containing an ANSI terminal escape sequence, leading to a denial of service (terminal locked up) when netstat is used by a victim."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-58251\nSeverity: low\nPackage: busybox-binsh\nVersion: 1.36.1-r29\nFix Version: \nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: nvd:cpe\nLink: [CVE-2024-58251](https://nvd.nist.gov/vuln/detail/CVE-2024-58251)",
+                "markdown": "**Vulnerability CVE-2024-58251**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | busybox-binsh  | 1.36.1-r29  |   | apk  | /lib/apk/db/installed  | nvd:cpe  | [CVE-2024-58251](https://nvd.nist.gov/vuln/detail/CVE-2024-58251)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/busybox-binsh@1.36.1-r29?arch=x86_64\u0026distro=alpine-3.20.3\u0026upstream=busybox"
+                ],
+                "security-severity": "2.5"
+              }
+            },
+            {
+              "id": "CVE-2024-58251-ssl_client",
+              "name": "ApkMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2024-58251 low vulnerability for ssl_client package"
+              },
+              "fullDescription": {
+                "text": "In netstat in BusyBox through 1.37.0, local users can launch of network application with an argv[0] containing an ANSI terminal escape sequence, leading to a denial of service (terminal locked up) when netstat is used by a victim."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2024-58251\nSeverity: low\nPackage: ssl_client\nVersion: 1.36.1-r29\nFix Version: \nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: nvd:cpe\nLink: [CVE-2024-58251](https://nvd.nist.gov/vuln/detail/CVE-2024-58251)",
+                "markdown": "**Vulnerability CVE-2024-58251**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | ssl_client  | 1.36.1-r29  |   | apk  | /lib/apk/db/installed  | nvd:cpe  | [CVE-2024-58251](https://nvd.nist.gov/vuln/detail/CVE-2024-58251)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/ssl_client@1.36.1-r29?arch=x86_64\u0026distro=alpine-3.20.3\u0026upstream=busybox"
+                ],
+                "security-severity": "2.5"
+              }
+            },
+            {
+              "id": "GHSA-qxp5-gwg8-xv66-golang.org/x/net",
+              "name": "GoModuleMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-qxp5-gwg8-xv66 medium vulnerability for golang.org/x/net package"
+              },
+              "fullDescription": {
+                "text": "HTTP Proxy bypass using IPv6 Zone IDs in golang.org/x/net"
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability GHSA-qxp5-gwg8-xv66\nSeverity: medium\nPackage: golang.org/x/net\nVersion: v0.26.0\nFix Version: 0.36.0\nType: go-module\nLocation: /usr/bin/kubectl\nData Namespace: github:language:go\nLink: [GHSA-qxp5-gwg8-xv66](https://github.com/advisories/GHSA-qxp5-gwg8-xv66)",
+                "markdown": "**Vulnerability GHSA-qxp5-gwg8-xv66**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | golang.org/x/net  | v0.26.0  | 0.36.0  | go-module  | /usr/bin/kubectl  | github:language:go  | [GHSA-qxp5-gwg8-xv66](https://github.com/advisories/GHSA-qxp5-gwg8-xv66)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:golang/golang.org/x/net@v0.26.0"
+                ],
+                "security-severity": "4.4"
+              }
+            },
+            {
+              "id": "CVE-2025-46394-busybox",
+              "name": "ApkMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2025-46394 low vulnerability for busybox package"
+              },
+              "fullDescription": {
+                "text": "In tar in BusyBox through 1.37.0, a TAR archive can have filenames hidden from a listing through the use of terminal escape sequences."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-46394\nSeverity: low\nPackage: busybox\nVersion: 1.36.1-r29\nFix Version: \nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: nvd:cpe\nLink: [CVE-2025-46394](https://nvd.nist.gov/vuln/detail/CVE-2025-46394)",
+                "markdown": "**Vulnerability CVE-2025-46394**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | busybox  | 1.36.1-r29  |   | apk  | /lib/apk/db/installed  | nvd:cpe  | [CVE-2025-46394](https://nvd.nist.gov/vuln/detail/CVE-2025-46394)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/busybox@1.36.1-r29?arch=x86_64\u0026distro=alpine-3.20.3"
+                ],
+                "security-severity": "3.2"
+              }
+            },
+            {
+              "id": "CVE-2025-46394-busybox-binsh",
+              "name": "ApkMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2025-46394 low vulnerability for busybox-binsh package"
+              },
+              "fullDescription": {
+                "text": "In tar in BusyBox through 1.37.0, a TAR archive can have filenames hidden from a listing through the use of terminal escape sequences."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-46394\nSeverity: low\nPackage: busybox-binsh\nVersion: 1.36.1-r29\nFix Version: \nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: nvd:cpe\nLink: [CVE-2025-46394](https://nvd.nist.gov/vuln/detail/CVE-2025-46394)",
+                "markdown": "**Vulnerability CVE-2025-46394**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | busybox-binsh  | 1.36.1-r29  |   | apk  | /lib/apk/db/installed  | nvd:cpe  | [CVE-2025-46394](https://nvd.nist.gov/vuln/detail/CVE-2025-46394)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/busybox-binsh@1.36.1-r29?arch=x86_64\u0026distro=alpine-3.20.3\u0026upstream=busybox"
+                ],
+                "security-severity": "3.2"
+              }
+            },
+            {
+              "id": "CVE-2025-46394-ssl_client",
+              "name": "ApkMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2025-46394 low vulnerability for ssl_client package"
+              },
+              "fullDescription": {
+                "text": "In tar in BusyBox through 1.37.0, a TAR archive can have filenames hidden from a listing through the use of terminal escape sequences."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-46394\nSeverity: low\nPackage: ssl_client\nVersion: 1.36.1-r29\nFix Version: \nType: apk\nLocation: /lib/apk/db/installed\nData Namespace: nvd:cpe\nLink: [CVE-2025-46394](https://nvd.nist.gov/vuln/detail/CVE-2025-46394)",
+                "markdown": "**Vulnerability CVE-2025-46394**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | ssl_client  | 1.36.1-r29  |   | apk  | /lib/apk/db/installed  | nvd:cpe  | [CVE-2025-46394](https://nvd.nist.gov/vuln/detail/CVE-2025-46394)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:apk/alpine/ssl_client@1.36.1-r29?arch=x86_64\u0026distro=alpine-3.20.3\u0026upstream=busybox"
+                ],
+                "security-severity": "3.2"
+              }
+            },
+            {
+              "id": "CVE-2025-22866-stdlib",
+              "name": "GoModuleMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2025-22866 medium vulnerability for stdlib package"
+              },
+              "fullDescription": {
+                "text": "Due to the usage of a variable time instruction in the assembly implementation of an internal function, a small number of bits of secret scalars are leaked on the ppc64le architecture. Due to the way this function is used, we do not believe this leakage is enough to allow recovery of the private key when P-256 is used in any well known protocols."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-22866\nSeverity: medium\nPackage: stdlib\nVersion: go1.22.6\nFix Version: 1.22.12,1.23.6,1.24.0-rc.3\nType: go-module\nLocation: /usr/bin/kubectl\nData Namespace: nvd:cpe\nLink: [CVE-2025-22866](https://nvd.nist.gov/vuln/detail/CVE-2025-22866)",
+                "markdown": "**Vulnerability CVE-2025-22866**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | stdlib  | go1.22.6  | 1.22.12,1.23.6,1.24.0-rc.3  | go-module  | /usr/bin/kubectl  | nvd:cpe  | [CVE-2025-22866](https://nvd.nist.gov/vuln/detail/CVE-2025-22866)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:golang/stdlib@1.22.6"
+                ],
+                "security-severity": "4.0"
+              }
+            },
+            {
+              "id": "CVE-2025-4674-stdlib",
+              "name": "GoModuleMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2025-4674 high vulnerability for stdlib package"
+              },
+              "fullDescription": {
+                "text": "The go command may execute unexpected commands when operating in untrusted VCS repositories. This occurs when possibly dangerous VCS configuration is present in repositories. This can happen when a repository was fetched via one VCS (e.g. Git), but contains metadata for another VCS (e.g. Mercurial). Modules which are retrieved using the go command line, i.e. via \"go get\", are not affected."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2025-4674\nSeverity: high\nPackage: stdlib\nVersion: go1.22.6\nFix Version: 1.23.11,1.24.5\nType: go-module\nLocation: /usr/bin/kubectl\nData Namespace: nvd:cpe\nLink: [CVE-2025-4674](https://nvd.nist.gov/vuln/detail/CVE-2025-4674)",
+                "markdown": "**Vulnerability CVE-2025-4674**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | stdlib  | go1.22.6  | 1.23.11,1.24.5  | go-module  | /usr/bin/kubectl  | nvd:cpe  | [CVE-2025-4674](https://nvd.nist.gov/vuln/detail/CVE-2025-4674)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:golang/stdlib@1.22.6"
+                ],
+                "security-severity": "8.6"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "CVE-2024-9143-libcrypto3",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libcrypto3, version 3.3.2-r0 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:eaf532c3dce219323b2d04b11b929d3ba41695c8971adbd7dcff133af02ef3e2:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3c8efe9b7d58080a0a6e30a90e6e9f56fd892fc98949a4d9fb10535d1caf2ec3:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-9143-libssl3",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libssl3, version 3.3.2-r0 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:eaf532c3dce219323b2d04b11b929d3ba41695c8971adbd7dcff133af02ef3e2:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b89b6ad434d10ba5fd544faf034f7a2a6670f63866333550aaa0047a67cca736:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-12797-libcrypto3",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libcrypto3, version 3.3.2-r0 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:eaf532c3dce219323b2d04b11b929d3ba41695c8971adbd7dcff133af02ef3e2:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3c8efe9b7d58080a0a6e30a90e6e9f56fd892fc98949a4d9fb10535d1caf2ec3:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-12797-libssl3",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libssl3, version 3.3.2-r0 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:eaf532c3dce219323b2d04b11b929d3ba41695c8971adbd7dcff133af02ef3e2:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b89b6ad434d10ba5fd544faf034f7a2a6670f63866333550aaa0047a67cca736:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-34156-stdlib",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in go-module package: stdlib, version go1.22.6 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /usr/bin/kubectl"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//usr/bin/kubectl"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/bin/kubectl",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:68fccbcc8515f4d399434172cb6690eb8c124e5e8b1c41ec097faed05d78afa4:/usr/bin/kubectl"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "99b3e0270f45879f4766bd2c3cadccdc1b999756e805275d7c77945bc4c930fb:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-34158-stdlib",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in go-module package: stdlib, version go1.22.6 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /usr/bin/kubectl"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//usr/bin/kubectl"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/bin/kubectl",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:68fccbcc8515f4d399434172cb6690eb8c124e5e8b1c41ec097faed05d78afa4:/usr/bin/kubectl"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "99b3e0270f45879f4766bd2c3cadccdc1b999756e805275d7c77945bc4c930fb:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-6v2p-p543-phr9-golang.org/x/oauth2",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in go-module package: golang.org/x/oauth2, version v0.21.0 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /usr/bin/kubectl"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//usr/bin/kubectl"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/bin/kubectl",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:68fccbcc8515f4d399434172cb6690eb8c124e5e8b1c41ec097faed05d78afa4:/usr/bin/kubectl"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a50812566d83acc1e8ed64813b1384b3f7e70393d613cbf762e52eedaba56fa0:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-34155-stdlib",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in go-module package: stdlib, version go1.22.6 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /usr/bin/kubectl"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//usr/bin/kubectl"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/bin/kubectl",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:68fccbcc8515f4d399434172cb6690eb8c124e5e8b1c41ec097faed05d78afa4:/usr/bin/kubectl"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "99b3e0270f45879f4766bd2c3cadccdc1b999756e805275d7c77945bc4c930fb:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-47907-stdlib",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in go-module package: stdlib, version go1.22.6 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /usr/bin/kubectl"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//usr/bin/kubectl"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/bin/kubectl",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:68fccbcc8515f4d399434172cb6690eb8c124e5e8b1c41ec097faed05d78afa4:/usr/bin/kubectl"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "99b3e0270f45879f4766bd2c3cadccdc1b999756e805275d7c77945bc4c930fb:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-13176-libcrypto3",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libcrypto3, version 3.3.2-r0 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:eaf532c3dce219323b2d04b11b929d3ba41695c8971adbd7dcff133af02ef3e2:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3c8efe9b7d58080a0a6e30a90e6e9f56fd892fc98949a4d9fb10535d1caf2ec3:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-13176-libssl3",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in apk package: libssl3, version 3.3.2-r0 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:eaf532c3dce219323b2d04b11b929d3ba41695c8971adbd7dcff133af02ef3e2:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b89b6ad434d10ba5fd544faf034f7a2a6670f63866333550aaa0047a67cca736:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-45336-stdlib",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in go-module package: stdlib, version go1.22.6 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /usr/bin/kubectl"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//usr/bin/kubectl"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/bin/kubectl",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:68fccbcc8515f4d399434172cb6690eb8c124e5e8b1c41ec097faed05d78afa4:/usr/bin/kubectl"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "99b3e0270f45879f4766bd2c3cadccdc1b999756e805275d7c77945bc4c930fb:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-45341-stdlib",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in go-module package: stdlib, version go1.22.6 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /usr/bin/kubectl"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//usr/bin/kubectl"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/bin/kubectl",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:68fccbcc8515f4d399434172cb6690eb8c124e5e8b1c41ec097faed05d78afa4:/usr/bin/kubectl"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "99b3e0270f45879f4766bd2c3cadccdc1b999756e805275d7c77945bc4c930fb:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-22871-stdlib",
+          "level": "error",
+          "message": {
+            "text": "A critical vulnerability in go-module package: stdlib, version go1.22.6 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /usr/bin/kubectl"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//usr/bin/kubectl"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/bin/kubectl",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:68fccbcc8515f4d399434172cb6690eb8c124e5e8b1c41ec097faed05d78afa4:/usr/bin/kubectl"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "99b3e0270f45879f4766bd2c3cadccdc1b999756e805275d7c77945bc4c930fb:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-4673-stdlib",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in go-module package: stdlib, version go1.22.6 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /usr/bin/kubectl"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//usr/bin/kubectl"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/bin/kubectl",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:68fccbcc8515f4d399434172cb6690eb8c124e5e8b1c41ec097faed05d78afa4:/usr/bin/kubectl"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "99b3e0270f45879f4766bd2c3cadccdc1b999756e805275d7c77945bc4c930fb:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-vvgc-356p-c3xw-golang.org/x/net",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in go-module package: golang.org/x/net, version v0.26.0 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /usr/bin/kubectl"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//usr/bin/kubectl"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/bin/kubectl",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:68fccbcc8515f4d399434172cb6690eb8c124e5e8b1c41ec097faed05d78afa4:/usr/bin/kubectl"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "f15a7a33878576d9e5ab940eb4a10d2b686519afc159210480a8360116d05b3c:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-26519-musl",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: musl, version 1.2.5-r0 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:eaf532c3dce219323b2d04b11b929d3ba41695c8971adbd7dcff133af02ef3e2:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "20c588fe873de706b0a8e9386dbac54786e8d3c76f7608426ffa6e0cd068004f:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-26519-musl-utils",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in apk package: musl-utils, version 1.2.5-r0 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:eaf532c3dce219323b2d04b11b929d3ba41695c8971adbd7dcff133af02ef3e2:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "f6801b3511a6a29e3ba08e4549dc1eabe907f0bcad83cfc973c08e9aa1e5baf1:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-58251-busybox",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in apk package: busybox, version 1.36.1-r29 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:eaf532c3dce219323b2d04b11b929d3ba41695c8971adbd7dcff133af02ef3e2:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a90c476b59dca2b07b395034b3d0c0bdbf3c4614f46f1cdef971673e2cbda10c:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-58251-busybox-binsh",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in apk package: busybox-binsh, version 1.36.1-r29 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:eaf532c3dce219323b2d04b11b929d3ba41695c8971adbd7dcff133af02ef3e2:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1883b11dcf85d2ed2e749ff1bad7ce1b95dad63f829aacc0156260ddb77f2aed:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2024-58251-ssl_client",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in apk package: ssl_client, version 1.36.1-r29 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:eaf532c3dce219323b2d04b11b929d3ba41695c8971adbd7dcff133af02ef3e2:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "cdc92c651faa0aa015942fb9fa1c7a2cc75bfe48f32d629a473f71bb0d34ae85:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-qxp5-gwg8-xv66-golang.org/x/net",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in go-module package: golang.org/x/net, version v0.26.0 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /usr/bin/kubectl"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//usr/bin/kubectl"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/bin/kubectl",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:68fccbcc8515f4d399434172cb6690eb8c124e5e8b1c41ec097faed05d78afa4:/usr/bin/kubectl"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "f15a7a33878576d9e5ab940eb4a10d2b686519afc159210480a8360116d05b3c:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-46394-busybox",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in apk package: busybox, version 1.36.1-r29 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:eaf532c3dce219323b2d04b11b929d3ba41695c8971adbd7dcff133af02ef3e2:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "a90c476b59dca2b07b395034b3d0c0bdbf3c4614f46f1cdef971673e2cbda10c:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-46394-busybox-binsh",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in apk package: busybox-binsh, version 1.36.1-r29 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:eaf532c3dce219323b2d04b11b929d3ba41695c8971adbd7dcff133af02ef3e2:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1883b11dcf85d2ed2e749ff1bad7ce1b95dad63f829aacc0156260ddb77f2aed:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-46394-ssl_client",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in apk package: ssl_client, version 1.36.1-r29 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /lib/apk/db/installed"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//lib/apk/db/installed"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/lib/apk/db/installed",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:eaf532c3dce219323b2d04b11b929d3ba41695c8971adbd7dcff133af02ef3e2:/lib/apk/db/installed"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "cdc92c651faa0aa015942fb9fa1c7a2cc75bfe48f32d629a473f71bb0d34ae85:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-22866-stdlib",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in go-module package: stdlib, version go1.22.6 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /usr/bin/kubectl"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//usr/bin/kubectl"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/bin/kubectl",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:68fccbcc8515f4d399434172cb6690eb8c124e5e8b1c41ec097faed05d78afa4:/usr/bin/kubectl"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "99b3e0270f45879f4766bd2c3cadccdc1b999756e805275d7c77945bc4c930fb:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2025-4674-stdlib",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in go-module package: stdlib, version go1.22.6 was found in image reg.nirmata.io/nirmata/kubectl:1.31.1 at: /usr/bin/kubectl"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "kubectl//usr/bin/kubectl"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/usr/bin/kubectl",
+                  "fullyQualifiedName": "reg.nirmata.io/nirmata/kubectl:1.31.1@sha256:68fccbcc8515f4d399434172cb6690eb8c124e5e8b1c41ec097faed05d78afa4:/usr/bin/kubectl"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "99b3e0270f45879f4766bd2c3cadccdc1b999756e805275d7c77945bc4c930fb:1"
+          }
+        }
+      ]
+    }
+  ]
+}
