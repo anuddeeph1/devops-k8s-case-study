@@ -1,0 +1,175 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "grype",
+          "version": "0.99.1",
+          "informationUri": "https://github.com/anchore/grype",
+          "rules": [
+            {
+              "id": "CVE-2022-28391-busybox",
+              "name": "StockMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2022-28391 high vulnerability for busybox package"
+              },
+              "fullDescription": {
+                "text": "BusyBox through 1.35.0 allows remote attackers to execute arbitrary code if netstat is used to print a DNS PTR record's value to a VT compatible terminal. Alternatively, the attacker could choose to change the terminal's colors."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2022-28391\nSeverity: high\nPackage: busybox\nVersion: 1.35.0\nFix Version: \nType: binary\nLocation: /bin/busybox\nData Namespace: nvd:cpe\nLink: [CVE-2022-28391](https://nvd.nist.gov/vuln/detail/CVE-2022-28391)",
+                "markdown": "**Vulnerability CVE-2022-28391**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | busybox  | 1.35.0  |   | binary  | /bin/busybox  | nvd:cpe  | [CVE-2022-28391](https://nvd.nist.gov/vuln/detail/CVE-2022-28391)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:generic/busybox@1.35.0"
+                ],
+                "security-severity": "8.8"
+              }
+            },
+            {
+              "id": "CVE-2022-30065-busybox",
+              "name": "StockMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2022-30065 high vulnerability for busybox package"
+              },
+              "fullDescription": {
+                "text": "A use-after-free in Busybox 1.35-x's awk applet leads to denial of service and possibly code execution when processing a crafted awk pattern in the copyvar function."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2022-30065\nSeverity: high\nPackage: busybox\nVersion: 1.35.0\nFix Version: \nType: binary\nLocation: /bin/busybox\nData Namespace: nvd:cpe\nLink: [CVE-2022-30065](https://nvd.nist.gov/vuln/detail/CVE-2022-30065)",
+                "markdown": "**Vulnerability CVE-2022-30065**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | busybox  | 1.35.0  |   | binary  | /bin/busybox  | nvd:cpe  | [CVE-2022-30065](https://nvd.nist.gov/vuln/detail/CVE-2022-30065)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:generic/busybox@1.35.0"
+                ],
+                "security-severity": "7.8"
+              }
+            },
+            {
+              "id": "CVE-2022-48174-busybox",
+              "name": "StockMatcherCpeMatch",
+              "shortDescription": {
+                "text": "CVE-2022-48174 critical vulnerability for busybox package"
+              },
+              "fullDescription": {
+                "text": "There is a stack overflow vulnerability in ash.c:6030 in busybox before 1.35. In the environment of Internet of Vehicles, this vulnerability can be executed from command to arbitrary code execution."
+              },
+              "helpUri": "https://github.com/anchore/grype",
+              "help": {
+                "text": "Vulnerability CVE-2022-48174\nSeverity: critical\nPackage: busybox\nVersion: 1.35.0\nFix Version: \nType: binary\nLocation: /bin/busybox\nData Namespace: nvd:cpe\nLink: [CVE-2022-48174](https://nvd.nist.gov/vuln/detail/CVE-2022-48174)",
+                "markdown": "**Vulnerability CVE-2022-48174**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| critical  | busybox  | 1.35.0  |   | binary  | /bin/busybox  | nvd:cpe  | [CVE-2022-48174](https://nvd.nist.gov/vuln/detail/CVE-2022-48174)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:generic/busybox@1.35.0"
+                ],
+                "security-severity": "9.8"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "CVE-2022-28391-busybox",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in binary package: busybox, version 1.35.0 was found in image busybox:1.35 at: /bin/busybox"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "busybox//bin/busybox"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/bin/[",
+                  "fullyQualifiedName": "busybox:1.35@sha256:e41a02dae87b9cfa96724113d920e0e3ff7070962ba6c9caa85d46af20e493e0:/bin/busybox"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "81ebee934f8f330573d4fa49e497bbbad70a1a701bc3ed4caf0be2edb82a6dd4:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2022-30065-busybox",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in binary package: busybox, version 1.35.0 was found in image busybox:1.35 at: /bin/busybox"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "busybox//bin/busybox"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/bin/[",
+                  "fullyQualifiedName": "busybox:1.35@sha256:e41a02dae87b9cfa96724113d920e0e3ff7070962ba6c9caa85d46af20e493e0:/bin/busybox"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "81ebee934f8f330573d4fa49e497bbbad70a1a701bc3ed4caf0be2edb82a6dd4:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2022-48174-busybox",
+          "level": "error",
+          "message": {
+            "text": "A critical vulnerability in binary package: busybox, version 1.35.0 was found in image busybox:1.35 at: /bin/busybox"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "busybox//bin/busybox"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "/bin/[",
+                  "fullyQualifiedName": "busybox:1.35@sha256:e41a02dae87b9cfa96724113d920e0e3ff7070962ba6c9caa85d46af20e493e0:/bin/busybox"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "81ebee934f8f330573d4fa49e497bbbad70a1a701bc3ed4caf0be2edb82a6dd4:1"
+          }
+        }
+      ]
+    }
+  ]
+}
