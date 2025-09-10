@@ -164,16 +164,17 @@ def determine_intelligent_vex_status(cve_id, vulnerability, artifact_name, cisa_
     # 🐙 GitHub Security Advisory Intelligence
     if gh_advisory:
         severity_gh = gh_advisory.get("severity", "").upper()
-        cvss_score = gh_advisory.get("cvss", {}).get("score", 0)
-        # Ensure cvss_score is a valid number
-        if cvss_score is None or not isinstance(cvss_score, (int, float)):
-            cvss_score = 0
+        cvss_data = gh_advisory.get("cvss", {})
+        cvss_score = 0.0
         
-        # Convert to float for comparison
-        try:
-            cvss_score = float(cvss_score)
-        except (ValueError, TypeError):
-            cvss_score = 0.0
+        # Safe CVSS score extraction
+        if cvss_data and isinstance(cvss_data, dict):
+            score_value = cvss_data.get("score", 0)
+            if score_value is not None:
+                try:
+                    cvss_score = float(score_value)
+                except (ValueError, TypeError):
+                    cvss_score = 0.0
         
         if severity_gh == "CRITICAL" or cvss_score >= 9.0:
             return {
@@ -196,19 +197,23 @@ def determine_intelligent_vex_status(cve_id, vulnerability, artifact_name, cisa_
     if nvd_data:
         cvss_v3_metrics = nvd_data.get("cvss_v3", [])
         if cvss_v3_metrics and len(cvss_v3_metrics) > 0:
-            cvss_data = cvss_v3_metrics[0].get("cvssData", {}) if isinstance(cvss_v3_metrics[0], dict) else {}
-            base_score = cvss_data.get("baseScore", 0) if cvss_data else 0
-            vector_string = cvss_data.get("vectorString", "") if cvss_data else ""
+            base_score = 0.0
+            vector_string = ""
             
-            # Ensure base_score is a valid number
-            if base_score is None or not isinstance(base_score, (int, float)):
-                base_score = 0
-            
-            # Convert to float for comparison
-            try:
-                base_score = float(base_score)
-            except (ValueError, TypeError):
-                base_score = 0.0
+            # Safe CVSS data extraction
+            if isinstance(cvss_v3_metrics[0], dict):
+                cvss_data = cvss_v3_metrics[0].get("cvssData", {})
+                if cvss_data and isinstance(cvss_data, dict):
+                    score_value = cvss_data.get("baseScore")
+                    vector_value = cvss_data.get("vectorString", "")
+                    
+                    if score_value is not None:
+                        try:
+                            base_score = float(score_value)
+                            vector_string = str(vector_value)
+                        except (ValueError, TypeError):
+                            base_score = 0.0
+                            vector_string = ""
             
             if base_score >= 9.0:
                 return {
