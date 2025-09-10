@@ -41,8 +41,8 @@ metadata:
 spec:
   restartPolicy: Never
   containers:
-  - name: mysql-client
-    image: mysql:8.0
+  - name: network-tester
+    image: nicolaka/netshoot
     command:
     - /bin/bash
     - -c
@@ -67,20 +67,16 @@ spec:
         exit 1
       fi
       
-      # Test MySQL authentication (using environment variables)
-      echo "📍 Testing MySQL authentication..."
-      mysql -h mysql-service -u root -p\$MYSQL_ROOT_PASSWORD -e "SELECT 1 as connection_test;" || {
-        echo "⚠️  MySQL authentication test failed (expected if wrong credentials)"
-        echo "🔍 But network connectivity is working!"
-      }
+      # Test MySQL connection (network layer only)
+      echo "📍 Testing MySQL connection..."
+      if timeout 10 bash -c '</dev/tcp/mysql-service/3306'; then
+        echo "✅ MySQL port 3306 is accessible"
+      else
+        echo "❌ MySQL port 3306 is not accessible"
+        exit 1
+      fi
       
       echo "🎉 Backup connectivity test completed successfully!"
-    env:
-    - name: MYSQL_ROOT_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: mysql-secret
-          key: mysql-root-password
 EOF
 
 echo "⏳ Waiting for test pod to start..."
