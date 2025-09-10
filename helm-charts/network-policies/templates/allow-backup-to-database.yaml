@@ -1,0 +1,164 @@
+{{- if .Values.networkPolicies.policies.allowBackupToDatabase.enabled }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: generate-netpol-backup-to-database
+  annotations:
+    policies.kyverno.io/title: Generate NetworkPolicy for Backup to Database Access
+    policies.kyverno.io/category: "Network Security, Backup Operations"
+    policies.kyverno.io/description: >-
+      {{ .Values.networkPolicies.policies.allowBackupToDatabase.description }}
+      This policy ensures backup jobs can connect to the MySQL database for data backup operations.
+      It generates NetworkPolicies for pods with backup job labels in the target namespace.
+spec:
+  validationFailureAction: {{ .Values.kyverno.validationFailureAction }}
+  background: {{ .Values.kyverno.background }}
+  generateExisting: {{ .Values.kyverno.generateExisting }}
+  rules:
+  - name: generate-backup-to-database-netpol
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+          names:
+          - "*"
+          namespaces:
+          - {{ .Values.networkPolicies.targetNamespace }}
+          operations:
+          - CREATE
+          - UPDATE
+      - resources:
+          kinds:
+          - Namespace
+          names:
+          - {{ .Values.networkPolicies.targetNamespace }}
+    preconditions:
+      any:
+      # Match backup job pods (like CronJob backup pods)
+      - key: "{{`{{ request.object.metadata.labels.\"app.kubernetes.io/component\" || '' }}`}}"
+        operator: Equals
+        value: "backup-job"
+      - key: "{{`{{ request.object.metadata.labels.\"app.kubernetes.io/component\" || '' }}`}}"
+        operator: Equals
+        value: "backup"
+    generate:
+      kind: NetworkPolicy
+      apiVersion: networking.k8s.io/v1
+      name: allow-backup-to-database-{{`{{ request.object.metadata.name }}`}}
+      namespace: "{{`{{ request.object.metadata.namespace }}`}}"
+      synchronize: true
+      data:
+        metadata:
+          labels:
+            app.kubernetes.io/managed-by: kyverno
+            policy.kyverno.io/policy-name: generate-netpol-backup-to-database
+            policy.kyverno.io/gr-name: "{{`{{ request.object.metadata.namespace }}-{{ request.object.metadata.name }}-allow-backup-to-database`}}"
+        spec:
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/component: "{{`{{ request.object.metadata.labels.\"app.kubernetes.io/component\" }}`}}"
+              app.kubernetes.io/name: "{{`{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}`}}"
+          policyTypes:
+          - Egress
+          egress:
+          # Allow backup jobs to connect to database
+          - to:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ .Values.podLabels.database }}
+                  tier: backend
+            ports:
+            - protocol: TCP
+              port: {{ .Values.ports.mysql }}
+          # Allow DNS resolution
+          - to: []
+            ports:
+            - protocol: UDP
+              port: {{ .Values.ports.dns }}
+            - protocol: TCP
+              port: {{ .Values.ports.dns }}
+---
+# Additional ingress policy for database to accept backup connections
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: generate-netpol-database-backup-ingress
+  annotations:
+    policies.kyverno.io/title: Generate NetworkPolicy for Database to Accept Backup Connections
+    policies.kyverno.io/category: "Network Security, Database Access"
+    policies.kyverno.io/description: >-
+      This policy generates NetworkPolicies to allow database pods to accept connections from backup jobs.
+      It complements the backup egress policy by allowing ingress traffic on the database side.
+spec:
+  validationFailureAction: {{ .Values.kyverno.validationFailureAction }}
+  background: {{ .Values.kyverno.background }}
+  generateExisting: {{ .Values.kyverno.generateExisting }}
+  rules:
+  - name: generate-database-backup-ingress-netpol
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+          names:
+          - "*"
+          namespaces:
+          - {{ .Values.networkPolicies.targetNamespace }}
+          operations:
+          - CREATE
+          - UPDATE
+      - resources:
+          kinds:
+          - Namespace
+          names:
+          - {{ .Values.networkPolicies.targetNamespace }}
+    preconditions:
+      any:
+      # Match database pods
+      - key: "{{`{{ request.object.metadata.labels.\"app.kubernetes.io/name\" || '' }}`}}"
+        operator: Equals
+        value: {{ .Values.podLabels.database }}
+      - key: "{{`{{ request.object.metadata.labels.tier || '' }}`}}"
+        operator: Equals
+        value: "backend"
+    generate:
+      kind: NetworkPolicy
+      apiVersion: networking.k8s.io/v1
+      name: allow-database-backup-ingress-{{`{{ request.object.metadata.name }}`}}
+      namespace: "{{`{{ request.object.metadata.namespace }}`}}"
+      synchronize: true
+      data:
+        metadata:
+          labels:
+            app.kubernetes.io/managed-by: kyverno
+            policy.kyverno.io/policy-name: generate-netpol-database-backup-ingress
+            policy.kyverno.io/gr-name: "{{`{{ request.object.metadata.namespace }}-{{ request.object.metadata.name }}-allow-database-backup-ingress`}}"
+        spec:
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: "{{`{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}`}}"
+              tier: "{{`{{ request.object.metadata.labels.tier }}`}}"
+          policyTypes:
+          - Ingress
+          ingress:
+          # Allow connections from backup jobs
+          - from:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/component: backup-job
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/component: backup
+            ports:
+            - protocol: TCP
+              port: {{ .Values.ports.mysql }}
+          # Allow connections from web-server (existing policy)
+          - from:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ .Values.podLabels.webServer }}
+            ports:
+            - protocol: TCP
+              port: {{ .Values.ports.mysql }}
+{{- end }}
