@@ -606,11 +606,14 @@ git push origin workflows
 ```
 devops-k8s-case-study/
 ├── 📋 README.md                          # This file
-├── 🚀 Scripts/                           # Deployment Scripts
-│   ├── 🚀 deploy.sh                      # Main Deployment Scripts
-│   ├── 🚀 setup-cluster.sh
+├── 🚀 Scripts/                           # Deployment & Operations Scripts
+│   ├── 🚀 deploy.sh                      # Main Deployment Script
+│   ├── 🚀 setup-cluster.sh               # KIND Cluster Setup
 │   ├── 🔍 multi-image-security-scan.sh   # Multi-image security scanning
-│   └── 📋 kind-cluster-config.yaml 
+│   ├── 💾 manual-backup.sh               # Manual database backup
+│   ├── 🔄 restore-backup.sh              # Database restore operations
+│   ├── 🧪 test-backup-connectivity.sh    # Backup network connectivity test
+│   └── 📋 kind-cluster-config.yaml       # KIND cluster configuration 
 |
 ├── 📦 helm-charts/                       # Helm chart templates
 │   ├── 🌐 web-server/                    # Frontend microservice
