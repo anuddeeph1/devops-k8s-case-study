@@ -21,9 +21,10 @@
 This case study demonstrates a **comprehensive microservices architecture** deployed on Kubernetes using modern DevOps practices. It showcases:
 
 - **GitHub Actions CI/CD Pipeline** with automated build, security scan & deployment
+- **Container Security** with Grype, Syft, VEX generation and Cosign attestation
 - **GitOps deployment** with ArgoCD and App-of-Apps pattern
 - **Security-First Approach** with Kyverno CLI scanning in CI/CD
-- **Balanced Security Policy**: Fail on protected branches, warn on PRs
+- **Flexible Workflow Policy**: No path restrictions on main branch PRs, targeted scanning on workflows branch
 - **Automated Helm Values Management** with image tag updates
 - **Kubernetes Cluster**: KIND cluster with Docker Hub registry  
 - **Database Deployment**: MySQL with persistent storage & backup automation
@@ -81,16 +82,16 @@ graph TD
     REPORTS["📊 Reports Server<br/>Policy Compliance"]
 
     %% Developer Workflows
-    DEV -->|"Create PR"| PR
+    DEV -->|"Create PR → main"| PR
     DEV -->|"Push to workflows"| PUSH
     DEV -->|"Code + Helm Charts"| GIT
     
-    %% PR Workflow (Security Only)
+    %% PR Workflow (No Path Restrictions)
     PR --> SCAN
     SCAN --> REPORT
     REPORT -->|"⚠️ Warn (Allow Merge)"| DEV
     
-    %% Production Workflow (workflows branch)
+    %% Production Workflow (workflows branch - Path Filtered)
     PUSH --> BUILD
     PUSH --> SCAN
     BUILD --> DOCKER
@@ -118,7 +119,6 @@ graph TD
     
     %% Image Flow
     MON -->|"Pulls Updated Images"| DOCKER
-    WEB -->|"Database Connection"| DB
 
     %% Styling
     classDef developer fill:#E74C3C,stroke:#C0392B,stroke-width:2px,color:#fff
@@ -143,7 +143,7 @@ graph TD
 ### 🔄 **Modern CI/CD Flow:**
 
 #### **🔀 Pull Request Workflow (Security Validation):**
-1. **👨‍💻 Developer** creates PR with code/Helm changes → **⚡ GitHub Actions** triggers
+1. **👨‍💻 Developer** creates PR with **any changes** → **⚡ GitHub Actions** triggers (no path restrictions)
 2. **🛡️ Kyverno Security Scan** validates all Helm templates against Pod Security Standards  
 3. **📋 PR Comments** show detailed security report with violation details
 4. **⚠️ Warnings Only** - PRs can merge with violations (allows iterative development)
@@ -218,20 +218,23 @@ flowchart LR
     %% CI Pipeline Stages
     TRIGGER["⚡ Trigger<br/>Path Filter"]
     BUILD["🏗️ Build<br/>Docker Image"]
-    SCAN["🛡️ Security Scan<br/>Grype + Syft + VEX"]
+    SCAN["🛡️ Pod-Monitor Scan<br/>Grype + Syft + VEX"]
+    MULTI_SCAN["🔍 Multi-Image Scan<br/>All Project Images"]
     SIGN["🔐 Attest<br/>Cosign"]
     UPDATE["📝 Update GitOps<br/>Helm Values"]
     VALIDATE["✅ Policy Check<br/>Kyverno CLI"]
     
     %% Outputs
     REGISTRY["🏪 Docker Registry<br/>"]
-    REPORTS["📊 Security Reports<br/>Vulnerability + SBOM"]
+    REPORTS["📊 Security Reports<br/>Pod-Monitor + Multi-Image"]
     
     %% Flow
     PUSH --> TRIGGER
     TRIGGER --> BUILD
+    TRIGGER --> MULTI_SCAN
     BUILD --> SCAN
     SCAN --> SIGN
+    MULTI_SCAN --> REPORTS
     SIGN --> UPDATE
     UPDATE --> VALIDATE
     
@@ -249,19 +252,20 @@ flowchart LR
     
     class PUSH,TRIGGER trigger
     class BUILD build
-    class SCAN,SIGN,VALIDATE security
+    class SCAN,MULTI_SCAN,SIGN,VALIDATE security
     class REGISTRY,REPORTS,DEPLOY output
     class UPDATE build
 ```
 
 **🎯 Pipeline Stages:**
-1. **⚡ Trigger**: Path-filtered activation on `monitoring-go-controller/**`, `helm-charts/**`
+1. **⚡ Trigger**: Path-filtered activation on `monitoring-go-controller/**`, `helm-charts/**`, `scripts/**`
 2. **🏗️ Build**: Multi-stage Docker build with distroless base image
-3. **🛡️ Security Scan**: Grype (vulnerabilities) + Syft (SBOM) + VEX (exploitability)
-4. **🔐 Sign & Attest**: Cosign keyless signing with GitHub OIDC
-5. **📝 Update GitOps**: Automated Helm values update with new image tags
-6. **✅ Policy Check**: Kyverno CLI validation against 17+ Pod Security Standards
-7. **🎯 Deploy**: ArgoCD GitOps deployment to Kubernetes
+3. **🛡️ Pod-Monitor Security Scan**: Grype (vulnerabilities) + Syft (SBOM) + VEX (exploitability)
+4. **🔍 Multi-Image Security Scan**: Comprehensive scanning of all project container images
+5. **🔐 Sign & Attest**: Cosign keyless signing with GitHub OIDC
+6. **📝 Update GitOps**: Automated Helm values update with new image tags
+7. **✅ Policy Check**: Kyverno CLI validation against 17+ Pod Security Standards
+8. **🎯 Deploy**: ArgoCD GitOps deployment to Kubernetes
 
 #### **📋 Workflow 2: PR Validation Pipeline (→ main branch)**
 
@@ -460,17 +464,17 @@ flowchart TD
 
 #### **🔀 Workflow Triggers:**
 ```yaml
-# Pull Request Validation
+# Pull Request Validation (No Path Restrictions)
 on:
   pull_request:
     branches: ['main']
-    paths: ['monitoring-go-controller/**', 'helm-charts/**']
+    # No path restrictions - triggers on ALL PR changes for comprehensive security validation
 
-# Production Deployment  
+# Production Deployment (Path Filtered)
 on:
   push:
     branches: ['workflows']
-    paths: ['monitoring-go-controller/**', 'helm-charts/**']
+    paths: ['monitoring-go-controller/**', 'helm-charts/**', 'scripts/**']
 ```
 
 #### **📊 Pipeline Jobs:**
@@ -479,11 +483,15 @@ on:
 |---------|-------------|-------------------|-------------|
 | **🏗️ Build & Push** | ⏭️ Skipped | ✅ Runs | Multi-arch Docker builds with unique tags |
 | **🔄 Helm Update** | ⏭️ Skipped | ✅ Runs | Auto-update `values.yaml` with new image tags |
-| **🛡️ Security Scan** | ✅ Runs | ✅ Runs | Kyverno CLI validates all Helm templates |
+| **🛡️ Container Security Scan** | ⏭️ Skipped | ✅ Runs | Pod-monitor image: Grype + Syft + VEX + Cosign |
+| **🔍 Multi-Image Security Scan** | ⏭️ Skipped | ✅ Runs | All project images: Comprehensive vulnerability analysis |
+| **🛡️ Kyverno Policy Scan** | ✅ Runs | ✅ Runs | Kyverno CLI validates all Helm templates |
 | **📋 PR Comments** | ✅ Runs | ⏭️ Skipped | Detailed violation reports in PR comments |
 | **❌ Failure Policy** | ⚠️ **Warn** | ❌ **Fail** | Balanced enforcement for development vs production |
 
 #### **🛡️ Security Integration:**
+- **Container Security Scanning**: Pod-monitor image scanned with Grype, Syft, VEX, and Cosign attestation
+- **Multi-Image Security Analysis**: Comprehensive scanning of all project container images (nginx, mysql, alpine, kyverno, etc.)
 - **Kyverno CLI v1.15.0** scans all Helm chart outputs against Pod Security Standards
 - **17+ Policies Applied**: Baseline + Restricted PSS compliance
 - **Template Validation**: Scans desired state (Helm templates) vs runtime violations
@@ -597,10 +605,11 @@ git push origin workflows
 ```
 devops-k8s-case-study/
 ├── 📋 README.md                          # This file
-├── 🚀 Scripts/                           # Deployment script
+├── 🚀 Scripts/                           # Deployment Scripts
 │   ├── 🚀 deploy.sh                      # Main Deployment Scripts
 │   ├── 🚀 setup-cluster.sh
-│   ├── 📋 kind-cluster-config.yaml 
+│   ├── 🔍 multi-image-security-scan.sh   # Multi-image security scanning
+│   └── 📋 kind-cluster-config.yaml 
 |
 ├── 📦 helm-charts/                       # Helm chart templates
 │   ├── 🌐 web-server/                    # Frontend microservice
@@ -640,7 +649,7 @@ devops-k8s-case-study/
 ### 💾 **Database** (`helm-charts/database/`)
 - **Technology**: MySQL 8.0
 - **Persistence**: 20Gi PVC with backup
-- **Security**: Secret-managed credentials
+- **Security**: Secret-managed credentials + network policy protection
 - **Disaster Recovery**: Automated backups + restore procedures
 
 ### 📊 **Monitoring** (`helm-charts/monitoring/`)
@@ -853,6 +862,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 | Feature | Status | Demo Command |
 |---------|--------|--------------|
 | **🔍 Security Scanning** | ✅ **Active** | `./scripts/security-scan.sh nginx:latest ./demo-reports` |
+| **🎯 Multi-Image Security Scan** | ✅ **Active** | `./scripts/multi-image-security-scan.sh ./security-reports` |
 | **📋 SBOM Generation** | ✅ **Ready** | `ls security-reports/sbom/` |
 | **📊 VEX Documents** | ✅ **Ready** | `cat security-reports/vex/*-vex-document.json` |
 | **🔐 Container Signing** | ✅ **Active** | `cosign verify --certificate-identity-regexp=".*" anuddeeph/pod-monitor:latest` |
@@ -865,7 +875,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 | **📊 Health Checks** | ✅ **Active** | `kubectl exec deployment/pod-monitor -- /usr/local/bin/pod-monitor --health-check` |
 
 ### 🚀 **Ready For:**
-- ✅ **🛡️ Security Demonstrations** - Complete container security scanning with Grype, Syft, VEX, and Cosign attestation
+- ✅ **🛡️ Security Demonstrations** - Complete container security scanning with Grype, Syft, VEX, and Cosign attestation + Multi-image analysis
 - ✅ **📋 Supply Chain Audits** - Full SBOM generation in CycloneDX and SPDX formats with exploitability analysis
 - ✅ **🔐 Enterprise Security Reviews** - Production-grade vulnerability management with organized reporting
 - ✅ **🎯 Technical Demonstrations** - GitOps + Modern CI/CD + Policy-as-Code + Container Security showcase
