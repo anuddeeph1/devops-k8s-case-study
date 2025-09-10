@@ -1,0 +1,32 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://github.com/devops-k8s-case-study/vex/reg_nirmata_io_nirmata_kubectl-1_32_1-1757488516",
+  "author": "Multi-Image Security Scanner",
+  "timestamp": "2025-09-10T07:15:54.490216Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-4575",
+        "description": "Vulnerability CVE-2025-4575"
+      },
+      "products": [
+        {
+          "@id": "reg.nirmata.io/nirmata/kubectl:1.32.1",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/libcrypto3@3.5.0-r0?arch=x86_64&distro=alpine-3.22.0&package-id=89dc4ec4fea2c234&upstream=openssl",
+              "name": "libcrypto3",
+              "version": "3.5.0-r0",
+              "purl": "pkg:apk/alpine/libcrypto3@3.5.0-r0?arch=x86_64&distro=alpine-3.22.0&upstream=openssl"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Severity: MEDIUM - No description available",
+      "action_statement": "Component found in SBOM: libcrypto3"
+    }
+  ]
+}
