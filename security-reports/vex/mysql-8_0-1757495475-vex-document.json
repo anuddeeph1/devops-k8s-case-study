@@ -1,0 +1,8 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://github.com/devops-k8s-case-study/vex/mysql-8_0-1757495475",
+  "author": "Multi-Image Security Scanner",
+  "timestamp": "2025-09-10T09:16:53.115344Z",
+  "version": 1,
+  "statements": []
+}
