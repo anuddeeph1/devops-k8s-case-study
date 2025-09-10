@@ -45,7 +45,7 @@ spec:
     generate:
       kind: NetworkPolicy
       apiVersion: networking.k8s.io/v1
-      name: allow-backup-to-database-{{`{{ request.object.metadata.name }}`}}
+      name: backup-egress-{{`{{ request.object.metadata.name }}`}}
       namespace: "{{`{{ request.object.metadata.namespace }}`}}"
       synchronize: true
       data:
@@ -53,7 +53,7 @@ spec:
           labels:
             app.kubernetes.io/managed-by: kyverno
             policy.kyverno.io/policy-name: generate-netpol-backup-to-database
-            policy.kyverno.io/gr-name: "{{`{{ request.object.metadata.namespace }}-{{ request.object.metadata.name }}-allow-backup-to-database`}}"
+            policy.kyverno.io/gr-name: "{{`{{ request.object.metadata.namespace }}-backup-egress`}}"
         spec:
           podSelector:
             matchLabels:
@@ -125,7 +125,7 @@ spec:
     generate:
       kind: NetworkPolicy
       apiVersion: networking.k8s.io/v1
-      name: allow-database-backup-ingress-{{`{{ request.object.metadata.name }}`}}
+      name: backup-ingress-{{`{{ request.object.metadata.name }}`}}
       namespace: "{{`{{ request.object.metadata.namespace }}`}}"
       synchronize: true
       data:
@@ -133,7 +133,7 @@ spec:
           labels:
             app.kubernetes.io/managed-by: kyverno
             policy.kyverno.io/policy-name: generate-netpol-database-backup-ingress
-            policy.kyverno.io/gr-name: "{{`{{ request.object.metadata.namespace }}-{{ request.object.metadata.name }}-allow-database-backup-ingress`}}"
+            policy.kyverno.io/gr-name: "{{`{{ request.object.metadata.namespace }}-backup-ingress`}}"
         spec:
           podSelector:
             matchLabels:
