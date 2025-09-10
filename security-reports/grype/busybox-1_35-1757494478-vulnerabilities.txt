@@ -1,0 +1,4 @@
+NAME     INSTALLED  TYPE    VULNERABILITY   SEVERITY  EPSS         RISK  
+busybox  1.35.0     binary  CVE-2022-28391  High      3.5% (87th)  2.8   
+busybox  1.35.0     binary  CVE-2022-30065  High      0.6% (68th)  0.4   
+busybox  1.35.0     binary  CVE-2022-48174  Critical  0.5% (62nd)  0.4

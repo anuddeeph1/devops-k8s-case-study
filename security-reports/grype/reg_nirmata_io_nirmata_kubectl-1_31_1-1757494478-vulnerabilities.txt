@@ -1,0 +1,12 @@
+NAME                 INSTALLED  FIXED IN  TYPE       VULNERABILITY        SEVERITY  EPSS           RISK   
+libcrypto3           3.3.2-r0   3.3.2-r1  apk        CVE-2024-9143        Medium    0.7% (69th)    0.3    
+libssl3              3.3.2-r0   3.3.2-r1  apk        CVE-2024-9143        Medium    0.7% (69th)    0.3    
+libcrypto3           3.3.2-r0   3.3.3-r0  apk        CVE-2024-12797       Medium    0.3% (49th)    0.1    
+libssl3              3.3.2-r0   3.3.3-r0  apk        CVE-2024-12797       Medium    0.3% (49th)    0.1    
+golang.org/x/oauth2  v0.21.0    0.27.0    go-module  GHSA-6v2p-p543-phr9  High      < 0.1% (23rd)  < 0.1  
+libcrypto3           3.3.2-r0   3.3.2-r2  apk        CVE-2024-13176       Medium    < 0.1% (24th)  < 0.1  
+libssl3              3.3.2-r0   3.3.2-r2  apk        CVE-2024-13176       Medium    < 0.1% (24th)  < 0.1  
+golang.org/x/net     v0.26.0    0.38.0    go-module  GHSA-vvgc-356p-c3xw  Medium    < 0.1% (3rd)   < 0.1  
+musl                 1.2.5-r0   1.2.5-r1  apk        CVE-2025-26519       High      < 0.1% (1st)   < 0.1  
+musl-utils           1.2.5-r0   1.2.5-r1  apk        CVE-2025-26519       High      < 0.1% (1st)   < 0.1  
+golang.org/x/net     v0.26.0    0.36.0    go-module  GHSA-qxp5-gwg8-xv66  Medium    < 0.1% (2nd)   < 0.1
